@@ -1,13 +1,4 @@
 const translations = {
-      it: {
-                homepage_title: "FOREX Dashboard",
-                homepage_subtitle: "Tassi di Cambio",
-                nav_eur_usd: "EUR/USD",
-                nav_historical_cross: "Cambi Storici",
-                loading_rates: "Caricamento tassi di cambio...",
-                search_placeholder: "Cerca divisa (es. CAD, Dollaro...)",
-                search_add: "Cerca e aggiungi divisa...",
-                offline_mode: "Modalitconst translations = {
                       it: {
           homepage_title: "FOREX Dashboard",
                     homepage_subtitle: "Tassi di Cambio",
