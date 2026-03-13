@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+  <html lang="it">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>FOREXcross - Dashboard</title>
+      <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+      <div class="background-overlay"></div>
+
+      <!-- Screen di Benvenuto -->
+      <div id="welcome-screen">
+          <div class="intro-text">
+              <h1 class="intro-line">FOREXcross</h1>
+              <p class="intro-line">Semplice. Veloce. Potente.</p>
+              <p class="intro-line">Il tuo convertitore di valuta definitivo.</p>
+          </div>
+      </div>
+
+      <div class="container" style="display: none;">
+          <header>
+              <div class="logo-container">
+                  <img src="https://raw.githubusercontent.com/Edoardo1953/FOREXcross/main/assets/FOREXcross-Logo.webp" alt="FOREXcross Logo" class="logo">
+                  <h1 id="main-title">FOREXcross - Dashboard</h1>
+              </div>
+              <div class="controls">
+                  <button id="lang-toggle" class="btn">EN / IT</button>
+                  <div class="theme-switch-wrapper">
+                      <label class="theme-switch" for="checkbox">
+                          <input type="checkbox" id="checkbox" />
+                          <div class="slider round"></div>
+                      </label>
+                      <span id="theme-label" style="margin-left: 10px;">Dark Mode</span>
+                  </div>
+              </div>
+          </header>
+
+          <main>
+              <section class="dashboard-grid">
+                  <div class="card" onclick="location.href='eur_usd.html'">
+                      <h2>EUR / USD</h2>
+                      <p id="eur_usd_desc">Analisi e Conversione Euro / Dollaro USA</p>
+                      <div class="chart-mini">
+                          <img src="https://www.tradingview.com/x/sP3G6lE7/" alt="Mini Chart EUR/USD">
+                      </div>
+                  </div>
+
+                  <div class="card">
+                      <h2>USD / BRL</h2>
+                      <p id="usd_brl_desc">Analisi e Conversione Dollaro / Real Brasiliano</p>
+                      <div class="chart-mini">
+                          <img src="https://www.tradingview.com/x/r7mF5G9B/" alt="Mini Chart USD/BRL">
+                      </div>
+                  </div>
+
+                  <div class="card">
+                      <h2>EUR / BRL</h2>
+                      <p id="eur_brl_desc">Analisi e Conversione Euro / Real Brasiliano</p>
+                      <div class="chart-mini">
+                          <img src="https://www.tradingview.com/x/QxZ6Uo2D/" alt="Mini Chart EUR/BRL">
+                      </div>
+                  </div>
+              </section>
+          </main>
+
+          <footer>
+              <p>&copy; 2024 FOREXcross. <span id="footer-text">Tutti i diritti riservati.</span></p>
+          </footer>
+      </div>
+
+      <script src="translations.js"></script>
+      <script src="intro.js"></script>
+      <script src="app.js"></script>
+  </body>
+  </html>
+  
