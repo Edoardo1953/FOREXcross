@@ -959,3 +959,266 @@ tbody tr:hover {
 .intro-page .lang-btn:hover {
     background: #f1f5f9;
 }
+
+/* ===================================================
+   RESPONSIVE DESIGN - MOBILE (max-width: 768px)
+   =================================================== */
+@media (max-width: 768px) {
+
+    /* --- App Container: stack vertically --- */
+    .app-container {
+        flex-direction: column;
+        height: 100dvh; /* dynamic viewport height for mobile browsers */
+    }
+
+    /* --- Sidebar becomes a top bar on mobile --- */
+    .sidebar {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        align-items: center;
+        padding: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        overflow-x: auto;
+        overflow-y: hidden;
+        flex-shrink: 0;
+    }
+
+    /* Hide logo on mobile to save space */
+    .sidebar .logo-area {
+        display: none;
+    }
+
+    /* Navigation menu becomes horizontal */
+    .nav-menu {
+        flex-direction: row;
+        flex: 0;
+        gap: 4px;
+        padding: 8px 12px;
+        flex-shrink: 0;
+    }
+
+    .nav-item {
+        padding: 8px 12px;
+        font-size: 12px;
+        gap: 6px;
+        white-space: nowrap;
+        border-radius: var(--border-radius-sm);
+    }
+
+    .nav-item i {
+        font-size: 14px;
+    }
+
+    /* Currency selector becomes horizontal scrollable row */
+    .currency-selector {
+        border-top: none;
+        border-left: 1px solid var(--border-color);
+        padding: 8px 12px;
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        overflow-x: auto;
+        flex-shrink: 0;
+    }
+
+    .selector-group {
+        margin-bottom: 0;
+        flex-shrink: 0;
+        padding: 8px;
+        min-width: auto;
+    }
+
+    .selector-group-title {
+        font-size: 9px;
+        margin-bottom: 6px;
+    }
+
+    .toggle-group-grid {
+        display: flex;
+        flex-direction: row;
+        gap: 4px;
+    }
+
+    .toggle-btn {
+        padding: 6px 8px;
+        font-size: 11px;
+        gap: 4px;
+        white-space: nowrap;
+        width: auto;
+    }
+
+    .toggle-btn .fi {
+        font-size: 0.9em;
+    }
+
+    /* --- Main content takes remaining space --- */
+    .main-content {
+        flex: 1;
+        overflow-y: auto;
+        min-height: 0;
+    }
+
+    /* --- Header on mobile --- */
+    .top-header {
+        padding: 16px 16px 12px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .header-titles h1 {
+        font-size: 20px;
+    }
+
+    .subtitle {
+        font-size: 13px;
+    }
+
+    .header-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    /* --- Dashboard data area --- */
+    .dashboard-data {
+        padding: 0 12px 20px;
+        gap: 16px;
+    }
+
+    /* --- Cards --- */
+    .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .summary-card {
+        padding: 16px;
+        gap: 14px;
+    }
+
+    .card-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+    }
+
+    .card-info h2 {
+        font-size: 22px;
+    }
+
+    /* --- Chart container --- */
+    .chart-container {
+        height: 250px;
+    }
+
+    .charts-area,
+    .tables-area {
+        padding: 16px 12px;
+    }
+
+    /* Chart title + filters: stack vertically */
+    .charts-area > div > div:first-child,
+    .chart-container > div:first-child {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+    }
+
+    .chart-filters {
+        width: 100%;
+        overflow-x: auto;
+        flex-wrap: nowrap !important;
+        display: flex !important;
+    }
+
+    .chart-filter-btn {
+        padding: 5px 10px;
+        font-size: 12px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    /* --- Tables: scrollable horizontally --- */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 480px; /* force scroll rather than squish */
+    }
+
+    th, td {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    th {
+        font-size: 12px;
+    }
+
+    /* --- Database view: filters bar stacks vertically --- */
+    .filters-bar {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+
+    .filters-bar select {
+        width: 100% !important;
+        min-width: unset !important;
+    }
+
+    /* --- Database table header: export button row adapts --- */
+    #viewDatabase > .table-container > div:first-child {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+    }
+
+    #exportExcelBtn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* --- Upload overlay --- */
+    .upload-overlay {
+        top: 60px;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+    }
+
+    .upload-card h2 {
+        font-size: 18px;
+    }
+
+    /* --- Sync status bar --- */
+    #syncStatus {
+        font-size: 10px !important;
+    }
+}
+
+/* Tablet: medium range tweaks (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    :root {
+        --sidebar-width: 220px;
+    }
+
+    .top-header {
+        padding: 20px 24px 16px;
+    }
+
+    .dashboard-data {
+        padding: 0 24px 24px;
+    }
+
+    .chart-container {
+        height: 300px;
+    }
+
+    .header-titles h1 {
+        font-size: 22px;
+    }
+}
