@@ -1111,11 +1111,16 @@ tbody tr:hover {
     /* --- Chart container --- */
     .chart-container {
         height: 250px;
+        margin-bottom: 30px; /* Aggiunto spazio sotto il grafico */
     }
 
     .charts-area,
     .tables-area {
         padding: 16px 12px;
+    }
+
+    .tables-area {
+        margin-top: 20px; /* Margine extra per evitare sovrapposizioni con le etichette del grafico */
     }
 
     /* Chart title + filters: stack vertically */
