@@ -1,130 +1,130 @@
 <!DOCTYPE html>
-  <html lang="it">
+<html lang="it">
 
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-      <title>FOREX Dash - Live Cross</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FOREX Dash - Live Cross</title>
 
-      <!-- Google Fonts for modern typography -->
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts for modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-      <!-- FontAwesome for icons -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-      <!-- Flag Icons -->
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" />
+    <!-- Flag Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" />
 
-      <!-- Custom CSS -->
-      <link rel="stylesheet" href="style.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
 
-      <!-- Translations Logic -->
-      <script src="translations.js"></script>
-  </head>
+    <!-- Translations Logic -->
+    <script src="translations.js"></script>
+</head>
 
-  <body class="intro-page">
-      <div class="intro-app-container">
-          <!-- Top Navigation Area -->
-          <header class="intro-header">
-              <div class="intro-titles">
-                  <h1>FOREX Dashboard</h1>
-                  <p data-i18n="homepage_subtitle">Cross</p>
-              </div>
-              <div class="intro-right-area" style="display: flex; flex-direction: column; align-items: flex-end; gap: 12px;">
-                  <div class="lang-selector">
-                      <button class="lang-btn" onclick="setLanguage('en')" title="English"><span class="fi fi-gb"></span></button>
-                      <button class="lang-btn" onclick="setLanguage('fr')" title="Francais"><span class="fi fi-fr"></span></button>
-                      <button class="lang-btn" onclick="setLanguage('it')" title="Italiano"><span class="fi fi-it"></span></button>
-                  </div>
-                  <div class="intro-actions" style="display: flex; flex-direction: column; gap: 8px;">
-                      <a href="eur_usd.html" class="nav-btn-text" data-i18n-title="title_nav_eur_usd" title="Vai al Cambio EUR/USD">
-                          EUR/USD <span class="fi fi-eu" style="margin-left: 4px; font-size: 1.1em; border-radius: 2px;"></span><span class="fi fi-us" style="margin-left: 2px; font-size: 1.1em; border-radius: 2px;"></span>
-                      </a>
-                      <a href="dashboard.html" class="nav-btn-text" data-i18n-title="title_nav_historical" title="Vai ai Cambi Storici">
-                          <span data-i18n="nav_historical_cross">Cambi Storici</span> <span class="fi fi-br" style="margin-left: 4px; font-size: 1.1em; border-radius: 2px;"></span>
-                      </a>
-                  </div>
-              </div>
-          </header>
-          <!-- Base Currency Display at Top -->
-          <section class="base-currency-section">
-              <div class="currency-row base-row" id="baseRow">
-                  <div class="curr-left">
-                      <div class="flag-container">
-                           <span class="fi fi-eu"></span>
-                      </div>
-                  </div>
-                  <div class="curr-middle">
-                      <span class="curr-code" id="baseCode">EUR</span>
-                      <span class="curr-name" id="baseName">Euro</span>
-                  </div>
-                  <div class="curr-right">
-                      <span class="curr-amount" id="baseAmountDisplay">1</span>
-                  </div>
-              </div>
-          </section>
+<body class="intro-page">
+    <div class="intro-app-container">
+        <!-- Top Navigation Area -->
+        <header class="intro-header">
+            <div class="intro-titles">
+                <h1>FOREX Dashboard</h1>
+                <p data-i18n="homepage_subtitle">Cross</p>
+            </div>
+            <div class="intro-right-area" style="display: flex; flex-direction: column; align-items: flex-end; gap: 12px;">
+                <div class="lang-selector">
+                    <button class="lang-btn" onclick="setLanguage('en')" title="English"><span class="fi fi-gb"></span></button>
+                    <button class="lang-btn" onclick="setLanguage('fr')" title="Français"><span class="fi fi-fr"></span></button>
+                    <button class="lang-btn" onclick="setLanguage('it')" title="Italiano"><span class="fi fi-it"></span></button>
+                </div>
+                <div class="intro-actions" style="display: flex; flex-direction: column; gap: 8px;">
+                    <a href="eur_usd.html" class="nav-btn-text" data-i18n-title="title_nav_eur_usd" title="Vai al Cambio EUR/USD">
+                        EUR/USD <span class="fi fi-eu" style="margin-left: 4px; font-size: 1.1em; border-radius: 2px;"></span><span class="fi fi-us" style="margin-left: 2px; font-size: 1.1em; border-radius: 2px;"></span>
+                    </a>
+                    <a href="dashboard.html" class="nav-btn-text" data-i18n-title="title_nav_historical" title="Vai ai Cambi Storici">
+                        <span data-i18n="nav_historical_cross">Cambi Storici</span> <span class="fi fi-br" style="margin-left: 4px; font-size: 1.1em; border-radius: 2px;"></span>
+                    </a>
+                </div>
+            </div>
+        </header>
 
-          <!-- Dynamic Rest Cross Rates -->
-          <section class="cross-rates-section">
-              <ul class="currency-list" id="currencyList">
-                  <!-- Items injected via JS -->
-                   <li class="loading-state"><span data-i18n="loading_rates">Caricamento tassi di cambio...</span> <i class="fa-solid fa-spinner fa-spin"></i></li>
-              </ul>
-              <!-- Spazio extra per far scorrere la lista sopra il tastierino -->
-              <div class="spacer-numpad"></div>
-          </section>
+        <!-- Base Currency Display at Top -->
+        <section class="base-currency-section">
+            <div class="currency-row base-row" id="baseRow">
+                <div class="curr-left">
+                    <div class="flag-container">
+                         <span class="fi fi-eu"></span>
+                    </div>
+                </div>
+                <div class="curr-middle">
+                    <span class="curr-code" id="baseCode">EUR</span>
+                    <span class="curr-name" id="baseName">Euro</span>
+                </div>
+                <div class="curr-right">
+                    <span class="curr-amount" id="baseAmountDisplay">1</span>
+                </div>
+            </div>
+        </section>
 
-          <!-- Fixed Bottom Numpad -->
-          <section class="numpad-section">
-              <div class="numpad-grid">
-                  <button class="num-key" data-key="7">7</button>
-                  <button class="num-key" data-key="8">8</button>
-                  <button class="num-key" data-key="9">9</button>
-                  <!-- Operation keys -->
-                  <button class="ac-key" id="key-ac" data-key="AC">AC</button>
+        <!-- Dynamic Rest Cross Rates -->
+        <section class="cross-rates-section">
+            <ul class="currency-list" id="currencyList">
+                <!-- Items injected via JS -->
+                 <li class="loading-state"><span data-i18n="loading_rates">Caricamento tassi di cambio...</span> <i class="fa-solid fa-spinner fa-spin"></i></li>
+            </ul>
+            <!-- Spazio extra per far scorrere la lista sopra il tastierino -->
+            <div class="spacer-numpad"></div>
+        </section>
 
-                  <button class="num-key" data-key="4">4</button>
-                  <button class="num-key" data-key="5">5</button>
-                  <button class="num-key" data-key="6">6</button>
-                   <!-- Backspace Key spanning rows -->
-                   <button class="backspace-key grid-row-span-3" id="key-delete" data-key="DEL">
-                      <i class="fa-solid fa-delete-left"></i>
-                  </button>
+        <!-- Fixed Bottom Numpad -->
+        <section class="numpad-section">
+            <div class="numpad-grid">
+                <button class="num-key" data-key="7">7</button>
+                <button class="num-key" data-key="8">8</button>
+                <button class="num-key" data-key="9">9</button>
+                <!-- Operation keys -->
+                <button class="ac-key" id="key-ac" data-key="AC">AC</button>
 
-                  <button class="num-key" data-key="1">1</button>
-                  <button class="num-key" data-key="2">2</button>
-                  <button class="num-key" data-key="3">3</button>
+                <button class="num-key" data-key="4">4</button>
+                <button class="num-key" data-key="5">5</button>
+                <button class="num-key" data-key="6">6</button>
+                 <!-- Backspace Key spanning rows -->
+                 <button class="backspace-key grid-row-span-3" id="key-delete" data-key="DEL">
+                    <i class="fa-solid fa-delete-left"></i>
+                </button>
 
-                  <button class="calc-icon-key disabled" disabled>
-                       <i class="fa-solid fa-calculator"></i>
-                  </button>
-                  <button class="num-key" data-key="0">0</button>
-                  <button class="num-key" data-key=",">,</button>
+                <button class="num-key" data-key="1">1</button>
+                <button class="num-key" data-key="2">2</button>
+                <button class="num-key" data-key="3">3</button>
 
-              </div>
-          </section>
+                <button class="calc-icon-key disabled" disabled>
+                     <i class="fa-solid fa-calculator"></i>
+                </button>
+                <button class="num-key" data-key="0">0</button>
+                <button class="num-key" data-key=",">,</button>
 
-      </div>
+            </div>
+        </section>
 
-      <!-- Search Overlay -->
-      <div id="searchOverlay" class="search-overlay hidden">
-          <div class="search-container">
-              <div class="search-header">
-                  <div class="search-input-wrapper">
-                      <button id="closeSearch" class="icon-btn"><i class="fa-solid fa-chevron-left"></i></button>
-                      <input type="text" id="searchInput" data-i18n="search_placeholder" placeholder="Cerca divisa (es. CAD, Dollaro...)" autocomplete="off">
-                  </div>
-              </div>
-              <ul id="searchResults" class="search-results">
-                  <!-- Results injected via JS -->
-              </ul>
-          </div>
-      </div>
+    </div>
 
-      <!-- Intro Logic JS -->
-      <script src="intro.js"></script>
-    <script src="app.js"></script>
-  </body>
-  </html>
+    <!-- Search Overlay -->
+    <div id="searchOverlay" class="search-overlay hidden">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-wrapper">
+                    <button id="closeSearch" class="icon-btn"><i class="fa-solid fa-chevron-left"></i></button>
+                    <input type="text" id="searchInput" data-i18n="search_placeholder" placeholder="Cerca divisa (es. CAD, Dollaro...)" autocomplete="off">
+                </div>
+            </div>
+            <ul id="searchResults" class="search-results">
+                <!-- Results injected via JS -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Intro Logic JS -->
+    <script src="intro.js"></script>
+</body>
+</html>
