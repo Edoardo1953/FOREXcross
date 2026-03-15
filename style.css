@@ -572,7 +572,14 @@ body {
 }
 
 /* Charts & Tables */
-.charts-area,
+.charts-area {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: 24px 24px 40px 24px; /* Increased bottom padding */
+    box-shadow: var(--shadow-card);
+}
+
 .tables-area {
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -589,7 +596,7 @@ body {
 }
 
 .chart-container {
-    height: 350px;
+    height: 420px; /* Increased from 350px to fit date labels */
     position: relative;
 }
 
@@ -1293,8 +1300,8 @@ tbody tr:hover {
 
     /* --- Chart container --- */
     .chart-container {
-        height: 250px;
-        margin-bottom: 30px; /* Aggiunto spazio sotto il grafico */
+        height: 320px; /* Increased from 250px */
+        margin-bottom: 40px; 
     }
 
     .charts-area,
@@ -1303,7 +1310,7 @@ tbody tr:hover {
     }
 
     .tables-area {
-        margin-top: 20px; /* Margine extra per evitare sovrapposizioni con le etichette del grafico */
+        margin-top: 30px; /* Margine extra per evitare sovrapposizioni con le etichette del grafico */
     }
 
     /* Chart title + filters: stack vertically */
@@ -1403,7 +1410,7 @@ tbody tr:hover {
     }
 
     .chart-container {
-        height: 300px;
+        height: 350px; /* Increased from 300px for tablets */
     }
 
     .header-titles h1 {
