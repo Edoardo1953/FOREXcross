@@ -1487,6 +1487,7 @@ tbody tr:hover {
 
     .header-titles {
         text-align: center;
+        order: 1;
     }
 
     .header-titles h1 {
@@ -1499,19 +1500,23 @@ tbody tr:hover {
         flex-direction: column;
         gap: 15px;
         align-items: center;
+        order: 2; /* Flags and Tools above Nav Pills */
     }
 
     .header-nav-pills {
         justify-content: center;
-        flex-wrap: wrap;
+        flex-wrap: nowrap; /* Keep together but allow overflow if needed */
         width: 100%;
+        order: 3; /* Move below tools */
+        gap: 4px;
     }
 
     .nav-pill {
-        padding: 6px 12px;
-        font-size: 12px;
+        padding: 8px 10px;
+        font-size: 11px; /* Smaller to fit */
         flex: 1;
         justify-content: center;
+        min-width: 0;
     }
 
     .dashboard-controls-row {
@@ -1531,6 +1536,11 @@ tbody tr:hover {
         gap: 20px;
     }
 
+    .chart-container {
+        min-height: 380px; /* Better visibility on mobile */
+        padding: 15px 10px;
+    }
+
     .cards-grid {
         grid-template-columns: 1fr;
     }
@@ -1539,6 +1549,14 @@ tbody tr:hover {
         width: 100%;
         overflow-x: auto;
         justify-content: flex-start;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 5px; /* Space for scrollbar if any */
+    }
+
+    .chart-filter-btn {
+        padding: 6px 10px;
+        font-size: 11px;
+        flex-shrink: 0;
     }
 
     .custom-cross-form-row {

@@ -191,17 +191,7 @@ const switchView = (targetView) => {
         viewOverview.classList.add('hidden');
         document.body.classList.add('database-view-active');
         renderFullDatabaseTable();
-        
-        // Force scroll to bottom when the view is opened
-        setTimeout(() => {
-            const tbody = document.querySelector('#fullDatabaseTable tbody');
-            if (tbody) {
-                const tableContainer = tbody.closest('.table-responsive');
-                if (tableContainer) {
-                    tableContainer.scrollTop = tableContainer.scrollHeight;
-                }
-            }
-        }, 100);
+        // Removed scroll-to-bottom logic as we now show most recent first
     }
     updateLabels();
 };
@@ -806,11 +796,11 @@ function renderFullDatabaseTable(limit = 100) {
     const sortedList = [...historicalRateList];
     const rows = [];
     
-    // Sort chronological for Database View (Oldest at top, most recent at bottom for scroll)
-    sortedList.sort((a, b) => a.dateObj - b.dateObj);
+    // Sort chronological: Newest at top for Database View
+    sortedList.sort((a, b) => b.dateObj - a.dateObj);
 
     let matchCount = 0;
-    for (let i = sortedList.length - 1; i >= 0; i--) {
+    for (let i = 0; i < sortedList.length; i++) {
         const data = sortedList[i];
         const isClosing = monthlyClosingsSet.has(data.dateStr);
 
