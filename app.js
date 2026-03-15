@@ -329,11 +329,13 @@ async function backgroundDeepSync(map, key, signal) {
         years.push(y);
     }
     
+    let batchCount = 0;
     for (let year of years) {
         if (signal && signal.aborted) return;
         
         const count = Array.from(map.values()).filter(d => d.dateObj.getFullYear() === year).length;
 
+        // Se mancano dati per quell'anno, scaricali
         if (count < 100) {
             if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-cloud-arrow-down"></i> ${getTranslation('syncing_year', {year})}`;
             
@@ -344,20 +346,24 @@ async function backgroundDeepSync(map, key, signal) {
             await fetchAndMergeRange(startY, fetchEnd, map, signal);
             if (signal && signal.aborted) return;
             
-            // Salviamo in cache ma NON re-renderizziamo tutto ogni volta per evitare instabilità UI
+            // Aggiorniamo la lista globale e la cache
             historicalRateList = Array.from(map.values()).sort((a,b) => a.dateObj - b.dateObj);
             saveToCache(key, historicalRateList);
             
-            // Aggiorniamo solo lo status ma non il grafico pesante durante il sync
-            // saveAndRenderAll(map, key); (rimosso per stabilità)
+            // Ogni 2 anni scaricati, rinfreschiamo la UI per mostrare progresso senza pesare troppo
+            batchCount++;
+            if (batchCount % 2 === 0) {
+                renderFullDatabaseTable();
+                renderChart();
+            }
             
-            await new Promise(r => setTimeout(r, 200));
+            await new Promise(r => setTimeout(r, 300)); // Rispetto per l'API
         }
     }
     
     if (signal && signal.aborted) return;
     
-    // Solo alla fine rinfreschiamo tutto il grafico e le tabelle
+    // Fine sincronizzazione: rinfreschiamo tutto
     saveAndRenderAll(map, key, true);
     
     if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-check-circle" style="color:var(--success)"></i> ${getTranslation('sync_complete')}`;
@@ -629,6 +635,13 @@ function renderFullDatabaseTable() {
     const tbody = document.querySelector('#fullDatabaseTable tbody');
     if (!tbody) return;
     tbody.innerHTML = '';
+
+    if (historicalRateList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 40px; color: var(--text-secondary);">
+            <i class="fa-solid fa-sync fa-spin" style="margin-right: 10px;"></i> ${getTranslation('sync_progress')}...
+        </td></tr>`;
+        return;
+    }
 
     // Identify end of month to highlight
     const monthlyClosingsSet = new Set(getMonthlyClosings().map(m => m.dateStr));
