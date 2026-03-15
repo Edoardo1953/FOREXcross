@@ -45,33 +45,6 @@
                 <a href="#" class="nav-item active" id="navOverview"><i class="fa-solid fa-chart-line"></i> <span data-i18n="nav_historical_cross">Cross Storici</span></a>
                 <a href="#" class="nav-item" id="navDatabase"><i class="fa-solid fa-database"></i> <span data-i18n="nav_database">Database Storico</span></a>
             </nav>
-            <div class="currency-selector">
-                <!-- Group 1: International crosses -->
-                <div class="selector-group">
-                    <span class="selector-group-title" data-i18n="group_main">Cross Principale</span>
-                    <div class="toggle-group-grid">
-                        <button class="toggle-btn active" data-base="EUR" data-target="USD">
-                            <span class="fi fi-eu"></span><span class="fi fi-us"></span> EUR/USD
-                        </button>
-                        <button class="toggle-btn" data-base="USD" data-target="EUR">
-                            <span class="fi fi-us"></span><span class="fi fi-eu"></span> USD/EUR
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Group 2: BRL crosses -->
-                <div class="selector-group">
-                    <span class="selector-group-title" data-i18n="group_brl">Cross verso BRL</span>
-                    <div class="toggle-group-grid">
-                        <button class="toggle-btn" data-base="EUR" data-target="BRL">
-                            <span class="fi fi-eu"></span><span class="fi fi-br"></span> EUR/BRL
-                        </button>
-                        <button class="toggle-btn" data-base="USD" data-target="BRL">
-                            <span class="fi fi-us"></span><span class="fi fi-br"></span> USD/BRL
-                        </button>
-                    </div>
-                </div>
-            </div>
         </aside>
 
         <!-- Main Content -->
@@ -99,6 +72,34 @@
                     </button>
                 </div>
             </header>
+
+            <div class="currency-selector">
+                <!-- Group 1: International crosses -->
+                <div class="selector-group">
+                    <span class="selector-group-title" data-i18n="group_main">Cross Principale</span>
+                    <div class="toggle-group-grid">
+                        <button class="toggle-btn active" data-base="EUR" data-target="USD">
+                            <span class="fi fi-eu"></span><span class="fi fi-us"></span> EUR/USD
+                        </button>
+                        <button class="toggle-btn" data-base="USD" data-target="EUR">
+                            <span class="fi fi-us"></span><span class="fi fi-eu"></span> USD/EUR
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Group 2: BRL crosses -->
+                <div class="selector-group">
+                    <span class="selector-group-title" data-i18n="group_brl">Cross verso BRL</span>
+                    <div class="toggle-group-grid">
+                        <button class="toggle-btn" data-base="EUR" data-target="BRL">
+                            <span class="fi fi-eu"></span><span class="fi fi-br"></span> EUR/BRL
+                        </button>
+                        <button class="toggle-btn" data-base="USD" data-target="BRL">
+                            <span class="fi fi-us"></span><span class="fi fi-br"></span> USD/BRL
+                        </button>
+                    </div>
+                </div>
+            </div>
 
             <!-- Global Loader for API Data -->
             <div id="globalLoader" class="upload-overlay" style="background-color: var(--bg-main); z-index: 50;">
@@ -286,4 +287,4 @@
     </script>
 </body>
 
-</html>aggiunto dashboard e corretti <link rel="stylesheet" href="">
+</html>

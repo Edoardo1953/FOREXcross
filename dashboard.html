@@ -34,6 +34,83 @@
 <body>
 
     <div class="app-container">
+        <!-- Top Header: Title and Actions -->
+        <header class="top-header">
+            <div class="header-top-row">
+                <div class="header-titles">
+                    <h1 id="pageTitle" data-i18n="page_title_historical">Historical Rates</h1>
+                    <p class="subtitle" data-i18n="subtitle_historical">Historical analysis</p>
+                    <div id="syncStatus" class="sync-status">
+                         <i class="fa-solid fa-sync fa-spin"></i> <span data-i18n="sync_init">Inizializzazione...</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="lang-selector">
+                        <button class="lang-btn" onclick="setLanguage('en')" title="English"><span class="fi fi-gb"></span></button>
+                        <button class="lang-btn" onclick="setLanguage('fr')" title="Français"><span class="fi fi-fr"></span></button>
+                        <button class="lang-btn" onclick="setLanguage('it')" title="Italiano"><span class="fi fi-it"></span></button>
+                        <button class="icon-btn settings-trigger" onclick="toggleSettings(true)" title="Strumenti" data-i18n-title="settings_title">
+                            <i class="fa-solid fa-gear"></i>
+                            <span data-i18n="settings_title">Strumenti</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Currency Selector integrated into header area -->
+            <div class="header-selector-area">
+                <div class="currency-selector">
+                    <!-- Group 1: Main Crosses -->
+                    <div class="selector-group">
+                        <span class="selector-group-title" data-i18n="group_main">Main Crosses</span>
+                        <div class="toggle-group-grid">
+                            <button class="toggle-btn" data-base="EUR" data-target="USD">
+                                <span class="fi fi-eu"></span><span class="fi fi-us"></span> EUR/USD
+                            </button>
+                            <button class="toggle-btn" data-base="USD" data-target="EUR">
+                                <span class="fi fi-us"></span><span class="fi fi-eu"></span> USD/EUR
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Group 2: Cross Search area -->
+                    <div class="selector-group">
+                        <span class="selector-group-title" data-i18n="group_custom">Cross Search</span>
+                        <div class="custom-cross-form">
+                            <div class="custom-inputs-row">
+                                <div class="input-group">
+                                    <label data-i18n="label_base">Base</label>
+                                    <div class="input-with-flag">
+                                        <span id="customBaseFlag" class="fi fi-eu"></span>
+                                        <input type="text" id="customBase" placeholder="EUR" maxlength="3">
+                                    </div>
+                                </div>
+                                <button id="btnSwap" class="swap-btn" title="Inverti">
+                                    <i class="fa-solid fa-right-left"></i>
+                                </button>
+                                <div class="input-group">
+                                    <label data-i18n="label_target">Target</label>
+                                    <div class="input-with-flag">
+                                        <span id="customTargetFlag" class="fi fi-br"></span>
+                                        <input type="text" id="customTarget" placeholder="BRL" maxlength="3">
+                                    </div>
+                                </div>
+                            </div>
+                            <button id="btnFetchCustom" class="btn-primary-small">
+                                <i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="btn_fetch">Recupera Dati</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="header-extra-actions">
+                    <button id="resetDataBtn" class="chart-filter-btn reset-btn">
+                        <i class="fa-solid fa-trash-can"></i> <span data-i18n="clean_cache">Pulisci Cache</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
             <div class="logo-area">
@@ -46,76 +123,9 @@
                 <a href="#" class="nav-item" id="navDatabase"><i class="fa-solid fa-database"></i> <span data-i18n="nav_database">Database Storico</span></a>
             </nav>
         </aside>
- 
-         <!-- Main Content -->
-         <main class="main-content">
-             <header class="top-header">
-                 <div class="header-titles">
-                     <h1 id="pageTitle" data-i18n="page_title_historical">Historical Rates</h1>
-                     <p class="subtitle" data-i18n="subtitle_historical">Historical analysis</p>
-                     <div id="syncStatus" style="font-size: 11px; margin-top: 5px; color: var(--accent-primary); font-weight: 500;">
-                         <i class="fa-solid fa-sync fa-spin"></i> <span data-i18n="sync_init">Inizializzazione...</span>
-                     </div>
-                 </div>
-                 <div class="header-actions" style="display: flex; gap: 10px; align-items: center;">
-                     <div class="lang-selector">
-                         <button class="lang-btn" onclick="setLanguage('en')" title="English"><span class="fi fi-gb"></span></button>
-                         <button class="lang-btn" onclick="setLanguage('fr')" title="Français"><span class="fi fi-fr"></span></button>
-                         <button class="lang-btn" onclick="setLanguage('it')" title="Italiano"><span class="fi fi-it"></span></button>
-                         <button class="icon-btn" onclick="toggleSettings(true)" title="Strumenti" data-i18n-title="settings_title" style="margin-left: 8px; width: auto; padding: 0 12px; border-radius: 20px; gap: 8px;">
-                             <i class="fa-solid fa-gear"></i>
-                             <span data-i18n="settings_title" style="font-size: 13px; font-weight: 600;">Strumenti</span>
-                         </button>
-                     </div>
-                     <button id="resetDataBtn" class="chart-filter-btn" style="border: 1px solid var(--border-color); color: var(--danger);">
-                         <i class="fa-solid fa-trash-can"></i> <span data-i18n="clean_cache">Pulisci Cache</span>
-                     </button>
-                 </div>
-             </header>
- 
-             <div class="currency-selector">
-                 <!-- Group 1: International crosses -->
-                 <div class="selector-group">
-                     <span class="selector-group-title" data-i18n="group_main">Cross Principale</span>
-                     <div class="toggle-group-grid">
-                         <button class="toggle-btn" data-base="EUR" data-target="USD">
-                             <span class="fi fi-eu"></span><span class="fi fi-us"></span> EUR/USD
-                         </button>
-                         <button class="toggle-btn" data-base="USD" data-target="EUR">
-                             <span class="fi fi-us"></span><span class="fi fi-eu"></span> USD/EUR
-                         </button>
-                     </div>
-                 </div>
- 
-                 <!-- Group 2: Custom Search area -->
-                 <div class="selector-group">
-                     <span class="selector-group-title" data-i18n="group_custom">Ricerca Cross Personale</span>
-                     <div class="custom-cross-form">
-                         <div class="custom-inputs-row">
-                             <div class="input-group">
-                                 <label data-i18n="label_base">Base</label>
-                                 <div style="display: flex; align-items: center; gap: 8px;">
-                                     <span id="customBaseFlag" class="fi fi-eu" style="border-radius: 2px;"></span>
-                                     <input type="text" id="customBase" placeholder="EUR" maxlength="3" style="flex: 1;">
-                                 </div>
-                             </div>
-                             <button id="btnSwap" class="swap-btn" title="Inverti" style="margin-top: 15px;">
-                                 <i class="fa-solid fa-right-left"></i>
-                             </button>
-                             <div class="input-group">
-                                 <label data-i18n="label_target">Target</label>
-                                 <div style="display: flex; align-items: center; gap: 8px;">
-                                     <span id="customTargetFlag" class="fi fi-br" style="border-radius: 2px;"></span>
-                                     <input type="text" id="customTarget" placeholder="BRL" maxlength="3" style="flex: 1;">
-                                 </div>
-                             </div>
-                         </div>
-                         <button id="btnFetchCustom" class="btn-primary-small">
-                             <i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="btn_fetch">Recupera Dati</span>
-                         </button>
-                     </div>
-                 </div>
-             </div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
 
             <!-- Global Loader for API Data -->
             <div id="globalLoader" class="upload-overlay" style="background-color: var(--bg-main); z-index: 50;">
@@ -129,7 +139,7 @@
                 </div>
             </div>
 
-            <!-- Dashboard Content (Visible initially, covered by loader if needed) -->
+            <!-- Dashboard Content -->
             <div id="dashboardData" class="dashboard-data">
 
                 <!-- OVERVIEW VIEW -->
@@ -145,7 +155,6 @@
                                         id="brlTrend">--%</span> (da ieri)</p>
                             </div>
                         </div>
-                        <!-- Additional cards will go here dynamically -->
                     </div>
 
                     <div class="charts-area">
@@ -187,40 +196,29 @@
                     </div>
                 </div>
 
-                <!-- DATABASE STORICO VIEW (Hidden by default) -->
+                <!-- DATABASE STORICO VIEW -->
                 <div id="viewDatabase" class="hidden">
                     <div class="table-container">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                             <h3 data-i18n="db_title">Database Giornaliero Completo</h3>
-                            <button id="exportExcelBtn" class="btn-primary"
-                                style="padding: 10px 20px; font-size: 14px;">
+                            <button id="exportExcelBtn" class="btn-primary" style="padding: 10px 20px; font-size: 14px;">
                                 <i class="fa-solid fa-file-excel"></i> <span data-i18n="export_excel">Esporta in Excel</span>
                             </button>
                         </div>
 
                         <!-- FILTERS AREA -->
-                        <div class="filters-bar"
-                            style="display: flex; gap: 15px; margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px;">
+                        <div class="filters-bar" style="display: flex; gap: 15px; margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px;">
                             <div>
-                                <label
-                                    style="display:block; font-size:12px; margin-bottom:5px; color:var(--text-secondary)" data-i18n="period_label">Periodo
-                                    (Mese/Anno)</label>
-                                <select id="filterPeriod"
-                                    style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); min-width: 150px;">
+                                <label style="display:block; font-size:12px; margin-bottom:5px; color:var(--text-secondary)" data-i18n="period_label">Periodo (Mese/Anno)</label>
+                                <select id="filterPeriod" style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); min-width: 150px;">
                                     <option value="all" data-i18n="all_periods">Tutti i periodi</option>
-                                    <!-- Populated by JS -->
                                 </select>
                             </div>
                             <div>
-                                <label
-                                    style="display:block; font-size:12px; margin-bottom:5px; color:var(--text-secondary)" data-i18n="closing_only_label">Solo
-                                    Chiusure Mensili</label>
-                                <select id="filterClosing"
-                                    style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); min-width: 150px;">
+                                <label style="display:block; font-size:12px; margin-bottom:5px; color:var(--text-secondary)" data-i18n="closing_only_label">Solo Chiusure Mensili</label>
+                                <select id="filterClosing" style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); min-width: 150px;">
                                     <option value="all" data-i18n="show_all">Mostra tutto</option>
-                                    <option value="closingOnly" data-i18n="yellow_rows_only">Solo Righe Gialle (Fine Mese)
-                                    </option>
+                                    <option value="closingOnly" data-i18n="yellow_rows_only">Month End</option>
                                 </select>
                             </div>
                         </div>
@@ -243,15 +241,11 @@
                     </div>
                 </div>
             </div>
-
-    </div>
-    </main>
+        </main>
     </div>
 
-    <!-- SheetJS for Excel Parsing and Export (Using xlsx-js-style to allow cell coloring) -->
+    <!-- SheetJS and Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
-
-    <!-- Chart.js for Data Visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
     <!-- Settings Overlay -->

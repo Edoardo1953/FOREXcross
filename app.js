@@ -152,14 +152,16 @@ function updateLabels() {
     const flagsHtml = `<span class="${baseFlag}" style="border-radius:2px; margin-left:8px;"></span><span class="${targetFlag}" style="border-radius:2px; margin-left:2px;"></span>`;
 
     const subtitleEl = document.querySelector('.subtitle');
+    const pageTitleEl = document.getElementById('pageTitle');
+    const viewOverviewEl = document.getElementById('viewOverview');
 
-    if (viewOverview.classList.contains('hidden')) {
+    if (viewOverviewEl && viewOverviewEl.classList.contains('hidden')) {
         // DATABASE VIEW ACTIVE
-        if (pageTitle) pageTitle.innerHTML = getTranslation('db_title');
+        if (pageTitleEl) pageTitleEl.innerHTML = getTranslation('db_title');
         if (subtitleEl) subtitleEl.innerHTML = `${getTranslation('subtitle_database')} ${pairLabel} ${flagsHtml}`;
     } else {
         // OVERVIEW VIEW ACTIVE
-        if (pageTitle) pageTitle.innerHTML = getTranslation('page_title_historical');
+        if (pageTitleEl) pageTitleEl.innerHTML = getTranslation('page_title_historical');
         if (subtitleEl) subtitleEl.innerHTML = getTranslation('subtitle_historical');
     }
     
@@ -253,7 +255,7 @@ async function initializeData() {
         if(dashboardDataContainer) dashboardDataContainer.classList.remove('hidden');
         
         // Final UI updates
-        updateDashboardUI();
+        // REMOVED redundant updateDashboardUI() here as fetchLiveData already handles initial and background renders efficiently
     } catch (e) {
         if (e.name === 'AbortError') return;
         console.error("Initialization Failed", e);
@@ -310,7 +312,12 @@ function updateDashboardUI() {
 
     // Render the tables
     renderTable();
-    renderFullDatabaseTable();
+    
+    // Only render full database if actually visible to save massive CPU cycles
+    const viewDatabase = document.getElementById('viewDatabase');
+    if (viewDatabase && !viewDatabase.classList.contains('hidden')) {
+        renderFullDatabaseTable();
+    }
 }
 
 const SAFE_HISTORY_DATA = {
@@ -465,16 +472,19 @@ async function backgroundDeepSync(map, key, signal) {
             if (signal && signal.aborted) return;
             
             // Aggiorniamo la lista globale e la cache
-            historicalRateList = Array.from(map.values()).sort((a,b) => a.dateObj - b.dateObj);
+            syncGlobalList(map);
             saveToCache(key, historicalRateList);
             
-            // Ogni 3 anni scaricati, rinfreschiamo la UI per mostrare progresso senza pesare troppo
+            // Ogni 2 anni scaricati, rinfreschiamo la UI per mostrare progresso
             batchCount++;
-            if (batchCount % 3 === 0) {
-                renderFullDatabaseTable();
+            if (batchCount % 2 === 0) {
+                // Background sync only refreshes chart and simple table automatically
+                // Full database table is left to the user to avoid freezing
+                renderChart();
+                renderTable();
             }
             
-            await new Promise(r => setTimeout(r, 300)); // Rispetto per l'API
+            await new Promise(r => setTimeout(r, 100)); // Non blocchiamo troppo a lungo
         }
     }
     
@@ -486,34 +496,42 @@ async function backgroundDeepSync(map, key, signal) {
     if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-check-circle" style="color:var(--success)"></i> ${getTranslation('sync_complete')}`;
 }
 
+/**
+ * Robustly updates historicalRateList from the map, ensuring no duplicates or invalid dates
+ */
+function syncGlobalList(mapReference) {
+    if (!mapReference) return;
+    historicalRateList = Array.from(mapReference.values())
+        .filter(d => d.dateObj && !isNaN(d.dateObj.getTime()))
+        .sort((a,b) => a.dateObj - b.dateObj);
+}
+
 function saveAndRenderAll(map, key, fullRender = false) {
-    historicalRateList = Array.from(map.values()).sort((a,b) => a.dateObj - b.dateObj);
+    syncGlobalList(map);
     saveToCache(key, historicalRateList);
     
     if (fullRender) {
         renderChart();
         renderTable();
-        // Update database table too when a full render is requested (at start and end of sync)
         renderFullDatabaseTable(); 
     }
 }
 
-function syncGlobalList(mapReference) {
-    historicalRateList = Array.from(mapReference.values())
-        .filter(d => !isNaN(d.dateObj.getTime()))
-        .sort((a,b) => a.dateObj - b.dateObj);
-}
+
 
 function saveToCache(key, list) {
+    if (!list || list.length === 0) return;
     try {
         const cleanData = list.map(item => ({
             dateStr: item.dateStr,
             rate: item.rate,
-            dateObj: item.dateObj.toISOString(),
+            dateObj: item.dateObj instanceof Date ? item.dateObj.toISOString() : new Date(item.dateObj).toISOString(),
             isLive: item.isLive
         }));
         localStorage.setItem(key, JSON.stringify(cleanData));
-    } catch (err) { /* silent */ }
+    } catch (err) { 
+        console.warn("Storage error", err);
+    }
 }
 
 // Tasto Reset Cache - No timeout needed if script is at end of body
@@ -720,10 +738,9 @@ function applyDatabaseFilters() {
     renderFullDatabaseTable();
 }
 
-function renderFullDatabaseTable() {
+function renderFullDatabaseTable(limit = 100) {
     const tbody = document.querySelector('#fullDatabaseTable tbody');
     if (!tbody) return;
-    tbody.innerHTML = '';
 
     if (historicalRateList.length === 0) {
         tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 40px; color: var(--text-secondary);">
@@ -732,96 +749,91 @@ function renderFullDatabaseTable() {
         return;
     }
 
-    // Identify end of month to highlight
-    const monthlyClosingsSet = new Set(getMonthlyClosings().map(m => m.dateStr));
-
-    // Get filter elements at execution time to ensure they exist
     const filterPeriodSelect = document.getElementById('filterPeriod');
     const filterClosingSelect = document.getElementById('filterClosing');
 
     // Add event listeners lazily if they dont exist
     if (filterPeriodSelect && !filterPeriodSelect.dataset.listenerAdded) {
-        filterPeriodSelect.addEventListener('change', renderFullDatabaseTable);
+        filterPeriodSelect.addEventListener('change', () => renderFullDatabaseTable());
         filterPeriodSelect.dataset.listenerAdded = 'true';
     }
     if (filterClosingSelect && !filterClosingSelect.dataset.listenerAdded) {
-        filterClosingSelect.addEventListener('change', renderFullDatabaseTable);
+        filterClosingSelect.addEventListener('change', () => renderFullDatabaseTable());
         filterClosingSelect.dataset.listenerAdded = 'true';
     }
 
-    // Always regenerate period dropdown options dynamically to prevent caching issues
-    if (filterPeriodSelect) {
-        // Save previous choice
+    // Refresh Dropdown PERIODS (only if needed or count changed)
+    const uniquePeriods = new Set();
+    historicalRateList.forEach(d => {
+        const mm = String(d.dateObj.getMonth() + 1).padStart(2, '0');
+        const yyyy = d.dateObj.getFullYear();
+        uniquePeriods.add(`${mm}/${yyyy}`);
+    });
+
+    if (filterPeriodSelect && (filterPeriodSelect.options.length - 1 !== uniquePeriods.size)) {
         const prevChoice = filterPeriodSelect.value;
-
-        // Reset to default
         filterPeriodSelect.innerHTML = `<option value="all">${getTranslation('all_periods')}</option>`;
-
-        const uniquePeriods = new Set();
-        historicalRateList.forEach(d => {
-            const mm = String(d.dateObj.getMonth() + 1).padStart(2, '0');
-            const yyyy = d.dateObj.getFullYear();
-            uniquePeriods.add(`${mm}/${yyyy}`);
-        });
-
-        // Sort periods descending
+        
         const sortedPeriods = Array.from(uniquePeriods).sort((a, b) => {
             const [mA, yA] = a.split('/');
             const [mB, yB] = b.split('/');
-            // yB - yA => sort years descending. Convert to Number to be perfectly safe
             if (yA !== yB) return Number(yB) - Number(yA);
             return Number(mB) - Number(mA);
         });
 
         sortedPeriods.forEach(p => {
-            const opt = new Option(`${getTranslation('mese_prefix')}${p}`, p);
-            filterPeriodSelect.add(opt);
+            filterPeriodSelect.add(new Option(`${getTranslation('mese_prefix')}${p}`, p));
         });
-
-        // Restore previous choice if that option still exists
-        const optionExists = Array.from(filterPeriodSelect.options).some(o => o.value === prevChoice);
-        if (optionExists) {
-            filterPeriodSelect.value = prevChoice;
-        }
+        filterPeriodSelect.value = prevChoice;
     }
 
-    // Get filter values from the elements (now they are fully rebuilt)
     const selectedPeriod = filterPeriodSelect ? filterPeriodSelect.value : 'all';
     const selectedClosing = filterClosingSelect ? filterClosingSelect.value : 'all';
 
-    // Show newest first as requested in previous conversations, but table logic for Database view usually prefers chronological for scroll to bottom
+    const monthlyClosingsSet = new Set(getMonthlyClosings().map(m => m.dateStr));
     const sortedList = [...historicalRateList];
+    const rows = [];
+    
+    // Sort chronological for Database View (Oldest at top, most recent at bottom for scroll)
+    sortedList.sort((a, b) => a.dateObj - b.dateObj);
 
-    let tableHtml = '';
-    sortedList.forEach(data => {
+    let matchCount = 0;
+    for (let i = sortedList.length - 1; i >= 0; i--) {
+        const data = sortedList[i];
         const isClosing = monthlyClosingsSet.has(data.dateStr);
 
-        // Apply Filters
-        if (selectedClosing === 'closingOnly' && !isClosing) return;
-
+        if (selectedClosing === 'closingOnly' && !isClosing) continue;
         if (selectedPeriod !== 'all') {
             const dataPeriod = `${String(data.dateObj.getMonth() + 1).padStart(2, '0')}/${data.dateObj.getFullYear()}`;
-            if (dataPeriod !== selectedPeriod) return;
+            if (dataPeriod !== selectedPeriod) continue;
         }
 
-        tableHtml += `
+        matchCount++;
+        rows.push(`
             <tr class="${isClosing ? 'row-closing' : ''}">
                 <td class="${isClosing ? 'cell-highlight' : ''}">${data.dateStr}</td>
                 <td class="${isClosing ? 'cell-highlight' : ''}">${APP_UTILS.formatNumber(data.rate)}</td>
                 <td>${isClosing ? `<i class="fa-solid fa-check cell-highlight"></i> ${getTranslation('yes')}` : '-'}</td>
                 <td>${data.isLive ? `<span style="color:var(--accent-primary)">${getTranslation('api_live')}</span>` : `<span style="color:var(--text-secondary)">${getTranslation('historical')}</span>`}</td>
             </tr>
-        `;
-    });
-    tbody.innerHTML = tableHtml;
+        `);
 
-    // Auto-scroll to bottom to show most recent data
-    const tableContainer = tbody.closest('.table-responsive');
-    if (tableContainer) {
-        setTimeout(() => {
-            tableContainer.scrollTop = tableContainer.scrollHeight;
-        }, 50);
+        if (limit && matchCount >= limit && selectedPeriod === 'all' && selectedClosing === 'all') break;
     }
+
+    if (limit && matchCount >= limit && sortedList.length > limit && selectedPeriod === 'all' && selectedClosing === 'all') {
+        rows.push(`
+            <tr>
+                <td colspan="4" style="text-align:center; padding:20px;">
+                    <button class="btn-primary-small" style="margin:0 auto;" onclick="renderFullDatabaseTable(0)">
+                        <i class="fa-solid fa-list"></i> Mostra tutto lo storico (${sortedList.length} righe)
+                    </button>
+                </td>
+            </tr>
+        `);
+    }
+
+    tbody.innerHTML = rows.join('');
 }
 
 function exportDatabaseToExcel() {
@@ -873,27 +885,30 @@ function exportDatabaseToExcel() {
         ]);
     });
 
-    // Crea un worbook vuoto
+    // Crea un workbook vuoto
+    if (typeof XLSX === 'undefined') {
+        alert("Libreria di esportazione non caricata. Controlla la connessione.");
+        return;
+    }
     const wb = XLSX.utils.book_new();
 
     // Converte l'array di array in un worksheet
     const ws = XLSX.utils.aoa_to_sheet(exportData);
 
-    // Applica stili (Sfondo Giallo FFFF00 per le righe di chiusura mese)
-    // iteriamo sulle righe e colonne per applicare i colori
+    // Applica stili (Sfondo Azzurro per le righe di chiusura mese - Matching UI)
     const range = XLSX.utils.decode_range(ws['!ref']);
 
     // Stile Intestazione
     const headerStyle = {
         font: { bold: true, color: { rgb: "FFFFFF" } },
-        fill: { fgColor: { rgb: "091B2F" } }, // Dark blue
+        fill: { fgColor: { rgb: "3B82F6" } }, // Match accent-primary
         alignment: { horizontal: "center" }
     };
 
-    // Stile Chiusura (Giallo)
+    // Stile Chiusura (Giallo morbido - Match UI)
     const closingStyle = {
-        fill: { fgColor: { rgb: "FFFF00" } },
-        font: { bold: true, color: { rgb: "000000" } } // Black text on yellow background
+        fill: { fgColor: { rgb: "FEF9C3" } }, // Soft yellow
+        font: { bold: true, color: { rgb: "854D0E" } } // Dark yellow/brown text
     };
 
     const normalStyle = {

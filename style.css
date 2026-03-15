@@ -18,8 +18,8 @@
     --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     
-    --highlight-yellow: #fde047;
-    --highlight-yellow-muted: rgba(253, 224, 71, 0.1);
+    --highlight-yellow: #fbbf24;       /* More vibrant amber/gold */
+    --highlight-yellow-muted: rgba(251, 191, 36, 0.12);
 }
 
 [data-theme='dark'] {
@@ -511,95 +511,127 @@ body {
     overflow-y: auto;
 }
 
+/* === DASHBOARD TOP HEADER === */
 .top-header {
-    padding: 32px 40px 24px;
+    padding: 32px 40px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.header-top-row {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
 }
 
-.header-titles h1 {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 4px;
-}
-
-.subtitle {
-    color: var(--text-secondary);
-    font-size: 15px;
-}
-
-#currentBaseCurrencyText {
-    color: var(--accent-primary);
-    font-weight: 600;
-}
-
-/* === UPLOAD OVERLAY === */
-.upload-overlay {
-    position: absolute;
-    top: 100px;
-    left: 40px;
-    right: 40px;
-    bottom: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--bg-card);
-    border: 2px dashed var(--border-color);
+.header-selector-area {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: var(--border-radius-lg);
-    transition: all 0.3s ease;
-}
-
-.upload-overlay.dragover {
-    background-color: var(--bg-hover);
-    border-color: var(--accent-primary);
-}
-
-.upload-card {
-    text-align: center;
-    max-width: 400px;
-}
-
-.upload-icon-container {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 24px;
-    background: rgba(59, 130, 246, 0.1);
-    border-radius: 50%;
+    padding: 24px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 32px;
-    color: var(--accent-primary);
+    justify-content: space-between;
+    align-items: flex-end;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
 }
 
-.upload-card h2 {
-    font-size: 24px;
-    margin-bottom: 12px;
-}
-
-.upload-card p {
-    color: var(--text-secondary);
-    line-height: 1.5;
-    margin-bottom: 24px;
-}
-
-.btn-primary {
+.header-selector-area::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
     background: var(--accent-gradient);
-    color: white;
-    border: none;
-    padding: 12px 28px;
-    border-radius: var(--border-radius-md);
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: var(--shadow-glow);
 }
 
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
+.header-selector-area .currency-selector {
+    display: flex;
+    gap: 40px;
+    flex: 1;
+}
+
+.header-selector-area .selector-group {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+.input-with-flag {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    padding: 4px 10px;
+    transition: var(--transition-fast);
+}
+
+.input-with-flag:focus-within {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.input-with-flag .fi {
+    font-size: 1.2em;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.input-with-flag input {
+    border: none;
+    background: transparent;
+    padding: 6px 0;
+    width: 60px;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    outline: none;
+}
+
+.header-extra-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sync-status {
+    font-size: 11px;
+    margin-top: 6px;
+    color: var(--accent-primary);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.settings-trigger {
+    width: auto !important;
+    padding: 0 16px !important;
+    border-radius: 20px !important;
+    gap: 10px !important;
+}
+
+.settings-trigger span {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.reset-btn {
+    border: 1px solid var(--border-color);
+    color: var(--danger);
+}
+
+.reset-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: var(--danger);
+    color: var(--danger);
 }
 
 /* === DASHBOARD DATA === */
@@ -760,21 +792,23 @@ tbody tr:hover {
 
 /* === HIGHLIGHTS === */
 .row-closing {
-    background-color: rgba(253, 224, 71, 0.15) !important;
+    background-color: var(--highlight-yellow-muted) !important; /* Yellow highlight for dark theme */
 }
 
 [data-theme='light'] .row-closing {
-    background-color: #fef08a !important; /* brighter yellow for light theme */
+    background-color: rgba(253, 224, 71, 0.2) !important; /* Slightly stronger yellow for light theme */
 }
 
 .cell-highlight {
-    color: var(--accent-warning) !important;
+    color: var(--highlight-yellow) !important;
     font-weight: 700 !important;
 }
 
 [data-theme='light'] .cell-highlight {
-    color: #eab308 !important; /* amber for light theme visibility */
+    color: #854d0e !important; /* Darker yellow/brown for light theme visibility */
 }
+
+
 
 /* === NEW INTRO PAGE === */
 .intro-page {
@@ -1370,22 +1404,44 @@ tbody tr:hover {
 
     /* --- Header on mobile --- */
     .top-header {
-        padding: 16px 16px 12px;
+        padding: 24px 16px 16px;
+        gap: 20px;
+    }
+
+    .header-top-row {
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
+        gap: 16px;
+        width: 100%;
     }
 
-    .header-titles h1 {
-        font-size: 20px;
+    .header-selector-area {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+        padding: 16px;
+        margin: 0;
     }
 
-    .subtitle {
-        font-size: 13px;
+    .header-selector-area::before {
+        height: 4px;
+        width: 100%;
+    }
+
+    .header-selector-area .currency-selector {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .header-extra-actions {
+        border-top: 1px solid var(--border-color);
+        padding-top: 16px;
+        justify-content: flex-end;
     }
 
     .header-actions {
         width: 100%;
+        display: flex;
         justify-content: space-between;
     }
 
@@ -1528,36 +1584,15 @@ tbody tr:hover {
     }
 
     .chart-container {
-        height: 350px; /* Increased from 300px for tablets */
+        height: 350px; 
     }
 
     .header-titles h1 {
         font-size: 22px;
     }
-
-    /* Desktop positioning for moved selector */
-    .currency-selector {
-        position: fixed;
-        left: 0;
-        top: 240px; /* Increased to avoid overlap with nav items */
-        width: var(--sidebar-width);
-        padding: 20px;
-        border-top: 1px solid var(--border-color);
-        z-index: 10;
-        background: var(--bg-sidebar); /* Match sidebar background */
-    }
 }
 
-/* Specific desktop style for the moved selector */
+/* Specific desktop style cleanup: remove fixed sidebar position for selector */
 @media (min-width: 1025px) {
-    .currency-selector {
-        position: fixed;
-        left: 0;
-        top: 260px; /* Further increased for larger screens */
-        width: var(--sidebar-width);
-        padding: 24px;
-        border-top: 1px solid var(--border-color);
-        z-index: 10;
-        background: var(--bg-sidebar);
-    }
+    /* No special fixed positioning needed for selector as it stays in main flow */
 }

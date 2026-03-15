@@ -17,8 +17,8 @@ const translations = {
         // Dashboard
         nav_calculator: "Calcolatore Cambi",
         nav_database: "Database Storico",
-        group_main: "Cambi Principali",
-        group_custom: "Ricerca Cross Personale",
+        group_main: "Main Crosses",
+        group_custom: "Custom Cross Search",
         label_base: "Divisa Base",
         label_target: "Divisa Target",
         btn_fetch: "Recupera Dati",
@@ -53,7 +53,7 @@ const translations = {
         all_periods: "Tutti i periodi",
         closing_only_label: "Solo Chiusure Mensili",
         show_all: "Mostra tutto",
-        yellow_rows_only: "Month End",
+        yellow_rows_only: "Solo Fine Mese (Righe Gialle)",
         col_date: "Data",
         col_day_closing: "Valore Chiusura Giorno (Tasso)",
         col_month_closing: "Chiusura Mese",
@@ -174,7 +174,7 @@ const translations = {
         nav_calculator: "Calculatrice de Taux",
         nav_database: "Base de Données Historique",
         group_main: "Taux Principaux",
-        group_custom: "Recherche Cross Personnalisée",
+        group_custom: "Custom Cross Search",
         label_base: "Devise de Base",
         label_target: "Devise Target",
         btn_fetch: "Récupérer les Données",
@@ -276,8 +276,8 @@ function applyTranslations() {
     // Update Language Buttons highlighting
     const langBtns = document.querySelectorAll('.lang-btn');
     langBtns.forEach(btn => {
-        // We can check the onclick attribute to see which language it sets
-        if (btn.getAttribute('onclick').includes(`'${currentLanguage}'`)) {
+        const onclickAttr = btn.getAttribute('onclick');
+        if (onclickAttr && onclickAttr.includes(`'${currentLanguage}'`)) {
             btn.classList.add('active');
         } else {
             btn.classList.remove('active');

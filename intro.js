@@ -75,10 +75,20 @@ function loadPersistentCurrencies() {
 }
 
 async function fetchAllAvailableCurrencies() {
+    // Try to load from cache first
+    const saved = localStorage.getItem('frankfurter_currencies');
+    if (saved) {
+        try {
+            allAvailableCurrencies = JSON.parse(saved);
+        } catch (e) {}
+    }
+
     try {
         const response = await fetch('https://api.frankfurter.app/currencies');
         if (response.ok) {
             allAvailableCurrencies = await response.json();
+            localStorage.setItem('frankfurter_currencies', JSON.stringify(allAvailableCurrencies));
+            
             displayedCurrencies.forEach(curr => {
                 if (allAvailableCurrencies[curr.code]) {
                     curr.name = allAvailableCurrencies[curr.code];
@@ -94,15 +104,17 @@ async function fetchAllAvailableCurrencies() {
 function updateBaseCurrencyDisplay() {
     const curr = displayedCurrencies.find(c => c.code === baseCurrency) || { code: baseCurrency, name: 'Valuta', symbol: '', flag: '' };
     
-    baseCodeEl.textContent = curr.code;
-    baseNameEl.textContent = curr.name;
-    baseFlagEl.innerHTML = curr.flag ? `<span class="${APP_UTILS.getFlagClass(curr.code)}"></span>` : '';
+    if (baseCodeEl) baseCodeEl.textContent = curr.code;
+    if (baseNameEl) baseNameEl.textContent = curr.name;
+    if (baseFlagEl) baseFlagEl.innerHTML = curr.flag ? `<span class="${APP_UTILS.getFlagClass(curr.code)}"></span>` : '';
     
-    let displayStr = baseAmountStr === '' ? '0' : baseAmountStr;
-    // Formatting for the input display remains slightly specific due to the "live" comma handling
-    let parts = displayStr.split(',');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    baseAmountDisplayEl.textContent = parts.join(',');
+    if (baseAmountDisplayEl) {
+        let displayStr = baseAmountStr === '' ? '0' : baseAmountStr;
+        // Formatting for the input display remains slightly specific due to the "live" comma handling
+        let parts = displayStr.split(',');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        baseAmountDisplayEl.textContent = parts.join(',');
+    }
 }
 
 // FALLBACK_RATES moved to SHARED_FALLBACK_RATES in utils.js
@@ -114,10 +126,11 @@ async function fetchAndRenderRates() {
 
     if (appAbortController) appAbortController.abort();
     appAbortController = new AbortController();
-    const signal = appAbortController.signal;
+    const currentController = appAbortController; // Capture local reference
+    const signal = currentController.signal;
 
     try {
-        const timeoutId = setTimeout(() => appAbortController.abort(), 8000);
+        const timeoutId = setTimeout(() => currentController.abort(), 8000);
 
         const response = await fetch(`https://api.frankfurter.app/latest?from=${baseCurrency}&to=${targetStr}`, {
             signal: signal
@@ -126,6 +139,7 @@ async function fetchAndRenderRates() {
 
         if(response.ok) {
             const data = await response.json();
+            if (signal.aborted) return; // Final safety check
             ratesCache[baseCurrency] = data.rates;
             renderCurrencyList();
         } else {
@@ -133,13 +147,17 @@ async function fetchAndRenderRates() {
         }
     } catch (e) {
         if (e.name === 'AbortError') return;
+        console.warn("Fetch failed, using fallback", e);
         ratesCache[baseCurrency] = SHARED_FALLBACK_RATES[baseCurrency] || {};
         renderCurrencyList();
         
-        const errorMsg = document.createElement('li');
-        errorMsg.style.cssText = "font-size:10px; color: var(--text-muted); text-align:center; padding: 10px; list-style:none;";
-        errorMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${getTranslation('offline_mode')}`;
-        currencyListEl.appendChild(errorMsg);
+        // Only show error if we are not aborted by a subsequent call
+        if (!signal.aborted) {
+            const errorMsg = document.createElement('li');
+            errorMsg.style.cssText = "font-size:10px; color: var(--text-muted); text-align:center; padding: 10px; list-style:none;";
+            errorMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${getTranslation('offline_mode')}`;
+            if (currencyListEl) currencyListEl.appendChild(errorMsg);
+        }
     }
 }
 
