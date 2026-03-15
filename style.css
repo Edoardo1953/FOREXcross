@@ -526,18 +526,30 @@ body {
 }
 
 .header-top-row {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr; /* 3 columns: titles, nav, actions */
     align-items: center;
-    gap: 40px; /* Stronger gap to prevent overlap */
-    max-width: 1400px; /* Aligned with cards content */
+    gap: 20px;
+    max-width: 1400px;
     width: 100%;
     margin: 0 auto;
 }
 
 .header-titles {
     min-width: 0;
-    flex: 1; /* Take available space but respect gap */
+    text-align: left;
+}
+
+.header-nav-pills {
+    display: flex;
+    justify-content: center;
+}
+
+.header-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
 }
 
 .header-titles h1 {
@@ -1445,7 +1457,113 @@ tbody tr:hover {
    =================================================== */
 /* Responsive Mobile styling relocated to support PC full-width by default */
 @media (max-width: 768px) {
-    /* (Styles moved here to only apply on small screens) */
+    .app-container {
+        flex-direction: column;
+        overflow-y: auto;
+        height: auto; /* Allow natural page height on mobile */
+    }
+
+    .sidebar {
+        display: none !important; /* Hide sidebar on mobile */
+    }
+
+    .main-content {
+        height: auto;
+        overflow-y: visible;
+    }
+
+    .top-header {
+        position: relative;
+        padding: 20px 15px;
+    }
+
+    .header-top-row {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+        text-align: center;
+    }
+
+    .header-titles {
+        text-align: center;
+    }
+
+    .header-titles h1 {
+        font-size: 20px;
+        white-space: normal;
+    }
+
+    .header-actions {
+        width: 100%;
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .header-nav-pills {
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .nav-pill {
+        padding: 6px 12px;
+        font-size: 12px;
+        flex: 1;
+        justify-content: center;
+    }
+
+    .dashboard-controls-row {
+        flex-direction: column;
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .selector-card {
+        min-width: 0;
+        width: 100%;
+        padding: 15px;
+    }
+
+    .dashboard-data {
+        padding: 15px;
+        gap: 20px;
+    }
+
+    .cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-filters {
+        width: 100%;
+        overflow-x: auto;
+        justify-content: flex-start;
+    }
+
+    .custom-cross-form-row {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .custom-cross-form-row .input-with-flag {
+        width: calc(50% - 25px);
+        flex: none;
+    }
+
+    .swap-btn {
+        margin: 0;
+    }
+
+    .btn-primary-small {
+        width: 100%;
+        order: 10; /* Put search button last on mobile wrap */
+    }
+    
+    .btn-secondary-small {
+        order: 11;
+        width: 100%;
+    }
 }
 
 /* Tablet: medium range tweaks (769px - 1024px) */
