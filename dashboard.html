@@ -126,20 +126,18 @@
                     </div>
 
                     <div class="charts-area">
-                        <div class="chart-container main-chart">
-                            <div
-                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                                <h3 style="margin-bottom:0;" id="chartTitle" data-i18n="chart_trend">Andamento</h3>
-                                <div class="chart-filters"
-                                    style="display: flex; background: rgba(255,255,255,0.05); padding: 4px; border-radius: 6px;">
-                                    <button class="chart-filter-btn" data-range="all" data-i18n="range_all">Storico</button>
-                                    <button class="chart-filter-btn" data-range="5y" data-i18n="range_5y">5Y</button>
-                                    <button class="chart-filter-btn" data-range="1y" data-i18n="range_1y">1Y</button>
-                                    <button class="chart-filter-btn" data-range="6m" data-i18n="range_6m">6M</button>
-                                    <button class="chart-filter-btn" data-range="3m" data-i18n="range_3m">3M</button>
-                                    <button class="chart-filter-btn active" data-range="1m" data-i18n="range_1m">1M</button>
-                                </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="margin-bottom:0;" id="chartTitle" data-i18n="chart_trend">Andamento</h3>
+                            <div class="chart-filters" style="display: flex; background: rgba(255,255,255,0.05); padding: 4px; border-radius: 6px;">
+                                <button class="chart-filter-btn" data-range="all" data-i18n="range_all">Storico</button>
+                                <button class="chart-filter-btn" data-range="5y" data-i18n="range_5y">5Y</button>
+                                <button class="chart-filter-btn" data-range="1y" data-i18n="range_1y">1Y</button>
+                                <button class="chart-filter-btn" data-range="6m" data-i18n="range_6m">6M</button>
+                                <button class="chart-filter-btn" data-range="3m" data-i18n="range_3m">3M</button>
+                                <button class="chart-filter-btn active" data-range="1m" data-i18n="range_1m">1M</button>
                             </div>
+                        </div>
+                        <div class="chart-container main-chart">
                             <canvas id="historicalChart"></canvas>
                         </div>
                     </div>
