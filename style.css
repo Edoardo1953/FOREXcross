@@ -1308,13 +1308,15 @@ tbody tr:hover {
 
     /* Currency selector becomes horizontal scrollable row */
     .currency-selector {
-        border-top: 1px solid var(--border-color); /* Separator above the groups */
-        border-left: none;
-        padding: 12px;
+        border-top: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
+        padding: 16px 12px;
         display: flex;
-        flex-direction: column; /* Stack the groups */
+        flex-direction: column;
         gap: 12px;
-        flex-shrink: 0;
+        background: var(--bg-card); /* Subtle highlight on mobile */
+        margin: 0 12px 16px;
+        border-radius: var(--border-radius-md);
     }
 
     .selector-group {
@@ -1519,5 +1521,29 @@ tbody tr:hover {
 
     .header-titles h1 {
         font-size: 22px;
+    }
+
+    /* Desktop positioning for moved selector */
+    .currency-selector {
+        position: fixed;
+        left: 0;
+        top: 180px; /* Below logo and nav */
+        width: var(--sidebar-width);
+        padding: 20px;
+        border-top: 1px solid var(--border-color);
+        z-index: 10;
+    }
+}
+
+/* Specific desktop style for the moved selector */
+@media (min-width: 1025px) {
+    .currency-selector {
+        position: fixed;
+        left: 0;
+        top: 200px;
+        width: var(--sidebar-width);
+        padding: 24px;
+        border-top: 1px solid var(--border-color);
+        z-index: 10;
     }
 }
