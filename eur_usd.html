@@ -24,6 +24,11 @@
     <script src="translations.js"></script>
     <script src="utils.js"></script>
     <script src="settings.js"></script>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a0a0a">
+    <link rel="apple-touch-icon" href="icon-512.png">
 </head>
 
 <body>
@@ -268,6 +273,17 @@
 
     <!-- Custom Logic -->
     <script src="app.js"></script>
+
+    <!-- Register Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker registered', reg))
+                    .catch(err => console.error('Service Worker registration failed', err));
+            });
+        }
+    </script>
 </body>
 
 </html>aggiunto dashboard e corretti <link rel="stylesheet" href="">

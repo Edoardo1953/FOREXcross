@@ -37,6 +37,82 @@ if (window.location.pathname.includes('eur_usd')) {
 // --- Event Listeners Definition ---
 
 // Handle base currency toggle
+// Custom Cross Form Logic
+const customBaseInput = document.getElementById('customBase');
+const customTargetInput = document.getElementById('customTarget');
+const customBaseFlag = document.getElementById('customBaseFlag');
+const customTargetFlag = document.getElementById('customTargetFlag');
+const btnFetchCustom = document.getElementById('btnFetchCustom');
+const btnSwap = document.getElementById('btnSwap');
+
+function updateCustomFlags() {
+    if (customBaseFlag && customBaseInput) {
+        customBaseFlag.className = APP_UTILS.getFlagClass(customBaseInput.value);
+    }
+    if (customTargetFlag && customTargetInput) {
+        customTargetFlag.className = APP_UTILS.getFlagClass(customTargetInput.value);
+    }
+}
+
+if (btnSwap) {
+    btnSwap.addEventListener('click', () => {
+        const temp = customBaseInput.value;
+        customBaseInput.value = customTargetInput.value;
+        customTargetInput.value = temp;
+        updateCustomFlags();
+        // Optionally auto-fetch on swap
+        if (btnFetchCustom) btnFetchCustom.click();
+    });
+}
+
+if (btnFetchCustom) {
+    btnFetchCustom.addEventListener('click', () => {
+        const base = customBaseInput.value.trim().toUpperCase();
+        const target = customTargetInput.value.trim().toUpperCase();
+
+        if (base && target && base.length === 3 && target.length === 3) {
+            // Remove active class from all static toggles
+            baseCurrencyToggles.forEach(b => b.classList.remove('active'));
+            
+            // Update state
+            currentBaseCurrency = base;
+            currentTargetCurrency = target;
+            
+            // Update UI labels
+            updateLabels();
+
+            // Fetch new data
+            const globalLoader = document.getElementById('globalLoader');
+            if (globalLoader) globalLoader.classList.remove('hidden');
+            
+            initializeData();
+        } else {
+            alert('Inserisci codici valuta validi di 3 lettere (es. EUR, USD, BRL)');
+        }
+    });
+
+    // Handle Enter key in inputs
+    const handleEnter = (e) => {
+        if (e.key === 'Enter') btnFetchCustom.click();
+    };
+    if (customBaseInput) {
+        customBaseInput.addEventListener('keypress', handleEnter);
+        customBaseInput.addEventListener('input', updateCustomFlags);
+        customBaseInput.addEventListener('blur', () => {
+            customBaseInput.value = customBaseInput.value.toUpperCase();
+            updateCustomFlags();
+        });
+    }
+    if (customTargetInput) {
+        customTargetInput.addEventListener('keypress', handleEnter);
+        customTargetInput.addEventListener('input', updateCustomFlags);
+        customTargetInput.addEventListener('blur', () => {
+            customTargetInput.value = customTargetInput.value.toUpperCase();
+            updateCustomFlags();
+        });
+    }
+}
+
 // Handle cross selector toggle
 baseCurrencyToggles.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -66,8 +142,18 @@ function updateLabels() {
     const targetFlag = APP_UTILS.getFlagClass(currentTargetCurrency);
     const flagsHtml = `<span class="${baseFlag}" style="border-radius:2px; margin-left:8px;"></span><span class="${targetFlag}" style="border-radius:2px; margin-left:2px;"></span>`;
 
-    if (currentPairText) currentPairText.innerHTML = `${pairLabel} ${flagsHtml}`;
-    if (pageTitle) pageTitle.innerHTML = `${getTranslation('page_title_historical')} ${pairLabel} ${flagsHtml}`;
+    const subtitleEl = document.querySelector('.subtitle');
+
+    if (viewOverview.classList.contains('hidden')) {
+        // DATABASE VIEW ACTIVE
+        if (pageTitle) pageTitle.innerHTML = getTranslation('db_title');
+        if (subtitleEl) subtitleEl.innerHTML = `${getTranslation('subtitle_database')} ${pairLabel} ${flagsHtml}`;
+    } else {
+        // OVERVIEW VIEW ACTIVE
+        if (pageTitle) pageTitle.innerHTML = getTranslation('page_title_historical');
+        if (subtitleEl) subtitleEl.innerHTML = getTranslation('subtitle_historical');
+    }
+    
     if (cardTitle) cardTitle.innerHTML = `${getTranslation('last_change')} ${pairLabel} ${flagsHtml}`;
     if (chartTitle) chartTitle.innerHTML = `${getTranslation('chart_trend')} ${pairLabel} ${flagsHtml}`;
 }
@@ -86,6 +172,7 @@ navOverview.addEventListener('click', (e) => {
     navDatabase.classList.remove('active');
     viewOverview.classList.remove('hidden');
     viewDatabase.classList.add('hidden');
+    updateLabels();
 });
 
 navDatabase.addEventListener('click', (e) => {
@@ -94,6 +181,7 @@ navDatabase.addEventListener('click', (e) => {
     navOverview.classList.remove('active');
     viewDatabase.classList.remove('hidden');
     viewOverview.classList.add('hidden');
+    updateLabels();
 
     // Force scroll to bottom when the view is opened
     setTimeout(() => {
@@ -114,6 +202,11 @@ document.getElementById('exportExcelBtn').addEventListener('click', exportDataba
 document.addEventListener('DOMContentLoaded', () => {
     // Start data fetch process on load
     initializeData();
+
+    // Set initial values for custom inputs
+    if (customBaseInput) customBaseInput.value = currentBaseCurrency;
+    if (customTargetInput) customTargetInput.value = currentTargetCurrency;
+    updateCustomFlags();
 
     // Listen for language changes to update UI components
     window.addEventListener('languageChanged', () => {
@@ -804,7 +897,7 @@ function exportDatabaseToExcel() {
         if (R > 0) {
             const checkCellAddress = XLSX.utils.encode_cell({ r: R, c: 2 });
             const checkCell = ws[checkCellAddress];
-            if (checkCell && checkCell.v === "Sì") {
+            if (checkCell && checkCell.v === getTranslation('yes')) {
                 isClosing = true;
             }
         }
@@ -835,6 +928,6 @@ function exportDatabaseToExcel() {
     XLSX.utils.book_append_sheet(wb, ws, "Database Storico");
 
     // Salva il file
-    const safeCurrency = currentBaseCurrency;
-    XLSX.writeFile(wb, `FOREX_Database_Storico_${safeCurrency}.xlsx`);
+    const fileName = `FOREX_${currentBaseCurrency}_${currentTargetCurrency}_Historical_Data.xlsx`;
+    XLSX.writeFile(wb, fileName);
 }

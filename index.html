@@ -24,6 +24,11 @@
     <script src="translations.js"></script>
     <script src="utils.js"></script>
     <script src="settings.js"></script>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a0a0a">
+    <link rel="apple-touch-icon" href="icon-512.png">
 </head>
 
 <body class="intro-page">
@@ -49,7 +54,7 @@
                         EUR/USD <span class="fi fi-eu" style="margin-left: 4px; font-size: 1.1em; border-radius: 2px;"></span><span class="fi fi-us" style="margin-left: 2px; font-size: 1.1em; border-radius: 2px;"></span>
                     </a>
                     <a href="dashboard.html" class="nav-btn-text" data-i18n-title="title_nav_historical" title="Vai ai Cambi Storici">
-                        <span data-i18n="nav_historical_cross">Cambi Storici</span> <span class="fi fi-br" style="margin-left: 4px; font-size: 1.1em; border-radius: 2px;"></span>
+                        <span data-i18n="group_custom">Custom Cross Search</span>
                     </a>
                 </div>
             </div>
@@ -164,5 +169,16 @@
 
     <!-- Intro Logic JS -->
     <script src="intro.js"></script>
+
+    <!-- Register Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker registered', reg))
+                    .catch(err => console.error('Service Worker registration failed', err));
+            });
+        }
+    </script>
 </body>
 </html>
