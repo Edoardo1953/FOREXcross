@@ -134,7 +134,7 @@ async function fetchAndRenderRates() {
         renderCurrencyList();
         
         const errorMsg = document.createElement('li');
-        errorMsg.style.cssText = "font-size:10px; color: #999; text-align:center; padding: 10px; list-style:none;";
+        errorMsg.style.cssText = "font-size:10px; color: var(--text-muted); text-align:center; padding: 10px; list-style:none;";
         errorMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${getTranslation('offline_mode')}`;
         currencyListEl.appendChild(errorMsg);
     }

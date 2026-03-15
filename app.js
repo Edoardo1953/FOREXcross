@@ -13,6 +13,9 @@ let appData = null; // Will hold parsed excel data
 let currentBaseCurrency = 'EUR'; 
 let currentTargetCurrency = 'BRL';
 
+// NEW: Global Sync Controller to avoid multiple overlapping syncs
+let syncAbortController = null;
+
 // Auto-detect pair from URL
 if (window.location.pathname.includes('eur_usd')) {
     currentBaseCurrency = 'EUR';
@@ -126,16 +129,33 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('languageChanged', () => {
         updateDashboardUI();
     });
+
+    // Listen for theme changes to update chart colors
+    window.addEventListener('themeChanged', () => {
+        updateDashboardUI();
+    });
 });
 
 async function initializeData() {
     console.log("Initializing Dashboard Data Integration...");
+    
+    // Abort any existing sync process
+    if (syncAbortController) {
+        syncAbortController.abort();
+    }
+    syncAbortController = new AbortController();
+    const currentSignal = syncAbortController.signal;
+
     const globalLoader = document.getElementById('globalLoader');
     const dashboardDataContainer = document.getElementById('dashboardData');
 
     try {
-        await fetchLiveData();
+        // Pass the signal to the fetch process
+        await fetchLiveData(currentSignal);
         
+        // If aborted, stop here
+        if (currentSignal.aborted) return;
+
         // Hide loader, show dashboard content
         if(globalLoader) globalLoader.classList.add('hidden');
         if(dashboardDataContainer) dashboardDataContainer.classList.remove('hidden');
@@ -143,6 +163,7 @@ async function initializeData() {
         // Final UI updates
         updateDashboardUI();
     } catch (e) {
+        if (e.name === 'AbortError') return;
         console.error("Initialization Failed", e);
         if(globalLoader) {
             globalLoader.innerHTML = `
@@ -221,26 +242,12 @@ const SAFE_HISTORY_DATA = {
 
 let historicalRateList = [];
 
-async function fetchLiveData() {
+async function fetchLiveData(signal) {
     const today = new Date();
     console.log(`Starting Progressive Sync (Mode: ${currentBaseCurrency}/${currentTargetCurrency})...`);
     const statusEl = document.getElementById('syncStatus');
     const storageKey = `forex_api_data_${currentBaseCurrency}_${currentTargetCurrency}`;
     const uniqueMap = new Map();
-
-    // 1. CARICAMENTO DATI DI SICUREZZA (Rimosso su richiesta utente per evitare dati anomali manuali)
-    /*
-    const pairKey = `${currentBaseCurrency}_${currentTargetCurrency}`;
-    const baseline = SAFE_HISTORY_DATA[pairKey] || [];
-
-    baseline.forEach(item => {
-        const p = item.d.split('/');
-        if (p.length === 3) {
-            const dObj = new Date(Number(p[2]), Number(p[1]) - 1, Number(p[0]));
-            uniqueMap.set(item.d, { dateStr: item.d, rate: item.r, dateObj: dObj, isLive: false });
-        }
-    });
-    */
 
     // 2. RECUPERO CACHE (Istante)
     try {
@@ -250,8 +257,6 @@ async function fetchLiveData() {
             JSON.parse(saved).forEach(item => {
                 const dObj = new Date(item.dateObj);
                 if (dObj >= limit) {
-                    // Escludiamo tutti i dati 'Storico' (manuali/hardcoded) caricati in precedenza 
-                    // per affidarci esclusivamente ai dati reali dell'API Frankfurter.
                     if (!item.isLive) return;
                     uniqueMap.set(item.dateStr, { ...item, dateObj: dObj });
                 }
@@ -260,45 +265,43 @@ async function fetchLiveData() {
     } catch (e) {}
 
     // 3. RENDER IMMEDIATO (L'utente vede subito la dashboard con dati statici/cache)
-    saveAndRenderAll(uniqueMap, storageKey);
+    if (signal && signal.aborted) return;
+    saveAndRenderAll(uniqueMap, storageKey, true); // initial render
 
     // 4. AVVIO SYNC API IN BACKGROUND (NON BLOCCANTE)
-    // Non usiamo 'await' qui per permettere a initializeData di finire subito
     if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-sync fa-spin"></i> ${getTranslation('sync_progress')}`;
     
     (async () => {
         try {
+            if (signal && signal.aborted) return;
             const today = new Date();
             const startDay = new Date(); startDay.setDate(today.getDate() - 90);
             
             // Scarica ultimi 3 mesi
-            await fetchAndMergeRange(startDay, today, uniqueMap);
-            saveAndRenderAll(uniqueMap, storageKey);
+            await fetchAndMergeRange(startDay, today, uniqueMap, signal);
+            if (signal && signal.aborted) return;
+            saveAndRenderAll(uniqueMap, storageKey, true);
             
             // Scarica tutto lo storico mancante
-            await backgroundDeepSync(uniqueMap, storageKey);
+            await backgroundDeepSync(uniqueMap, storageKey, signal);
         } catch (err) {
+            if (err.name === 'AbortError') return;
             console.warn("Background sync error", err);
             if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${getTranslation('offline_mode')}`;
         }
     })();
 
-    return true; // Ritorniamo subito true per sbloccare la UI
+    return true; 
 }
 
-async function fetchAndMergeRange(start, end, map) {
+async function fetchAndMergeRange(start, end, map, signal) {
     const sStr = start.toISOString().split('T')[0];
     const eStr = end.toISOString().split('T')[0];
     try {
         let url = `https://api.frankfurter.app/${sStr}..${eStr}?to=${currentTargetCurrency}`;
         if (currentBaseCurrency !== 'EUR') url += `&from=${currentBaseCurrency}`;
         
-        // Timeout di 15 secondi per non restare appesi
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000);
-
-        const response = await fetch(url, { signal: controller.signal });
-        clearTimeout(timeoutId);
+        const response = await fetch(url, { signal: signal });
 
         if (response.ok) {
             const data = await response.json();
@@ -316,11 +319,10 @@ async function fetchAndMergeRange(start, end, map) {
     } catch (err) {}
 }
 
-async function backgroundDeepSync(map, key) {
+async function backgroundDeepSync(map, key, signal) {
     const statusEl = document.getElementById('syncStatus');
     const today = new Date();
     
-    // Anni da recuperare: dal corrente indietro di 10 anni (richiesta utente per evitare dati sporchi 2012-2015)
     const years = [];
     const limitYear = today.getFullYear() - 10;
     for (let y = today.getFullYear(); y >= limitYear; y--) {
@@ -328,39 +330,49 @@ async function backgroundDeepSync(map, key) {
     }
     
     for (let year of years) {
-        // Controlliamo quanti dati abbiamo per questo anno
+        if (signal && signal.aborted) return;
+        
         const count = Array.from(map.values()).filter(d => d.dateObj.getFullYear() === year).length;
 
-        // Se abbiamo meno di 100 giorni (un anno lavorativo ne ha circa 250), scarichiamo l'intero anno
         if (count < 100) {
             if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-cloud-arrow-down"></i> ${getTranslation('syncing_year', {year})}`;
             
             const startY = new Date(year, 0, 1);
             const endY = new Date(year, 11, 31);
-            
-            // Se è l'anno corrente, non andare oltre oggi
             const fetchEnd = endY > today ? today : endY;
 
-            await fetchAndMergeRange(startY, fetchEnd, map);
+            await fetchAndMergeRange(startY, fetchEnd, map, signal);
+            if (signal && signal.aborted) return;
             
-            // Salviamo in cache dopo ogni anno
-            saveToCache(key, Array.from(map.values()).sort((a,b) => a.dateObj - b.dateObj));
+            // Salviamo in cache ma NON re-renderizziamo tutto ogni volta per evitare instabilità UI
+            historicalRateList = Array.from(map.values()).sort((a,b) => a.dateObj - b.dateObj);
+            saveToCache(key, historicalRateList);
             
-            // Aggiorniamo la UI una volta per anno scaricato
-            saveAndRenderAll(map, key);
+            // Aggiorniamo solo lo status ma non il grafico pesante durante il sync
+            // saveAndRenderAll(map, key); (rimosso per stabilità)
             
-            // Piccolo delay per non sovraccaricare l'API
             await new Promise(r => setTimeout(r, 200));
         }
     }
+    
+    if (signal && signal.aborted) return;
+    
+    // Solo alla fine rinfreschiamo tutto il grafico e le tabelle
+    saveAndRenderAll(map, key, true);
+    
     if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-check-circle" style="color:var(--success)"></i> ${getTranslation('sync_complete')}`;
 }
 
-function saveAndRenderAll(map, key) {
+function saveAndRenderAll(map, key, fullRender = false) {
     historicalRateList = Array.from(map.values()).sort((a,b) => a.dateObj - b.dateObj);
     saveToCache(key, historicalRateList);
-    renderChart();
-    renderTable();
+    
+    if (fullRender) {
+        renderChart();
+        renderTable();
+        // Skip database table update as it's very heavy and auto-scrolled
+        // renderFullDatabaseTable(); 
+    }
 }
 
 function syncGlobalList(mapReference) {
@@ -499,12 +511,12 @@ function renderChart() {
             {
                 label: `${currentTargetCurrency} vs ${currentBaseCurrency}`,
                 data: dataPoints,
-                borderColor: '#3b82f6',
+                borderColor: getComputedStyle(document.documentElement).getPropertyValue('--accent-primary').trim() || '#3b82f6',
                 backgroundColor: 'rgba(59, 130, 246, 0.1)',
                 borderWidth: 2,
                 pointRadius: 3,
-                pointBackgroundColor: '#0f172a',
-                pointBorderColor: '#3b82f6',
+                pointBackgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-sidebar').trim() || '#0f172a',
+                pointBorderColor: getComputedStyle(document.documentElement).getPropertyValue('--accent-primary').trim() || '#3b82f6',
                 fill: true,
                 tension: 0.3
             }]
@@ -529,12 +541,12 @@ function renderChart() {
             },
             scales: {
                 x: {
-                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                    ticks: { color: '#94a3b8', maxTicksLimit: 12 }
+                    grid: { color: getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim() || 'rgba(255, 255, 255, 0.05)' },
+                    ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim() || '#94a3b8', maxTicksLimit: 12 }
                 },
                 y: {
-                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                    ticks: { color: '#94a3b8' }
+                    grid: { color: getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim() || 'rgba(255, 255, 255, 0.05)' },
+                    ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim() || '#94a3b8' }
                 }
             }
         }
@@ -681,13 +693,13 @@ function renderFullDatabaseTable() {
         const tr = document.createElement('tr');
 
         if (isClosing) {
-            tr.style.backgroundColor = 'rgba(253, 224, 71, 0.1)'; // subtle yellow background
+            tr.classList.add('row-closing');
         }
 
         tr.innerHTML = `
-            <td style="${isClosing ? 'font-weight: bold; color: #fde047;' : ''}">${data.dateStr}</td>
-            <td style="${isClosing ? 'font-weight: bold; color: #fde047;' : ''}">${formatNumberWithSeparators(data.rate)}</td>
-            <td>${isClosing ? `<i class="fa-solid fa-check" style="color:#fde047"></i> ${getTranslation('yes')}` : '-'}</td>
+            <td class="${isClosing ? 'cell-highlight' : ''}">${data.dateStr}</td>
+            <td class="${isClosing ? 'cell-highlight' : ''}">${formatNumberWithSeparators(data.rate)}</td>
+            <td>${isClosing ? `<i class="fa-solid fa-check cell-highlight"></i> ${getTranslation('yes')}` : '-'}</td>
             <td>${data.isLive ? `<span style="color:var(--accent-primary)">${getTranslation('api_live')}</span>` : `<span style="color:var(--text-secondary)">${getTranslation('historical')}</span>`}</td>
         `;
 

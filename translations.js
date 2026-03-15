@@ -65,7 +65,14 @@ const translations = {
         error_connection_title: "Errore di Connessione",
         error_connection_text: "Impossibile recuperare i dati dalla Banca Centrale Europea al momento. Controlla la tua connessione o riprova più tardi.",
         mese_prefix: "Mese: ",
-        sidebar_logo_dash: "Dash"
+        sidebar_logo_dash: "Dash",
+        settings_title: "Strumenti",
+        theme_label: "Colore App",
+        theme_light: "Chiaro",
+        theme_dark: "Scuro",
+        background_label: "Colore Sfondo",
+        bg_option_default: "Predefinito",
+        bg_option_black: "Nero"
     },
     en: {
         homepage_title: "FOREX Dashboard",
@@ -132,7 +139,14 @@ const translations = {
         error_connection_title: "Connection Error",
         error_connection_text: "Unable to retrieve data from the European Central Bank at the moment. Please check your connection or try again later.",
         mese_prefix: "Month: ",
-        sidebar_logo_dash: "Dash"
+        sidebar_logo_dash: "Dash",
+        settings_title: "Tools",
+        theme_label: "App Theme",
+        theme_light: "Light",
+        theme_dark: "Dark",
+        background_label: "Background Color",
+        bg_option_default: "Default",
+        bg_option_black: "Black"
     },
     fr: {
         homepage_title: "FOREX Dashboard",
@@ -199,7 +213,14 @@ const translations = {
         error_connection_title: "Erreur de Connexion",
         error_connection_text: "Impossible de récupérer les données de la Banque Centrale Européenne pour le moment. Veuillez vérifier votre connexion ou réessayer plus tard.",
         mese_prefix: "Mois: ",
-        sidebar_logo_dash: "Dash"
+        sidebar_logo_dash: "Dash",
+        settings_title: "Outils",
+        theme_label: "Couleur de l'application",
+        theme_light: "Clair",
+        theme_dark: "Sombre",
+        background_label: "Couleur de Fond",
+        bg_option_default: "Par défaut",
+        bg_option_black: "Noir"
     }
 };
 
@@ -266,4 +287,12 @@ function getTranslation(key, params = {}) {
 
 document.addEventListener('DOMContentLoaded', () => {
     applyTranslations();
+});
+
+// NEW: Listen for language changes from other tabs
+window.addEventListener('storage', (e) => {
+    if (e.key === 'app_language' && e.newValue) {
+        currentLanguage = e.newValue;
+        applyTranslations();
+    }
 });
