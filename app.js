@@ -39,15 +39,15 @@ if (window.location.pathname.includes('eur_usd')) {
 // Handle base currency toggle
 // Handle cross selector toggle
 baseCurrencyToggles.forEach(btn => {
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', () => {
         // Remove active class from all
         baseCurrencyToggles.forEach(b => b.classList.remove('active'));
-        // Add active to clicked
-        e.target.classList.add('active');
+        // Add active to the button itself
+        btn.classList.add('active');
 
-        // Update state
-        currentBaseCurrency = e.target.getAttribute('data-base');
-        currentTargetCurrency = e.target.getAttribute('data-target');
+        // Update state from the button attributes
+        currentBaseCurrency = btn.getAttribute('data-base');
+        currentTargetCurrency = btn.getAttribute('data-target');
         
         // Update UI labels
         updateLabels();
@@ -370,8 +370,8 @@ function saveAndRenderAll(map, key, fullRender = false) {
     if (fullRender) {
         renderChart();
         renderTable();
-        // Skip database table update as it's very heavy and auto-scrolled
-        // renderFullDatabaseTable(); 
+        // Update database table too when a full render is requested (at start and end of sync)
+        renderFullDatabaseTable(); 
     }
 }
 
