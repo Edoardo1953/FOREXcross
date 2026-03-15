@@ -264,8 +264,20 @@ async function fetchLiveData(signal) {
         }
     } catch (e) {}
 
-    // 3. RENDER IMMEDIATO (L'utente vede subito la dashboard con dati statici/cache)
+    // 3. RENDER IMMEDIATO
     if (signal && signal.aborted) return;
+    
+    // Se la cache è vuota, aggiungiamo un dato statico di emergenza per non mostrare il grafico vuoto mentre carica
+    if (uniqueMap.size === 0) {
+        const pairKey = `${currentBaseCurrency}_${currentTargetCurrency}`;
+        if (SAFE_HISTORY_DATA[pairKey]) {
+            SAFE_HISTORY_DATA[pairKey].forEach(item => {
+                const dObj = parseDate(item.d);
+                uniqueMap.set(item.d, { dateStr: item.d, rate: item.r, dateObj: dObj, isLive: false });
+            });
+        }
+    }
+    
     saveAndRenderAll(uniqueMap, storageKey, true); // initial render
 
     // 4. AVVIO SYNC API IN BACKGROUND (NON BLOCCANTE)
@@ -301,22 +313,30 @@ async function fetchAndMergeRange(start, end, map, signal) {
         let url = `https://api.frankfurter.app/${sStr}..${eStr}?to=${currentTargetCurrency}`;
         if (currentBaseCurrency !== 'EUR') url += `&from=${currentBaseCurrency}`;
         
+        console.log(`Fetching: ${url}`);
         const response = await fetch(url, { signal: signal });
 
         if (response.ok) {
             const data = await response.json();
             if (data && data.rates) {
+                let added = 0;
                 for (const [dStr, rates] of Object.entries(data.rates)) {
                     if (rates[currentTargetCurrency]) {
                         const p = dStr.split('-');
                         const dObj = new Date(p[0], p[1]-1, p[2]);
                         const label = `${String(dObj.getDate()).padStart(2,'0')}/${String(dObj.getMonth()+1).padStart(2,'0')}/${dObj.getFullYear()}`;
                         map.set(label, { dateStr: label, rate: rates[currentTargetCurrency], dateObj: dObj, isLive: true });
+                        added++;
                     }
                 }
+                console.log(`Merged ${added} records for ${currentBaseCurrency}/${currentTargetCurrency}`);
             }
+        } else {
+            console.warn(`API responded with status: ${response.status} for ${url}`);
         }
-    } catch (err) {}
+    } catch (err) {
+        if (err.name !== 'AbortError') console.error(`Fetch error for ${currentBaseCurrency}/${currentTargetCurrency}:`, err);
+    }
 }
 
 async function backgroundDeepSync(map, key, signal) {
