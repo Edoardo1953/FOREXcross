@@ -89,7 +89,7 @@
 }
 
 /* Apply transitions to background colors */
-body, .intro-app-container, .main-content, .sidebar, .intro-header, .numpad-section, .settings-container {
+body, .intro-app-container, .main-content, .intro-header, .numpad-section, .settings-container {
     transition: background-color var(--transition-normal), color var(--transition-normal), border-color var(--transition-normal);
 }
 
@@ -273,23 +273,9 @@ body {
     overflow-x: hidden;
 }
 
-/* Base App Layout */
-.app-container {
-    display: flex;
-    height: 100vh;
-    width: 100%;
-}
+/* Cleaned up redundant layout blocks */
 
-/* === SIDEBAR === */
-.sidebar {
-    width: var(--sidebar-width);
-    background-color: var(--bg-sidebar);
-    border-right: 1px solid var(--border-color);
-    display: flex;
-    flex-direction: column;
-    padding: 24px 0;
-    z-index: 10;
-}
+/* Consolidating sidebar logic below */
 
 .logo-area {
     display: flex;
@@ -497,48 +483,144 @@ body {
     transition: all 0.2s;
 }
 
-.btn-primary-small:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-glow);
+.app-container {
+    display: flex;
+    flex-direction: row; /* Back to row layout with sidebar */
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    background-color: var(--bg-main);
 }
 
-/* === MAIN CONTENT === */
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100%;
+    background-color: var(--bg-sidebar);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 30px 0;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
 .main-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     position: relative;
     overflow-y: auto;
+    padding: 0;
 }
 
 /* === DASHBOARD TOP HEADER === */
 .top-header {
-    padding: 32px 40px 0;
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    padding: 24px 30px;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    box-shadow: var(--shadow-sm);
 }
 
 .header-top-row {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: center;
+    gap: 40px; /* Stronger gap to prevent overlap */
+    max-width: 1400px; /* Aligned with cards content */
+    width: 100%;
+    margin: 0 auto;
 }
 
-.header-selector-area {
+.header-titles {
+    min-width: 0;
+    flex: 1; /* Take available space but respect gap */
+}
+
+.header-titles h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+/* Nav Pills in Header */
+.header-nav-pills {
+    display: flex;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 4px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.nav-pill {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.nav-pill:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-pill.active {
+    color: #fff;
+    background: var(--accent-primary);
+}
+
+/* Dashboard Controls cards side by side */
+/* Dashboard Controls Row: centered and aligned */
+.dashboard-controls-row {
+    display: flex;
+    gap: 20px;
+    padding: 24px 30px 0;
+    max-width: 1400px; /* Matches header */
+    width: 100%;
+    margin: 0 auto;
+    align-items: stretch;
+}
+
+.selector-card {
+    flex: 0 1 auto;
+    min-width: 380px; /* Increased for PC */
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-lg);
     padding: 24px;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+    flex-direction: column;
+    gap: 16px;
     box-shadow: var(--shadow-md);
     position: relative;
     overflow: hidden;
 }
 
-.header-selector-area::before {
+.selector-card::before {
     content: '';
     position: absolute;
     top: 0;
@@ -546,19 +628,73 @@ body {
     width: 4px;
     height: 100%;
     background: var(--accent-gradient);
+    opacity: 0.8;
 }
 
-.header-selector-area .currency-selector {
+.selector-group-title {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.selector-group-notice {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: -8px; /* Closer to the form */
+    font-weight: 400;
+    opacity: 0.8;
+}
+
+.toggle-group-grid.horizontal {
     display: flex;
-    gap: 40px;
+    gap: 12px;
+}
+
+.toggle-group-grid.horizontal .toggle-btn {
+    flex: 1;
+    padding: 0 24px;
+    height: 48px; /* Restored larger height */
+    font-size: 15px;
+}
+
+.custom-cross-form-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.custom-cross-form-row .input-with-flag {
     flex: 1;
 }
 
-.header-selector-area .selector-group {
-    background: none;
-    border: none;
-    padding: 0;
-    margin-bottom: 0;
+.custom-cross-form-row .btn-primary-small {
+    height: 48px;
+    padding: 0 24px;
+    font-size: 14px;
+}
+
+.btn-secondary-small {
+    height: 48px;
+    width: 54px; /* Enlarged as requested */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 18px; /* Slightly larger icon */
+}
+
+.btn-secondary-small:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border-color: var(--danger);
 }
 
 .input-with-flag {
@@ -640,10 +776,13 @@ body {
 }
 
 .dashboard-data {
-    padding: 0 40px 40px;
+    padding: 24px 30px 40px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 30px;
+    max-width: 1400px; /* Matches header */
+    width: 100%;
+    margin: 0 auto;
 }
 
 .cards-grid {
@@ -726,13 +865,14 @@ body {
 }
 
 .chart-container {
-    height: 420px; /* Increased from 350px to fit date labels */
+    height: 650px; /* Even larger as requested */
     position: relative;
 }
 
 /* Table styling */
 .table-responsive {
     overflow-x: auto;
+    max-height: 80vh; /* More expansive on PC */
 }
 
 table {
@@ -1303,296 +1443,24 @@ tbody tr:hover {
 /* ===================================================
    RESPONSIVE DESIGN - MOBILE (max-width: 768px)
    =================================================== */
+/* Responsive Mobile styling relocated to support PC full-width by default */
 @media (max-width: 768px) {
-
-    /* --- App Container: stack vertically --- */
-    .app-container {
-        flex-direction: column;
-        height: 100dvh; /* dynamic viewport height for mobile browsers */
-    }
-
-    /* --- Sidebar becomes a top bar on mobile --- */
-    .sidebar {
-        width: 100%;
-        height: auto;
-        flex-direction: column; /* Stacked below each other */
-        align-items: stretch;
-        padding: 0;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-        flex-shrink: 0;
-    }
-
-    /* Hide logo on mobile to save space */
-    .sidebar .logo-area {
-        display: none;
-    }
-
-    /* Navigation menu becomes horizontal */
-    .nav-menu {
-        flex-direction: row;
-        flex: 0;
-        gap: 4px;
-        padding: 8px 12px;
-        flex-shrink: 0;
-    }
-
-    .nav-item {
-        padding: 8px 12px;
-        font-size: 12px;
-        gap: 6px;
-        white-space: nowrap;
-        border-radius: var(--border-radius-sm);
-    }
-
-    .nav-item i {
-        font-size: 14px;
-    }
-
-    /* Currency selector becomes horizontal scrollable row */
-    .currency-selector {
-        border-top: 1px solid var(--border-color);
-        border-bottom: 1px solid var(--border-color);
-        padding: 16px 12px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        background: var(--bg-card); /* Subtle highlight on mobile */
-        margin: 0 12px 16px;
-        border-radius: var(--border-radius-md);
-    }
-
-    .selector-group {
-        margin-bottom: 0;
-        flex-shrink: 0;
-        padding: 0;
-        min-width: auto;
-    }
-
-    .selector-group-title {
-        font-size: 9px;
-        margin-bottom: 6px;
-    }
-
-    .toggle-group-grid {
-        display: flex;
-        flex-direction: column; /* Stacked for larger size */
-        gap: 10px;
-    }
-
-    .toggle-btn {
-        padding: 12px 16px;
-        font-size: 14px;
-        gap: 8px;
-        width: 100%;
-        height: 48px; /* Matching custom input heights */
-        justify-content: center;
-        background: var(--bg-main);
-        border: 1px solid var(--border-color);
-    }
-
-    .toggle-btn .fi {
-        font-size: 0.9em;
-    }
-
-    /* --- Main content takes remaining space --- */
-    .main-content {
-        flex: 1;
-        overflow-y: auto;
-        min-height: 0;
-    }
-
-    /* --- Header on mobile --- */
-    .top-header {
-        padding: 24px 16px 16px;
-        gap: 20px;
-    }
-
-    .header-top-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-        width: 100%;
-    }
-
-    .header-selector-area {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 20px;
-        padding: 16px;
-        margin: 0;
-    }
-
-    .header-selector-area::before {
-        height: 4px;
-        width: 100%;
-    }
-
-    .header-selector-area .currency-selector {
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .header-extra-actions {
-        border-top: 1px solid var(--border-color);
-        padding-top: 16px;
-        justify-content: flex-end;
-    }
-
-    .header-actions {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    /* --- Dashboard data area --- */
-    .dashboard-data {
-        padding: 0 12px 20px;
-        gap: 16px;
-    }
-
-    /* --- Cards --- */
-    .cards-grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
-
-    .summary-card {
-        padding: 16px;
-        gap: 14px;
-    }
-
-    .card-icon {
-        width: 48px;
-        height: 48px;
-        font-size: 20px;
-    }
-
-    .card-info h2 {
-        font-size: 22px;
-    }
-
-    /* --- Chart container --- */
-    .chart-container {
-        height: 320px; /* Increased from 250px */
-        margin-bottom: 40px; 
-    }
-
-    .charts-area,
-    .tables-area {
-        padding: 16px 12px;
-    }
-
-    .tables-area {
-        margin-top: 30px; /* Margine extra per evitare sovrapposizioni con le etichette del grafico */
-    }
-
-    /* Chart title + filters: stack vertically */
-    .charts-area > div > div:first-child,
-    .chart-container > div:first-child {
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 10px !important;
-    }
-
-    .chart-filters {
-        width: 100%;
-        overflow-x: auto;
-        flex-wrap: nowrap !important;
-        display: flex !important;
-    }
-
-    .chart-filter-btn {
-        padding: 5px 10px;
-        font-size: 12px;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-
-    /* --- Tables: scrollable horizontally --- */
-    .table-responsive {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    table {
-        min-width: 480px; /* force scroll rather than squish */
-    }
-
-    th, td {
-        padding: 10px 12px;
-        font-size: 13px;
-    }
-
-    th {
-        font-size: 12px;
-    }
-
-    /* --- Database view: filters bar stacks vertically --- */
-    .filters-bar {
-        flex-direction: column !important;
-        gap: 10px !important;
-    }
-
-    .filters-bar select {
-        width: 100% !important;
-        min-width: unset !important;
-    }
-
-    /* --- Database table header: export button row adapts --- */
-    #viewDatabase > .table-container > div:first-child {
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 10px !important;
-    }
-
-    #exportExcelBtn {
-        width: 100%;
-        justify-content: center;
-    }
-
-    /* --- Upload overlay --- */
-    .upload-overlay {
-        top: 60px;
-        left: 12px;
-        right: 12px;
-        bottom: 12px;
-    }
-
-    .upload-card h2 {
-        font-size: 18px;
-    }
-
-    /* --- Sync status bar --- */
-    #syncStatus {
-        font-size: 10px !important;
-    }
+    /* (Styles moved here to only apply on small screens) */
 }
 
 /* Tablet: medium range tweaks (769px - 1024px) */
-@media (min-width: 769px) and (max-width: 1024px) {
-    :root {
-        --sidebar-width: 220px;
-    }
 
-    .top-header {
-        padding: 20px 24px 16px;
-    }
-
-    .dashboard-data {
-        padding: 0 24px 24px;
-    }
-
-    .chart-container {
-        height: 350px; 
-    }
-
-    .header-titles h1 {
-        font-size: 22px;
-    }
-}
-
-/* Specific desktop style cleanup: remove fixed sidebar position for selector */
 @media (min-width: 1025px) {
-    /* No special fixed positioning needed for selector as it stays in main flow */
+    /* Full width database view for PC */
+    body.database-view-active .sidebar {
+        display: none;
+    }
+    
+    body.database-view-active .top-header,
+    body.database-view-active .dashboard-data {
+        padding-left: 80px;
+        padding-right: 80px;
+        max-width: 1600px;
+        margin: 0 auto;
+    }
 }

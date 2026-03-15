@@ -21,7 +21,7 @@ const translations = {
         group_custom: "Custom Cross Search",
         label_base: "Divisa Base",
         label_target: "Divisa Target",
-        btn_fetch: "Recupera Dati",
+        btn_fetch: "Cross Currencies Search",
         page_title_historical: "Historical Rates",
         subtitle_historical: "Historical analysis",
         sync_init: "Inizializzazione...",
@@ -76,7 +76,8 @@ const translations = {
         theme_dark: "Scuro",
         background_label: "Colore Sfondo",
         bg_option_default: "Predefinito",
-        bg_option_black: "Nero"
+        bg_option_black: "Nero",
+        select_currency_notice: "Please select the currency you require"
     },
     en: {
         homepage_title: "FOREX Dashboard",
@@ -99,7 +100,7 @@ const translations = {
         group_custom: "Custom Cross Search",
         label_base: "Base Currency",
         label_target: "Target Currency",
-        btn_fetch: "Fetch Data",
+        btn_fetch: "Cross Currencies Search",
         page_title_historical: "Historical Rates",
         subtitle_historical: "Historical analysis",
         sync_init: "Initializing...",
@@ -154,7 +155,8 @@ const translations = {
         theme_dark: "Dark",
         background_label: "Background Color",
         bg_option_default: "Default",
-        bg_option_black: "Black"
+        bg_option_black: "Black",
+        select_currency_notice: "Please select the currency you require"
     },
     fr: {
         homepage_title: "FOREX Dashboard",
@@ -177,7 +179,7 @@ const translations = {
         group_custom: "Custom Cross Search",
         label_base: "Devise de Base",
         label_target: "Devise Target",
-        btn_fetch: "Récupérer les Données",
+        btn_fetch: "Cross Currencies Search",
         page_title_historical: "Historical Rates",
         subtitle_historical: "Historical analysis",
         sync_init: "Initialisation...",
@@ -232,7 +234,8 @@ const translations = {
         theme_dark: "Sombre",
         background_label: "Couleur de Fond",
         bg_option_default: "Par défaut",
-        bg_option_black: "Noir"
+        bg_option_black: "Noir",
+        select_currency_notice: "Veuillez sélectionner la devise requise"
     }
 };
 

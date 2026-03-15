@@ -172,38 +172,52 @@ function updateLabels() {
 // getFlagClass moved to APP_UTILS
 
 // Navigation View Logic
-const navOverview = document.getElementById('navOverview');
-const navDatabase = document.getElementById('navDatabase');
+const navOverviewTriggers = document.querySelectorAll('#navOverview, #headerNavOverview');
+const navDatabaseTriggers = document.querySelectorAll('#navDatabase, #headerNavDatabase');
 const viewOverview = document.getElementById('viewOverview');
 const viewDatabase = document.getElementById('viewDatabase');
 
-navOverview.addEventListener('click', (e) => {
-    e.preventDefault();
-    navOverview.classList.add('active');
-    navDatabase.classList.remove('active');
-    viewOverview.classList.remove('hidden');
-    viewDatabase.classList.add('hidden');
+const switchView = (targetView) => {
+    if (targetView === 'overview') {
+        navOverviewTriggers.forEach(btn => btn.classList.add('active'));
+        navDatabaseTriggers.forEach(btn => btn.classList.remove('active'));
+        viewOverview.classList.remove('hidden');
+        viewDatabase.classList.add('hidden');
+        document.body.classList.remove('database-view-active');
+    } else {
+        navDatabaseTriggers.forEach(btn => btn.classList.add('active'));
+        navOverviewTriggers.forEach(btn => btn.classList.remove('active'));
+        viewDatabase.classList.remove('hidden');
+        viewOverview.classList.add('hidden');
+        document.body.classList.add('database-view-active');
+        renderFullDatabaseTable();
+        
+        // Force scroll to bottom when the view is opened
+        setTimeout(() => {
+            const tbody = document.querySelector('#fullDatabaseTable tbody');
+            if (tbody) {
+                const tableContainer = tbody.closest('.table-responsive');
+                if (tableContainer) {
+                    tableContainer.scrollTop = tableContainer.scrollHeight;
+                }
+            }
+        }, 100);
+    }
     updateLabels();
+};
+
+navOverviewTriggers.forEach(trigger => {
+    trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        switchView('overview');
+    });
 });
 
-navDatabase.addEventListener('click', (e) => {
-    e.preventDefault();
-    navDatabase.classList.add('active');
-    navOverview.classList.remove('active');
-    viewDatabase.classList.remove('hidden');
-    viewOverview.classList.add('hidden');
-    updateLabels();
-
-    // Force scroll to bottom when the view is opened
-    setTimeout(() => {
-        const tbody = document.querySelector('#fullDatabaseTable tbody');
-        if (tbody) {
-            const tableContainer = tbody.closest('.table-responsive');
-            if (tableContainer) {
-                tableContainer.scrollTop = tableContainer.scrollHeight;
-            }
-        }
-    }, 100); // 100ms delay to ensure browser has rendered the unhidden div
+navDatabaseTriggers.forEach(trigger => {
+    trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        switchView('database');
+    });
 });
 
 // Export Excel functionality
@@ -511,9 +525,7 @@ function saveAndRenderAll(map, key, fullRender = false) {
     saveToCache(key, historicalRateList);
     
     if (fullRender) {
-        renderChart();
-        renderTable();
-        renderFullDatabaseTable(); 
+        updateDashboardUI();
     }
 }
 
