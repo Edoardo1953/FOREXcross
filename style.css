@@ -1165,13 +1165,11 @@ tbody tr:hover {
     .sidebar {
         width: 100%;
         height: auto;
-        flex-direction: row;
-        align-items: center;
+        flex-direction: column; /* Stacked below each other */
+        align-items: stretch;
         padding: 0;
         border-right: none;
         border-bottom: 1px solid var(--border-color);
-        overflow-x: auto;
-        overflow-y: hidden;
         flex-shrink: 0;
     }
 
@@ -1203,20 +1201,19 @@ tbody tr:hover {
 
     /* Currency selector becomes horizontal scrollable row */
     .currency-selector {
-        border-top: none;
-        border-left: 1px solid var(--border-color);
-        padding: 8px 12px;
+        border-top: 1px solid var(--border-color); /* Separator above the groups */
+        border-left: none;
+        padding: 12px;
         display: flex;
-        flex-direction: row;
-        gap: 8px;
-        overflow-x: auto;
+        flex-direction: column; /* Stack the groups */
+        gap: 12px;
         flex-shrink: 0;
     }
 
     .selector-group {
         margin-bottom: 0;
         flex-shrink: 0;
-        padding: 8px;
+        padding: 0;
         min-width: auto;
     }
 
@@ -1226,9 +1223,9 @@ tbody tr:hover {
     }
 
     .toggle-group-grid {
-        display: flex;
-        flex-direction: row;
-        gap: 4px;
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Two buttons side by side for each group */
+        gap: 8px;
     }
 
     .toggle-btn {
