@@ -47,9 +47,9 @@
     --bg-sidebar: #ffffff;       /* Pure white sidebar */
     --bg-card: #ffffff;          /* White cards */
     --bg-hover: #f1f5f9;         /* Subtle light hover */
-    --text-primary: #0f172a;     /* Deep slate text (dark) */
-    --text-secondary: #64748b;   /* Muted slate text */
-    --text-muted: #94a3b8;       
+    --text-primary: #000000;     /* Pure Black for better contrast */
+    --text-secondary: #475569;   /* Darker slate text */
+    --text-muted: #64748b;       
     --glass-bg: rgba(255, 255, 255, 0.8);
     --glass-border: rgba(0, 0, 0, 0.05);
     --border-color: rgba(0, 0, 0, 0.08);
@@ -65,7 +65,7 @@
 /* Specific light theme adjustments for numpad and others if needed */
 body[data-theme='light'] .numpad-section, 
 body[data-theme='light'] .intro-header,
-body[data-theme='light'] .numpad-grid button {
+body[data-theme='light'] .numpad-grid button:not(.ac-key):not(.backspace-key):not(.op-key) {
     background-color: #ffffff;
 }
 
@@ -936,12 +936,18 @@ tbody tr:hover {
 }
 
 .numpad-grid .ac-key, .numpad-grid .backspace-key {
-    background-color: var(--text-muted);
-    color: white;
-    font-weight: 600;
+    background-color: #f1f5f9; /* Light grey background */
+    color: var(--accent-danger); /* Use red for AC and Delete for clear visibility */
+    font-weight: 700;
 }
 .numpad-grid .ac-key:active, .numpad-grid .backspace-key:active {
-    background-color: #374151;
+    background-color: #e2e8f0;
+}
+
+[data-theme="dark"] .numpad-grid .ac-key, 
+[data-theme="dark"] .numpad-grid .backspace-key {
+    background-color: rgba(239, 64, 64, 0.1);
+    color: #ef4444;
 }
 
 /* Modifiers for orange operators from reference image */
