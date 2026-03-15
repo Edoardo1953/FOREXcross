@@ -550,7 +550,10 @@ function renderChart() {
             scales: {
                 x: {
                     grid: { color: getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim() || 'rgba(255, 255, 255, 0.05)' },
-                    ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim() || '#94a3b8', maxTicksLimit: 12 }
+                    ticks: { 
+                        color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim() || '#94a3b8', 
+                        maxTicksLimit: window.innerWidth < 768 ? 6 : 12 // Reduced ticks for mobile
+                    }
                 },
                 y: {
                     grid: { color: getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim() || 'rgba(255, 255, 255, 0.05)' },
