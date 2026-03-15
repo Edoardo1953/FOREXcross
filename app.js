@@ -62,8 +62,8 @@ baseCurrencyToggles.forEach(btn => {
 
 function updateLabels() {
     const pairLabel = `${currentBaseCurrency}/${currentTargetCurrency}`;
-    const baseFlag = getFlagClass(currentBaseCurrency);
-    const targetFlag = getFlagClass(currentTargetCurrency);
+    const baseFlag = APP_UTILS.getFlagClass(currentBaseCurrency);
+    const targetFlag = APP_UTILS.getFlagClass(currentTargetCurrency);
     const flagsHtml = `<span class="${baseFlag}" style="border-radius:2px; margin-left:8px;"></span><span class="${targetFlag}" style="border-radius:2px; margin-left:2px;"></span>`;
 
     if (currentPairText) currentPairText.innerHTML = `${pairLabel} ${flagsHtml}`;
@@ -72,17 +72,7 @@ function updateLabels() {
     if (chartTitle) chartTitle.innerHTML = `${getTranslation('chart_trend')} ${pairLabel} ${flagsHtml}`;
 }
 
-function getFlagClass(currency) {
-    switch (currency) {
-        case 'EUR': return 'fi fi-eu';
-        case 'USD': return 'fi fi-us';
-        case 'BRL': return 'fi fi-br';
-        case 'GBP': return 'fi fi-gb';
-        case 'JPY': return 'fi fi-jp';
-        case 'HKD': return 'fi fi-hk';
-        default: return '';
-    }
-}
+// getFlagClass moved to APP_UTILS
 
 // Navigation View Logic
 const navOverview = document.getElementById('navOverview');
@@ -192,7 +182,7 @@ function updateDashboardUI() {
         const lastRecord = historicalRateList[historicalRateList.length - 1];
         const prevRecord = historicalRateList.length > 1 ? historicalRateList[historicalRateList.length - 2] : null;
 
-        latestRateElement.innerHTML = `${formatCurrency(lastRecord.rate, currentTargetCurrency)}`;
+        latestRateElement.innerHTML = APP_UTILS.formatCurrency(lastRecord.rate, currentTargetCurrency);
 
         const trendEl = document.getElementById('brlTrend');
         const trendParent = trendEl.parentElement;
@@ -253,16 +243,22 @@ async function fetchLiveData(signal) {
     try {
         const saved = localStorage.getItem(storageKey);
         if (saved) {
-            const limit = new Date(); limit.setFullYear(today.getFullYear() - 10);
-            JSON.parse(saved).forEach(item => {
-                const dObj = new Date(item.dateObj);
-                if (dObj >= limit) {
-                    if (!item.isLive) return;
-                    uniqueMap.set(item.dateStr, { ...item, dateObj: dObj });
-                }
-            });
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed)) {
+                const limit = new Date(); limit.setFullYear(today.getFullYear() - 10);
+                parsed.forEach(item => {
+                    if (!item.dateObj || !item.dateStr || item.rate === undefined) return;
+                    const dObj = new Date(item.dateObj);
+                    if (dObj >= limit) {
+                        if (!item.isLive) return;
+                        uniqueMap.set(item.dateStr, { ...item, dateObj: dObj });
+                    }
+                });
+            }
         }
-    } catch (e) {}
+    } catch (e) {
+        console.warn("Could not load cache for", storageKey, e);
+    }
 
     // 3. RENDER IMMEDIATO
     if (signal && signal.aborted) return;
@@ -272,7 +268,7 @@ async function fetchLiveData(signal) {
         const pairKey = `${currentBaseCurrency}_${currentTargetCurrency}`;
         if (SAFE_HISTORY_DATA[pairKey]) {
             SAFE_HISTORY_DATA[pairKey].forEach(item => {
-                const dObj = parseDate(item.d);
+                const dObj = APP_UTILS.parseDate(item.d);
                 uniqueMap.set(item.d, { dateStr: item.d, rate: item.r, dateObj: dObj, isLive: false });
             });
         }
@@ -370,11 +366,10 @@ async function backgroundDeepSync(map, key, signal) {
             historicalRateList = Array.from(map.values()).sort((a,b) => a.dateObj - b.dateObj);
             saveToCache(key, historicalRateList);
             
-            // Ogni 2 anni scaricati, rinfreschiamo la UI per mostrare progresso senza pesare troppo
+            // Ogni 3 anni scaricati, rinfreschiamo la UI per mostrare progresso senza pesare troppo
             batchCount++;
-            if (batchCount % 2 === 0) {
+            if (batchCount % 3 === 0) {
                 renderFullDatabaseTable();
-                renderChart();
             }
             
             await new Promise(r => setTimeout(r, 300)); // Rispetto per l'API
@@ -419,8 +414,8 @@ function saveToCache(key, list) {
     } catch (err) { /* silent */ }
 }
 
-// Tasto Reset Cache
-setTimeout(() => {
+// Tasto Reset Cache - No timeout needed if script is at end of body
+document.addEventListener('DOMContentLoaded', () => {
     const resetBtn = document.getElementById('resetDataBtn');
     if (resetBtn) {
         resetBtn.addEventListener('click', () => {
@@ -431,41 +426,13 @@ setTimeout(() => {
             }
         });
     }
-}, 1000);
+});
 
 
 
-function parseDate(dateStr) {
-    if (!dateStr) return new Date();
-    // Assuming DD/MM/YYYY format based on preview
-    const parts = dateStr.split('/');
-    if (parts.length === 3) {
-        return new Date(parts[2], parts[1] - 1, parts[0]);
-    }
-    return new Date(dateStr); // fallback to standard parsing
-}
+// formatCurrency and parseDate moved to APP_UTILS
 
-function formatCurrency(val, currency) {
-    if (currency === 'BRL') return `R$ ${formatNumberWithSeparators(val)}`;
-    if (currency === 'USD') return `$ ${formatNumberWithSeparators(val)}`;
-    if (currency === 'EUR') return `€ ${formatNumberWithSeparators(val)}`;
-    return `${currency} ${formatNumberWithSeparators(val)}`;
-}
-
-// Custom number formatter to get 1.000,0000 format
-function formatNumberWithSeparators(val, decimals = 4) {
-    if (val === undefined || val === null || isNaN(val)) return '--';
-    const num = Number(val);
-    
-    // Split into integer and decimal parts
-    const parts = num.toFixed(decimals).split('.');
-    
-    // Add dots for thousands spacing
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    
-    // Join with comma for decimals
-    return parts.join(',');
-}
+// formatNumberWithSeparators replaced by APP_UTILS.formatNumber
 
 let historicalChartInstance = null;
 let activeChartFrame = '1m'; // Default to 1 Month
@@ -567,7 +534,7 @@ function renderChart() {
                     callbacks: {
                         label: function (context) {
                             const label = context.dataset.label || '';
-                            const formattedVal = formatCurrency(context.parsed.y, currentTargetCurrency);
+                            const formattedVal = APP_UTILS.formatCurrency(context.parsed.y, currentTargetCurrency);
                             return `${label}: ${formattedVal}`;
                         }
                     }
@@ -639,8 +606,8 @@ function renderTable() {
         tr.innerHTML = `
             <td><strong>${data.monthLabel}</strong></td>
             <td>${data.dateStr}</td>
-            <td style="color: var(--accent-primary); font-weight: 500;">${formatNumberWithSeparators(data.rate)}</td>
-            <td style="color: var(--text-secondary); font-weight: 500;">${formatNumberWithSeparators(data.avgRate)}</td>
+            <td style="color: var(--accent-primary); font-weight: 500;">${APP_UTILS.formatNumber(data.rate)}</td>
+            <td style="color: var(--text-secondary); font-weight: 500;">${APP_UTILS.formatNumber(data.avgRate)}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -723,6 +690,7 @@ function renderFullDatabaseTable() {
     // Show newest first as requested in previous conversations, but table logic for Database view usually prefers chronological for scroll to bottom
     const sortedList = [...historicalRateList];
 
+    let tableHtml = '';
     sortedList.forEach(data => {
         const isClosing = monthlyClosingsSet.has(data.dateStr);
 
@@ -734,21 +702,16 @@ function renderFullDatabaseTable() {
             if (dataPeriod !== selectedPeriod) return;
         }
 
-        const tr = document.createElement('tr');
-
-        if (isClosing) {
-            tr.classList.add('row-closing');
-        }
-
-        tr.innerHTML = `
-            <td class="${isClosing ? 'cell-highlight' : ''}">${data.dateStr}</td>
-            <td class="${isClosing ? 'cell-highlight' : ''}">${formatNumberWithSeparators(data.rate)}</td>
-            <td>${isClosing ? `<i class="fa-solid fa-check cell-highlight"></i> ${getTranslation('yes')}` : '-'}</td>
-            <td>${data.isLive ? `<span style="color:var(--accent-primary)">${getTranslation('api_live')}</span>` : `<span style="color:var(--text-secondary)">${getTranslation('historical')}</span>`}</td>
+        tableHtml += `
+            <tr class="${isClosing ? 'row-closing' : ''}">
+                <td class="${isClosing ? 'cell-highlight' : ''}">${data.dateStr}</td>
+                <td class="${isClosing ? 'cell-highlight' : ''}">${APP_UTILS.formatNumber(data.rate)}</td>
+                <td>${isClosing ? `<i class="fa-solid fa-check cell-highlight"></i> ${getTranslation('yes')}` : '-'}</td>
+                <td>${data.isLive ? `<span style="color:var(--accent-primary)">${getTranslation('api_live')}</span>` : `<span style="color:var(--text-secondary)">${getTranslation('historical')}</span>`}</td>
+            </tr>
         `;
-
-        tbody.appendChild(tr);
     });
+    tbody.innerHTML = tableHtml;
 
     // Auto-scroll to bottom to show most recent data
     const tableContainer = tbody.closest('.table-responsive');

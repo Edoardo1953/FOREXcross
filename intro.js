@@ -16,6 +16,7 @@ let baseCurrency = 'EUR';
 let baseAmountStr = '1';
 let isInitialState = true;
 let ratesCache = {}; 
+let appAbortController = null;
 
 // DOM Elements
 const currencyListEl = document.getElementById('currencyList');
@@ -36,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function initApp() {
+    console.log("Initializing Intro App...");
     loadPersistentCurrencies();
     updateBaseCurrencyDisplay();
     
@@ -94,31 +96,31 @@ function updateBaseCurrencyDisplay() {
     
     baseCodeEl.textContent = curr.code;
     baseNameEl.textContent = curr.name;
-    baseFlagEl.innerHTML = curr.flag ? `<span class="fi fi-${curr.flag}"></span>` : '';
+    baseFlagEl.innerHTML = curr.flag ? `<span class="${APP_UTILS.getFlagClass(curr.code)}"></span>` : '';
     
     let displayStr = baseAmountStr === '' ? '0' : baseAmountStr;
+    // Formatting for the input display remains slightly specific due to the "live" comma handling
     let parts = displayStr.split(',');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     baseAmountDisplayEl.textContent = parts.join(',');
 }
 
-const FALLBACK_RATES = {
-    'EUR': { 'USD': 1.08, 'BRL': 6.12, 'HKD': 8.45, 'GBP': 0.86, 'CAD': 1.48 },
-    'USD': { 'EUR': 0.92, 'BRL': 5.65, 'HKD': 7.82, 'GBP': 0.79, 'CAD': 1.36 },
-    'BRL': { 'EUR': 0.16, 'USD': 0.18, 'HKD': 1.38, 'GBP': 0.14, 'CAD': 0.24 },
-    'GBP': { 'EUR': 1.16, 'USD': 1.25, 'BRL': 7.15, 'HKD': 9.80, 'CAD': 1.71 }
-};
+// FALLBACK_RATES moved to SHARED_FALLBACK_RATES in utils.js
 
 async function fetchAndRenderRates() {
     const codesToFetch = displayedCurrencies.map(c => c.code).filter(c => c !== baseCurrency);
+    if (codesToFetch.length === 0) return;
     const targetStr = codesToFetch.join(',');
 
+    if (appAbortController) appAbortController.abort();
+    appAbortController = new AbortController();
+    const signal = appAbortController.signal;
+
     try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        const timeoutId = setTimeout(() => appAbortController.abort(), 8000);
 
         const response = await fetch(`https://api.frankfurter.app/latest?from=${baseCurrency}&to=${targetStr}`, {
-            signal: controller.signal
+            signal: signal
         });
         clearTimeout(timeoutId);
 
@@ -130,7 +132,8 @@ async function fetchAndRenderRates() {
             throw new Error(`API Status ${response.status}`);
         }
     } catch (e) {
-        ratesCache[baseCurrency] = FALLBACK_RATES[baseCurrency] || {};
+        if (e.name === 'AbortError') return;
+        ratesCache[baseCurrency] = SHARED_FALLBACK_RATES[baseCurrency] || {};
         renderCurrencyList();
         
         const errorMsg = document.createElement('li');
@@ -164,7 +167,7 @@ function renderCurrencyList() {
             <div class="curr-main-link">
                 <div class="curr-left">
                     <div class="flag-container">
-                        <span class="fi fi-${curr.flag}"></span>
+                        <span class="${APP_UTILS.getFlagClass(curr.code)}"></span>
                     </div>
                 </div>
                 <div class="curr-middle">
@@ -172,7 +175,7 @@ function renderCurrencyList() {
                     <span class="curr-name">${displayName}</span>
                 </div>
                 <div class="curr-right">
-                    <span class="curr-amount">${formatCalculatedAmount(calculatedAmount)}</span>
+                    <span class="curr-amount">${APP_UTILS.formatNumber(calculatedAmount)}</span>
                 </div>
             </div>
             ${!protectedCodes.includes(curr.code) ? `
@@ -272,13 +275,7 @@ function addCurrency(code, name) {
     fetchAndRenderRates();
 }
 
-function formatCalculatedAmount(val) {
-    if(val === 0) return '0,0000';
-    const num = Number(val);
-    const parts = num.toFixed(4).split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    return parts.join(',');
-}
+// formatCalculatedAmount replaced by APP_UTILS.formatNumber
 
 function setAsBaseCurrency(newCode) {
     if(newCode === baseCurrency) return;

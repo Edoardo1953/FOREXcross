@@ -63,19 +63,19 @@
 }
 
 /* Specific light theme adjustments for numpad and others if needed */
-body[data-theme='light'] .numpad-section, 
-body[data-theme='light'] .intro-header,
-body[data-theme='light'] .numpad-grid button:not(.ac-key):not(.backspace-key):not(.op-key) {
+[data-theme='light'] .numpad-section, 
+[data-theme='light'] .intro-header,
+[data-theme='light'] .numpad-grid button:not(.ac-key):not(.backspace-key):not(.op-key) {
     background-color: #ffffff;
 }
 
-body[data-theme='dark'] .numpad-section,
-body[data-theme='dark'] .intro-header,
-body[data-theme='dark'] .numpad-grid button {
+[data-theme='dark'] .numpad-section,
+[data-theme='dark'] .intro-header,
+[data-theme='dark'] .numpad-grid button {
     background-color: var(--bg-sidebar);
 }
 
-body[data-theme='dark'] .numpad-grid {
+[data-theme='dark'] .numpad-grid {
     background-color: var(--border-color);
 }
 
@@ -221,13 +221,13 @@ body, .intro-app-container, .main-content, .sidebar, .intro-header, .numpad-sect
     box-shadow: var(--shadow-sm);
 }
 
-body[data-theme='dark'] .theme-switch-btn[data-theme='dark'].active,
-body[data-theme='dark'] .bg-switch-btn.active {
+[data-theme='dark'] .theme-switch-btn[data-theme='dark'].active,
+[data-theme='dark'] .bg-switch-btn.active {
     background-color: var(--bg-sidebar);
 }
 
-body[data-theme='light'] .theme-switch-btn[data-theme='light'].active,
-body[data-theme='light'] .bg-switch-btn.active {
+[data-theme='light'] .theme-switch-btn[data-theme='light'].active,
+[data-theme='light'] .bg-switch-btn.active {
     background-color: #ffffff;
 }
 
@@ -658,6 +658,24 @@ tbody tr:hover {
     background: var(--bg-hover);
     color: var(--text-primary);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* === HIGHLIGHTS === */
+.row-closing {
+    background-color: rgba(253, 224, 71, 0.15) !important;
+}
+
+[data-theme='light'] .row-closing {
+    background-color: #fef08a !important; /* brighter yellow for light theme */
+}
+
+.cell-highlight {
+    color: var(--accent-warning) !important;
+    font-weight: 700 !important;
+}
+
+[data-theme='light'] .cell-highlight {
+    color: #eab308 !important; /* amber for light theme visibility */
 }
 
 /* === NEW INTRO PAGE === */

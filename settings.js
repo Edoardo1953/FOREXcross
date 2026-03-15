@@ -61,7 +61,6 @@ function toggleSettings(show) {
 }
 
 function setTheme(theme, save = true) {
-    document.body.setAttribute('data-theme', theme);
     document.documentElement.setAttribute('data-theme', theme);
     if (save) {
         localStorage.setItem('app_theme', theme);
@@ -83,10 +82,8 @@ function setTheme(theme, save = true) {
 
 function setBackground(bg, save = true) {
     if (bg === 'default') {
-        document.body.removeAttribute('data-bg');
         document.documentElement.removeAttribute('data-bg');
     } else {
-        document.body.setAttribute('data-bg', bg);
         document.documentElement.setAttribute('data-bg', bg);
     }
     
