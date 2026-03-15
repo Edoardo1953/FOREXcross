@@ -522,7 +522,15 @@ function renderChart() {
             }]
         },
         options: {
-            animation: false, // Disabilita animazioni per evitare "movimenti" durante l'aggiornamento dati
+            layout: {
+                padding: {
+                    bottom: 25,
+                    left: 10,
+                    right: 10,
+                    top: 10
+                }
+            },
+            animation: false, 
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
