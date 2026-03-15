@@ -54,12 +54,18 @@ function updateCustomFlags() {
     }
 }
 
+function activateCustomArea() {
+    updateCustomFlags();
+    if (btnFetchCustom) btnFetchCustom.classList.remove('btn-inactive');
+    baseCurrencyToggles.forEach(b => b.classList.remove('active'));
+}
+
 if (btnSwap) {
     btnSwap.addEventListener('click', () => {
         const temp = customBaseInput.value;
         customBaseInput.value = customTargetInput.value;
         customTargetInput.value = temp;
-        updateCustomFlags();
+        activateCustomArea();
         // Optionally auto-fetch on swap
         if (btnFetchCustom) btnFetchCustom.click();
     });
@@ -97,18 +103,18 @@ if (btnFetchCustom) {
     };
     if (customBaseInput) {
         customBaseInput.addEventListener('keypress', handleEnter);
-        customBaseInput.addEventListener('input', updateCustomFlags);
+        customBaseInput.addEventListener('input', activateCustomArea);
         customBaseInput.addEventListener('blur', () => {
             customBaseInput.value = customBaseInput.value.toUpperCase();
-            updateCustomFlags();
+            activateCustomArea();
         });
     }
     if (customTargetInput) {
         customTargetInput.addEventListener('keypress', handleEnter);
-        customTargetInput.addEventListener('input', updateCustomFlags);
+        customTargetInput.addEventListener('input', activateCustomArea);
         customTargetInput.addEventListener('blur', () => {
             customTargetInput.value = customTargetInput.value.toUpperCase();
-            updateCustomFlags();
+            activateCustomArea();
         });
     }
 }
@@ -121,9 +127,12 @@ baseCurrencyToggles.forEach(btn => {
         // Add active to the button itself
         btn.classList.add('active');
 
-        // Update state from the button attributes
+        // Update state
         currentBaseCurrency = btn.getAttribute('data-base');
         currentTargetCurrency = btn.getAttribute('data-target');
+        
+        // Disable the custom fetch button visually since we switched to a preset
+        if (btnFetchCustom) btnFetchCustom.classList.add('btn-inactive');
         
         // Update UI labels
         updateLabels();
