@@ -102,7 +102,8 @@ const translations = {
         manuals_desc: "Guide procedurali e documentazione tecnica.",
         manual_privacy_title: "Guida alla Privacy e Accesso",
         dev_preview_label: "Developer Access",
-        btn_mobile_preview: "Anteprima Cellulare"
+        btn_mobile_preview: "Anteprima Cellulare",
+        custom_cross_hint: "Inserisci qui le divise che stai cercando"
     },
     en: {
         homepage_title: "FOREX Dashboard",
@@ -206,7 +207,8 @@ const translations = {
         manuals_desc: "Procedural guides and technical documentation.",
         manual_privacy_title: "Privacy and Access Guide",
         dev_preview_label: "Developer Access",
-        btn_mobile_preview: "Mobile Preview"
+        btn_mobile_preview: "Mobile Preview",
+        custom_cross_hint: "Enter the currencies you are looking for here"
     },
     fr: {
         homepage_title: "FOREX Dashboard",
@@ -293,7 +295,8 @@ const translations = {
         manuals_desc: "Guides de procédure et documentation technique.",
         manual_privacy_title: "Guide de Confidentialité et d'Accès",
         dev_preview_label: "Aperçu Développeur",
-        btn_mobile_preview: "Aperçu Mobile"
+        btn_mobile_preview: "Aperçu Mobile",
+        custom_cross_hint: "Entrez ici les devises que vous recherchez"
     }
 };
 

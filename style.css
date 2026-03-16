@@ -46,7 +46,8 @@
     background-color: var(--bg-sidebar);
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; /* Numpad at bottom of its area */
+    justify-content: flex-start; /* Numpad aligned at top with base currency */
+    padding-top: 24px; /* Aligns vertically with the base currency section */
 }
 
 /* mobile only helper */
@@ -64,6 +65,50 @@
     padding: 12px 24px;
     font-size: 15px;
 }
+
+/* === CUSTOM CROSS NAV PILL - ENHANCED === */
+.intro-page .header-nav-pills .nav-pill {
+    background: var(--accent-gradient);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.35);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.3px;
+    position: relative;
+    overflow: hidden;
+}
+
+.intro-page .header-nav-pills .nav-pill::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0);
+    transition: background 0.2s;
+}
+
+.intro-page .header-nav-pills .nav-pill:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+    color: white;
+    background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+}
+
+.intro-page .header-nav-pills .nav-pill:hover::before {
+    background: rgba(255,255,255,0.08);
+}
+
+.intro-page .header-nav-pills .nav-pill i {
+    font-size: 16px;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+}
+
 
 /* Responsive adjustments for split layout */
 @media (max-width: 900px) {
@@ -1624,12 +1669,12 @@ tbody tr:hover {
    DEVELOPER PREVIEW: MOBILE SIMULATOR
    =================================================== */
 .mobile-preview-active {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.75);
     display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
+    justify-content: center;
+    align-items: center;
     min-height: 100vh;
-    padding: 20px 40px 20px 0; /* Align with right margin more naturally */
+    padding: 20px;
 }
 
 .mobile-preview-active body {
@@ -2139,36 +2184,44 @@ tbody tr:hover {
 }
 
 .floating-mobile-btn {
-    width: 60px !important;
-    height: 60px !important;
-    border-radius: 50% !important;
+    width: auto !important;
+    height: 48px !important;
+    border-radius: 24px !important;
     background: var(--accent-gradient) !important;
     color: white !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4) !important;
     display: flex !important;
     align-items: center;
     justify-content: center;
+    gap: 8px;
+    padding: 0 20px !important;
     border: none !important;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    white-space: nowrap;
 }
 
 .floating-mobile-btn i {
     color: white !important;
-    font-size: 24px;
+    font-size: 18px;
 }
 
 .floating-mobile-btn:hover {
-    transform: scale(1.1) rotate(5deg);
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5) !important;
     filter: brightness(1.1);
 }
 
 .floating-mobile-btn.active {
     background: var(--accent-danger) !important;
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4) !important;
 }
 
 .floating-mobile-btn .btn-text {
-    display: none;
+    display: inline;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
 }
 
 @media (max-width: 900px) {
@@ -2177,9 +2230,19 @@ tbody tr:hover {
     }
 }
 
-/* Hide in simulator mode header */
-.mobile-preview-active .dev-btn-pc {
+/* In simulator mode: hide the old header btn-pc elements only (not the floating btn) */
+.mobile-preview-active .intro-header .dev-btn-pc,
+.mobile-preview-active .top-header .dev-btn-pc {
     display: none !important;
+}
+
+/* Floating container: stays visible always, moves to top-center in preview mode */
+.mobile-preview-active .floating-mobile-container {
+    bottom: auto;
+    top: 16px;
+    right: 50%;
+    transform: translateX(50%);
+    z-index: 99999;
 }
 
 .settings-col {
