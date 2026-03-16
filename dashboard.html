@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" />
     
     <!-- Custom CSS with versioning to force refresh -->
-    <link rel="stylesheet" href="style.css?v=1.1">
+    <link rel="stylesheet" href="style.css?v=1.2">
 
     <!-- Translations Logic -->
     <script src="translations.js"></script>
@@ -69,6 +69,10 @@
                         <button class="lang-btn" onclick="setLanguage('en')" title="English"><span class="fi fi-gb"></span></button>
                         <button class="lang-btn" onclick="setLanguage('fr')" title="Français"><span class="fi fi-fr"></span></button>
                         <button class="lang-btn" onclick="setLanguage('it')" title="Italiano"><span class="fi fi-it"></span></button>
+                        <button class="icon-btn dev-btn-pc" onclick="toggleMobilePreview()" title="Mobile View" data-i18n-title="btn_mobile_preview" style="margin-left: 8px;">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                            <span class="btn-text" data-i18n="btn_mobile_preview">Cell</span>
+                        </button>
                         <button class="icon-btn privacy-btn-pc" onclick="togglePrivacy(true)" title="Privacy" data-i18n-title="privacy_title" style="margin-left: 8px;">
                             <i class="fa-solid fa-key"></i>
                             <span class="btn-text" data-i18n="privacy_title">Privacy</span>
@@ -133,10 +137,9 @@
                             </button>
                             <button id="resetDataBtn" class="btn-secondary-small" title="Clear Cache" data-i18n-title="clean_cache">
                                 <i class="fa-solid fa-rotate"></i>
-                                <span class="mobile-btn-text" data-i18n="clean_cache">Clear Cache</span>
+                                <span class="mobile-btn-text" data-i18n="clean_cache">Reset</span>
                             </button>
                         </div>
-                        <p class="selector-group-notice" data-i18n="select_currency_notice">Please select the currency you require</p>
                     </div>
                 </div>
 
@@ -255,6 +258,16 @@
             </div>
             <div class="settings-body">
                 <div class="settings-group">
+                    <label class="settings-group-title">Developer Access</label>
+                    <div class="settings-row">
+                        <span data-i18n="btn_mobile_preview">Anteprima Cellulare</span>
+                        <div class="theme-switch-wrapper">
+                            <button id="btnToggleMobilePreview" class="theme-switch-btn" onclick="toggleMobilePreview()">OFF</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-group">
                     <label class="settings-group-title" data-i18n="theme_label">Colore App</label>
                     <div class="settings-row">
                         <span data-i18n="theme_label">Tema</span>
@@ -264,6 +277,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="settings-group">
                     <label class="settings-group-title" data-i18n="background_label">Colore Sfondo</label>
                     <div class="settings-row">
@@ -275,6 +289,45 @@
                     </div>
                 </div>
 
+                <div class="settings-group">
+                    <label class="settings-group-title" data-i18n="manuals_title">Manuali</label>
+                    <p class="settings-group-desc" data-i18n="manuals_desc" style="font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">Guide procedurali e documentazione tecnica.</p>
+                    <div class="manual-list">
+                        <a href="#" id="manualPrivacyLink" class="manual-item" target="_blank" style="display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); text-decoration: none; font-size: 13px; transition: var(--transition-fast);">
+                            <i class="fa-solid fa-file-pdf" style="color: var(--danger); font-size: 16px;"></i>
+                            <span data-i18n="manual_privacy_title">Guida alla Privacy e Accesso</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Access Prompt Overlay -->
+    <div id="accessOverlay" class="access-overlay hidden">
+        <div class="access-container">
+            <div class="access-icon">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2 data-i18n="prompt_password_title">Accesso Protetto</h2>
+            <p data-i18n="prompt_password_desc">Inserisci la password fornita per accedere alla dashboard.</p>
+            
+            <div class="access-form">
+                <input type="password" id="accessPasswordInput" placeholder="••••••••">
+                <p id="accessError" class="access-error hidden" data-i18n="invalid_password">Password non valida.</p>
+                <button id="btnLogin" class="btn-login" data-i18n="btn_login">Entra</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Overlay -->
+    <div id="privacyOverlay" class="settings-overlay hidden">
+        <div class="settings-container">
+            <div class="settings-header">
+                <h2 data-i18n="privacy_title">Privacy</h2>
+                <button class="close-settings" onclick="togglePrivacy(false)"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="settings-body">
                 <div class="settings-group">
                     <label class="settings-group-title" data-i18n="share_access_title">Condividi Accesso</label>
                     <p class="settings-group-desc" data-i18n="share_access_desc" style="font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">Crea un link con password per fornire accesso temporaneo a terzi.</p>
@@ -300,29 +353,9 @@
                         </div>
                     </div>
                 </div>
-                </div>
             </div>
         </div>
     </div>
-
-    <!-- Access Prompt Overlay -->
-    <div id="accessOverlay" class="access-overlay hidden">
-        <div class="access-container">
-            <div class="access-icon">
-                <i class="fa-solid fa-lock"></i>
-            </div>
-            <h2 data-i18n="prompt_password_title">Accesso Protetto</h2>
-            <p data-i18n="prompt_password_desc">Inserisci la password fornita per accedere alla dashboard.</p>
-            
-            <div class="access-form">
-                <input type="password" id="accessPasswordInput" placeholder="••••••••">
-                <p id="accessError" class="access-error hidden" data-i18n="invalid_password">Password non valida.</p>
-                <button id="btnLogin" class="btn-login" data-i18n="btn_login">Entra</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Custom Logic -->
     <script src="app.js"></script>
 
     <!-- Register Service Worker -->

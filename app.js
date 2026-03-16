@@ -285,7 +285,7 @@ function updateDashboardUI() {
 
     // Update the UI texts
     const latestRateElement = document.getElementById('latestRate');
-    if (historicalRateList.length > 0) {
+    if (latestRateElement && historicalRateList.length > 0) {
         // Assume last item is the most recent
         const lastRecord = historicalRateList[historicalRateList.length - 1];
         const prevRecord = historicalRateList.length > 1 ? historicalRateList[historicalRateList.length - 2] : null;
@@ -389,10 +389,11 @@ async function fetchLiveData(signal) {
     
     saveAndRenderAll(uniqueMap, storageKey, true); // initial render
 
-    // 4. AVVIO SYNC API IN BACKGROUND (NON BLOCCANTE)
+    // 4. AVVIO SYNC API IN BACKGROUND (CON DEBOUNCE)
     if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-sync fa-spin"></i> ${getTranslation('sync_progress')}`;
     
-    (async () => {
+    // Timeout per evitare che il sync parta troppo velocemente durante lo switch di valute
+    setTimeout(async () => {
         try {
             if (signal && signal.aborted) return;
             const today = new Date();
@@ -401,8 +402,13 @@ async function fetchLiveData(signal) {
             // Scarica ultimi 3 mesi
             await fetchAndMergeRange(startDay, today, uniqueMap, signal);
             if (signal && signal.aborted) return;
-            saveAndRenderAll(uniqueMap, storageKey, true);
             
+            // Salva ma non renderizzare tutto il Database ancora (pesante)
+            syncGlobalList(uniqueMap);
+            saveToCache(storageKey, historicalRateList);
+            renderChart(); 
+            renderTable();
+
             // Scarica tutto lo storico mancante
             await backgroundDeepSync(uniqueMap, storageKey, signal);
         } catch (err) {
@@ -410,7 +416,7 @@ async function fetchLiveData(signal) {
             console.warn("Background sync error", err);
             if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${getTranslation('offline_mode')}`;
         }
-    })();
+    }, 500);
 
     return true; 
 }
@@ -494,8 +500,10 @@ async function backgroundDeepSync(map, key, signal) {
     
     if (signal && signal.aborted) return;
     
-    // Fine sincronizzazione: rinfreschiamo tutto
-    saveAndRenderAll(map, key, true);
+    // Fine sincronizzazione: rinfreschiamo la UI finale
+    syncGlobalList(map);
+    saveToCache(key, historicalRateList);
+    updateDashboardUI();
     
     if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-check-circle" style="color:var(--success)"></i> ${getTranslation('sync_complete')}`;
 }
@@ -574,13 +582,17 @@ if (chartFilterBtns.length > 0 && !chartFilterBtns[0].dataset.listenerAdded) {
 }
 
 function renderChart() {
-    const ctx = document.getElementById('historicalChart').getContext('2d');
+    const chartCanvas = document.getElementById('historicalChart');
+    if (!chartCanvas) return;
+    
+    const ctx = chartCanvas.getContext('2d');
 
     if (historicalChartInstance) {
         historicalChartInstance.destroy();
     }
 
     let chartData = [...historicalRateList];
+    if (chartData.length === 0) return;
 
     // Applica filtro temporale grafico
     if (activeChartFrame === '5y') {

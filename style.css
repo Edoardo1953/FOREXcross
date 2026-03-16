@@ -246,6 +246,8 @@ body, .intro-app-container, .main-content, .intro-header, .numpad-section, .sett
 
 .settings-body {
     padding: 20px;
+    max-height: 70vh; /* Meglio su schermi diversi */
+    overflow-y: auto;
 }
 
 .settings-group {
@@ -685,15 +687,15 @@ body {
 }
 
 .selector-card {
-    flex: 0 1 auto;
-    min-width: 380px; /* Increased for PC */
+    flex: 1;
+    min-width: 280px;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-lg);
-    padding: 24px;
+    padding: 18px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
     box-shadow: var(--shadow-md);
     position: relative;
     overflow: hidden;
@@ -741,18 +743,41 @@ body {
 .custom-cross-form-row {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     width: 100%;
+    flex-wrap: nowrap !important; /* Forza orizzontalità */
+}
+
+.custom-cross-main-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
 }
 
 .custom-cross-form-row .input-with-flag {
     flex: 1;
+    min-width: 90px;
 }
 
 .custom-cross-form-row .btn-primary-small {
-    height: 48px;
-    padding: 0 24px;
-    font-size: 14px;
+    height: 44px;
+    padding: 0 16px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.dev-btn-pc i {
+    color: var(--accent-secondary) !important;
+}
+
+.dev-btn-pc.active {
+    background: var(--accent-secondary) !important;
+    color: white !important;
+}
+
+.dev-btn-pc.active i {
+    color: white !important;
 }
 
 .btn-secondary-small {
@@ -1116,14 +1141,38 @@ tbody tr:hover {
 }
 
 @media (max-width: 768px) {
-    .settings-btn-pc, .privacy-btn-pc {
+    .settings-btn-pc, .privacy-btn-pc, .dev-btn-pc {
+        padding: 8px !important;
+        margin-left: 4px !important;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid var(--border-color);
+        min-width: 40px;
+        justify-content: center;
         width: 44px !important;
-        padding: 0 !important;
+        height: 44px !important;
         border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
     }
     .settings-btn-pc .btn-text, .privacy-btn-pc .btn-text {
-        display: none;
+        display: none !important;
     }
+}
+
+/* Also apply to Simulator Mode on Desktop */
+.mobile-preview-active .settings-btn-pc, 
+.mobile-preview-active .privacy-btn-pc {
+    width: 44px !important;
+    height: 44px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+.mobile-preview-active .settings-btn-pc .btn-text, 
+.mobile-preview-active .privacy-btn-pc .btn-text {
+    display: none !important;
 }
 
 .icon-btn i {
@@ -1569,9 +1618,36 @@ tbody tr:hover {
 }
 
 /* ===================================================
-   RESPONSIVE DESIGN - MOBILE (max-width: 768px)
+   DEVELOPER PREVIEW: MOBILE SIMULATOR
    =================================================== */
-/* Responsive Mobile styling relocated to support PC full-width by default */
+.mobile-preview-active {
+    background-color: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.mobile-preview-active body {
+    width: 390px !important;
+    height: 844px !important;
+    margin: 20px auto !important;
+    border: 10px solid #333;
+    border-radius: 40px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
+    display: block !important;
+}
+
+.mobile-preview-active .app-container {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+/* ===================================================
+   RESPONSIVE DESIGN - MOBILE
+   =================================================== */
 @media (max-width: 768px) {
     .intro-app-container {
         max-width: 500px;
@@ -1738,10 +1814,11 @@ tbody tr:hover {
     }
 
     .custom-cross-main-row {
-        display: flex;
+        display: flex !important;
+        flex-direction: row !important;
         align-items: center;
         justify-content: space-between;
-        gap: 10px;
+        gap: 6px;
         width: 100%;
     }
 
@@ -1767,6 +1844,148 @@ tbody tr:hover {
         order: 5;
         margin-top: 10px;
     }
+}
+
+/* Reduplicate styles for the simulator class */
+.mobile-preview-active .split-content {
+    flex-direction: column !important;
+    overflow-y: auto !important;
+}
+.mobile-preview-active .split-right {
+    width: 100% !important;
+    border-left: none !important;
+    border-top: 1px solid var(--border-color);
+}
+.mobile-preview-active .numpad-section {
+    position: relative !important;
+    width: 100% !important;
+}
+.mobile-preview-active .mobile-only {
+    display: block !important;
+}
+.mobile-preview-active .app-container {
+    flex-direction: column;
+    overflow-y: auto;
+    height: auto;
+}
+.mobile-preview-active .sidebar {
+    display: none !important;
+}
+.mobile-preview-active .main-content {
+    height: auto;
+    overflow-y: visible;
+}
+.mobile-preview-active .top-header {
+    position: relative;
+    padding: 20px 15px;
+}
+.mobile-preview-active .header-top-row {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    text-align: center;
+}
+.mobile-preview-active .header-titles {
+    text-align: center;
+    order: 1;
+}
+.mobile-preview-active .header-titles h1 {
+    font-size: 20px;
+    white-space: normal;
+}
+.mobile-preview-active .header-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    order: 2;
+}
+.mobile-preview-active .header-nav-pills {
+    justify-content: center;
+    flex-wrap: nowrap;
+    width: 100%;
+    order: 3;
+    gap: 4px;
+}
+.mobile-preview-active .nav-pill {
+    padding: 8px 10px;
+    font-size: 11px;
+    flex: 1;
+    justify-content: center;
+    min-width: 0;
+}
+.mobile-preview-active .dashboard-controls-row {
+    flex-direction: column;
+    padding: 15px;
+    gap: 15px;
+}
+.mobile-preview-active .selector-card {
+    min-width: 0;
+    width: 100%;
+    padding: 15px;
+}
+.mobile-preview-active .dashboard-data {
+    padding: 10px 0;
+    gap: 15px;
+}
+.mobile-preview-active .chart-container {
+    min-height: 380px;
+    padding: 15px 0;
+}
+.mobile-preview-active .charts-area, 
+.mobile-preview-active .summary-card, 
+.mobile-preview-active .dashboard-controls-row {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+.mobile-preview-active .table-responsive {
+    margin: 0 -10px;
+    width: calc(100% + 20px);
+}
+.mobile-preview-active .table-container {
+    padding: 0;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+}
+.mobile-preview-active .chart-filters {
+    width: 100%;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+.mobile-preview-active .charts-area > div:first-child {
+    flex-direction: column-reverse;
+    align-items: stretch !important;
+}
+.mobile-preview-active .chart-filter-btn {
+    padding: 8px 12px;
+    font-size: 11px;
+    flex-shrink: 0;
+    flex: 1;
+    text-align: center;
+}
+.mobile-preview-active .custom-cross-form-row {
+    flex-direction: column;
+    gap: 12px;
+}
+.mobile-preview-active .custom-cross-main-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+}
+.mobile-preview-active .btn-secondary-small .mobile-btn-text {
+    display: inline;
+}
+.mobile-preview-active .intro-app-container {
+    max-width: 500px;
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
 }
 
 /* Tablet: medium range tweaks (769px - 1024px) */

@@ -100,7 +100,9 @@ const translations = {
         privacy_title: "Privacy",
         manuals_title: "Manuali",
         manuals_desc: "Guide procedurali e documentazione tecnica.",
-        manual_privacy_title: "Guida alla Privacy e Accesso"
+        manual_privacy_title: "Guida alla Privacy e Accesso",
+        dev_preview_label: "Developer Access",
+        btn_mobile_preview: "Anteprima Cellulare"
     },
     en: {
         homepage_title: "FOREX Dashboard",
@@ -202,7 +204,9 @@ const translations = {
         privacy_title: "Privacy",
         manuals_title: "Manuals",
         manuals_desc: "Procedural guides and technical documentation.",
-        manual_privacy_title: "Privacy and Access Guide"
+        manual_privacy_title: "Privacy and Access Guide",
+        dev_preview_label: "Developer Access",
+        btn_mobile_preview: "Mobile Preview"
     },
     fr: {
         homepage_title: "FOREX Dashboard",
@@ -287,7 +291,9 @@ const translations = {
         privacy_title: "Confidentialité",
         manuals_title: "Manuels",
         manuals_desc: "Guides de procédure et documentation technique.",
-        manual_privacy_title: "Guide de Confidentialité et d'Accès"
+        manual_privacy_title: "Guide de Confidentialité et d'Accès",
+        dev_preview_label: "Aperçu Développeur",
+        btn_mobile_preview: "Aperçu Mobile"
     }
 };
 
