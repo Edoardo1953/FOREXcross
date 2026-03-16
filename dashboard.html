@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title data-i18n="homepage_title">FOREX Dashboard</title>
 
     <!-- Google Fonts for modern typography -->
@@ -69,10 +69,6 @@
                         <button class="lang-btn" onclick="setLanguage('en')" title="English"><span class="fi fi-gb"></span></button>
                         <button class="lang-btn" onclick="setLanguage('fr')" title="Français"><span class="fi fi-fr"></span></button>
                         <button class="lang-btn" onclick="setLanguage('it')" title="Italiano"><span class="fi fi-it"></span></button>
-                        <button class="icon-btn dev-btn-pc" onclick="toggleMobilePreview()" title="Mobile View" data-i18n-title="btn_mobile_preview" style="margin-left: 8px;">
-                            <i class="fa-solid fa-mobile-screen-button"></i>
-                            <span class="btn-text" data-i18n="btn_mobile_preview">Cell</span>
-                        </button>
                         <button class="icon-btn privacy-btn-pc" onclick="togglePrivacy(true)" title="Privacy" data-i18n-title="privacy_title" style="margin-left: 8px;">
                             <i class="fa-solid fa-key"></i>
                             <span class="btn-text" data-i18n="privacy_title">Privacy</span>
@@ -368,6 +364,12 @@
             });
         }
     </script>
+    <!-- Floating Mobile Preview Button (PC only) -->
+    <div class="floating-mobile-container">
+        <button class="floating-mobile-btn dev-btn-pc" onclick="toggleMobilePreview()" title="Mobile View" data-i18n-title="btn_mobile_preview">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+        </button>
+    </div>
 </body>
 
 </html>

@@ -1141,7 +1141,7 @@ tbody tr:hover {
 }
 
 @media (max-width: 768px) {
-    .settings-btn-pc, .privacy-btn-pc, .dev-btn-pc {
+    .settings-btn-pc, .privacy-btn-pc {
         padding: 8px !important;
         margin-left: 4px !important;
         background: rgba(255,255,255,0.05);
@@ -1156,6 +1156,9 @@ tbody tr:hover {
     }
     .settings-btn-pc .btn-text, .privacy-btn-pc .btn-text {
         display: none !important;
+    }
+    .dev-btn-pc {
+        display: none !important; /* Hide from header on mobile */
     }
 }
 
@@ -1621,19 +1624,20 @@ tbody tr:hover {
    DEVELOPER PREVIEW: MOBILE SIMULATOR
    =================================================== */
 .mobile-preview-active {
-    background-color: #1a1a1a;
+    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-end;
+    align-items: flex-end;
     min-height: 100vh;
+    padding: 20px 40px 20px 0; /* Align with right margin more naturally */
 }
 
 .mobile-preview-active body {
     width: 390px !important;
-    height: 844px !important;
-    margin: 20px auto !important;
-    border: 10px solid #333;
-    border-radius: 40px;
+    height: 800px !important;
+    margin: 0 !important;
+    border: 12px solid #222;
+    border-radius: 45px;
     position: relative;
     overflow: hidden;
     box-shadow: 0 0 50px rgba(0,0,0,0.5);
@@ -1674,10 +1678,51 @@ tbody tr:hover {
     .mobile-only {
         display: block;
     }
+
+    /* Intro Page Mobile Specifics */
+    .intro-header {
+        flex-direction: column !important;
+        padding: 15px !important;
+        gap: 15px !important;
+        text-align: center;
+    }
+    .intro-header .header-actions {
+        order: 2;
+        width: 100%;
+        justify-content: center;
+        gap: 10px;
+        display: flex;
+    }
+    .intro-header .header-nav-pills {
+        order: 3;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    .intro-header .intro-titles {
+        order: 1;
+    }
+    .intro-header .intro-titles h1 {
+        font-size: 24px !important;
+    }
+    
+    .base-currency-section {
+        padding: 15px 0 10px;
+    }
+    .currency-row.base-row {
+        padding: 15px 15px 10px 15px !important; 
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .base-row .curr-amount {
+        font-size: 28px !important;
+        padding-right: 0 !important;
+    }
     .app-container {
         flex-direction: column;
-        overflow-y: auto;
-        height: auto; /* Allow natural page height on mobile */
+        overflow: hidden; /* Prevent body scroll, use inner scroll */
+        height: 100vh;
     }
 
     .sidebar {
@@ -2084,6 +2129,57 @@ tbody tr:hover {
     color: var(--danger);
     font-size: 14px;
     margin-top: -8px;
+}
+
+.floating-mobile-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.floating-mobile-btn {
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 50% !important;
+    background: var(--accent-gradient) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    border: none !important;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.floating-mobile-btn i {
+    color: white !important;
+    font-size: 24px;
+}
+
+.floating-mobile-btn:hover {
+    transform: scale(1.1) rotate(5deg);
+    filter: brightness(1.1);
+}
+
+.floating-mobile-btn.active {
+    background: var(--accent-danger) !important;
+}
+
+.floating-mobile-btn .btn-text {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .floating-mobile-container {
+        display: none; /* Hide on real mobile devices to save space, it's a dev tool */
+    }
+}
+
+/* Hide in simulator mode header */
+.mobile-preview-active .dev-btn-pc {
+    display: none !important;
 }
 
 .settings-col {

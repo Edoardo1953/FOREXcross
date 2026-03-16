@@ -806,13 +806,12 @@ function renderFullDatabaseTable(limit = 100) {
     const selectedClosing = filterClosingSelect ? filterClosingSelect.value : 'all';
 
     const monthlyClosingsSet = new Set(getMonthlyClosings().map(m => m.dateStr));
-    const sortedList = [...historicalRateList];
-    const rows = [];
-    
-    // Sort chronological: Newest at top for Database View
-    sortedList.sort((a, b) => b.dateObj - a.dateObj);
-
     let matchCount = 0;
+    const fragment = document.createDocumentFragment();
+
+    // Reverse the list to show newest first in the database
+    const sortedList = [...historicalRateList].reverse();
+
     for (let i = 0; i < sortedList.length; i++) {
         const data = sortedList[i];
         const isClosing = monthlyClosingsSet.has(data.dateStr);
@@ -824,31 +823,36 @@ function renderFullDatabaseTable(limit = 100) {
         }
 
         matchCount++;
-        rows.push(`
-            <tr class="${isClosing ? 'row-closing' : ''}">
-                <td class="${isClosing ? 'cell-highlight' : ''}">${data.dateStr}</td>
-                <td class="${isClosing ? 'cell-highlight' : ''}">${APP_UTILS.formatNumber(data.rate)}</td>
-                <td>${isClosing ? `<i class="fa-solid fa-check cell-highlight"></i> ${getTranslation('yes')}` : '-'}</td>
-                <td>${data.isLive ? `<span style="color:var(--accent-primary)">${getTranslation('api_live')}</span>` : `<span style="color:var(--text-secondary)">${getTranslation('historical')}</span>`}</td>
-            </tr>
-        `);
+        const tr = document.createElement('tr');
+        if (isClosing) tr.className = 'row-closing';
+        
+        tr.innerHTML = `
+            <td class="${isClosing ? 'cell-highlight' : ''}">${data.dateStr}</td>
+            <td class="${isClosing ? 'cell-highlight' : ''}">${APP_UTILS.formatNumber(data.rate)}</td>
+            <td>${isClosing ? `<i class="fa-solid fa-check cell-highlight"></i> ${getTranslation('yes')}` : '-'}</td>
+            <td>${data.isLive ? `<span style="color:var(--accent-primary)">${getTranslation('api_live')}</span>` : `<span style="color:var(--text-secondary)">${getTranslation('historical')}</span>`}</td>
+        `;
+        fragment.appendChild(tr);
 
+        // Limit for initial render to avoid freeze, but allow "Show All"
         if (limit && matchCount >= limit && selectedPeriod === 'all' && selectedClosing === 'all') break;
     }
 
-    if (limit && matchCount >= limit && sortedList.length > limit && selectedPeriod === 'all' && selectedClosing === 'all') {
-        rows.push(`
-            <tr>
-                <td colspan="4" style="text-align:center; padding:20px;">
-                    <button class="btn-primary-small" style="margin:0 auto;" onclick="renderFullDatabaseTable(0)">
-                        <i class="fa-solid fa-list"></i> Mostra tutto lo storico (${sortedList.length} righe)
-                    </button>
-                </td>
-            </tr>
-        `);
-    }
+    tbody.innerHTML = '';
+    tbody.appendChild(fragment);
 
-    tbody.innerHTML = rows.join('');
+    // Se ci sono più dati del limite, aggiungiamo il tasto "Mostra Tutto" in una riga separata (non nel fragment per performance)
+    if (limit && matchCount >= limit && sortedList.length > limit && selectedPeriod === 'all' && selectedClosing === 'all') {
+        const moreRow = document.createElement('tr');
+        moreRow.innerHTML = `
+            <td colspan="4" style="text-align:center; padding:20px;">
+                <button class="btn-primary-small" style="margin:0 auto;" onclick="renderFullDatabaseTable(0)">
+                    <i class="fa-solid fa-list"></i> Mostra tutto lo storico (${sortedList.length} righe)
+                </button>
+            </td>
+        `;
+        tbody.appendChild(moreRow);
+    }
 }
 
 function exportDatabaseToExcel() {

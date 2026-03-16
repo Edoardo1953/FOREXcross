@@ -162,9 +162,29 @@ async function fetchAndRenderRates() {
 }
 
 function renderCurrencyList() {
-    currencyListEl.innerHTML = '';
     const currentRates = ratesCache[baseCurrency] || {};
     let baseAmountNum = parseFloat(baseAmountStr.replace(',', '.'));
+    if(isNaN(baseAmountNum)) baseAmountNum = 0;
+
+    // Se la lista è già popolata e il numero di elementi non è cambiato, aggiorna solo i valori
+    const existingRows = currencyListEl.querySelectorAll('.currency-row');
+    const codesToDisplay = displayedCurrencies.filter(c => c.code !== baseCurrency);
+    
+    if (existingRows.length === codesToDisplay.length && existingRows.length > 0) {
+        existingRows.forEach((row, idx) => {
+            const curr = codesToDisplay[idx];
+            const rate = currentRates[curr.code] || 0;
+            const calculatedAmount = baseAmountNum * rate;
+            const amountEl = row.querySelector('.curr-amount');
+            if (amountEl) {
+                amountEl.textContent = APP_UTILS.formatNumber(calculatedAmount);
+            }
+        });
+        return;
+    }
+
+    currencyListEl.innerHTML = '';
+    // Use already declared variables
     if(isNaN(baseAmountNum)) baseAmountNum = 0;
 
     // Define core protected codes
