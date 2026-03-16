@@ -84,13 +84,20 @@
                     <!-- Area 1: Main Crosses -->
                     <div class="selector-card">
                         <span class="selector-group-title" data-i18n="group_main">Main Crosses</span>
-                        <div class="toggle-group-grid horizontal">
-                            <button class="toggle-btn" data-base="EUR" data-target="USD">
-                                <span class="fi fi-eu"></span><span class="fi fi-us"></span> EUR/USD
-                            </button>
-                            <button class="toggle-btn" data-base="USD" data-target="EUR">
-                                <span class="fi fi-us"></span><span class="fi fi-eu"></span> USD/EUR
-                            </button>
+                        <div class="custom-cross-form-row">
+                            <div class="custom-cross-main-row" id="mainCrossRow">
+                                <div class="input-with-flag" id="mainBaseContainer" style="cursor: pointer;">
+                                    <span id="mainBaseFlag" class="fi fi-eu"></span>
+                                    <input type="text" id="mainBase" value="EUR" readonly style="cursor: pointer; pointer-events: none;">
+                                </div>
+                                <button id="btnSwapMain" class="swap-btn" title="Inverti">
+                                    <i class="fa-solid fa-right-left"></i>
+                                </button>
+                                <div class="input-with-flag" id="mainTargetContainer" style="cursor: pointer;">
+                                    <span id="mainTargetFlag" class="fi fi-us"></span>
+                                    <input type="text" id="mainTarget" value="USD" readonly style="cursor: pointer; pointer-events: none;">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -111,9 +118,7 @@
                                     <input type="text" id="customTarget" placeholder="BRL" maxlength="3">
                                 </div>
                             </div>
-                            <button id="btnFetchCustom" class="btn-primary-small">
-                                <i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="btn_fetch">Search</span>
-                            </button>
+                            <!-- Search button removed -->
                             <button id="resetDataBtn" class="btn-secondary-small" title="Clear Cache" data-i18n-title="clean_cache">
                                 <i class="fa-solid fa-rotate"></i>
                                 <span class="mobile-btn-text" data-i18n="clean_cache">Reset</span>

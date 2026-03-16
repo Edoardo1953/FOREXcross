@@ -11,7 +11,7 @@ const chartTitle = document.getElementById('chartTitle');
 // Application State
 let appData = null; // Will hold parsed excel data
 let currentBaseCurrency = 'EUR'; 
-let currentTargetCurrency = 'BRL';
+let currentTargetCurrency = 'USD';
 
 // NEW: Global Sync Controller to avoid multiple overlapping syncs
 let syncAbortController = null;
@@ -45,6 +45,19 @@ const customTargetFlag = document.getElementById('customTargetFlag');
 const btnFetchCustom = document.getElementById('btnFetchCustom');
 const btnSwap = document.getElementById('btnSwap');
 
+function updateGroupTitles(activeGroup) {
+    const titles = document.querySelectorAll('.selector-group-title');
+    titles.forEach(t => {
+        if (activeGroup === 'main' && t.getAttribute('data-i18n') === 'group_main') {
+            t.classList.add('active');
+        } else if (activeGroup === 'custom' && t.getAttribute('data-i18n') === 'group_custom') {
+            t.classList.add('active');
+        } else {
+            t.classList.remove('active');
+        }
+    });
+}
+
 function updateCustomFlags() {
     if (customBaseFlag && customBaseInput) {
         customBaseFlag.className = APP_UTILS.getFlagClass(customBaseInput.value);
@@ -56,94 +69,109 @@ function updateCustomFlags() {
 
 function activateCustomArea() {
     updateCustomFlags();
-    if (btnFetchCustom) btnFetchCustom.classList.remove('btn-inactive');
     baseCurrencyToggles.forEach(b => b.classList.remove('active'));
+    updateGroupTitles('custom');
 }
 
-if (btnSwap) {
-    btnSwap.addEventListener('click', () => {
-        const temp = customBaseInput.value;
-        customBaseInput.value = customTargetInput.value;
-        customTargetInput.value = temp;
+function triggerCustomFetch() {
+    const base = customBaseInput ? customBaseInput.value.trim().toUpperCase() : '';
+    const target = customTargetInput ? customTargetInput.value.trim().toUpperCase() : '';
+
+    if (base && target && base.length === 3 && target.length === 3) {
         activateCustomArea();
-        // Optionally auto-fetch on swap
-        if (btnFetchCustom) btnFetchCustom.click();
-    });
-}
-
-if (btnFetchCustom) {
-    btnFetchCustom.addEventListener('click', () => {
-        const base = customBaseInput.value.trim().toUpperCase();
-        const target = customTargetInput.value.trim().toUpperCase();
-
-        if (base && target && base.length === 3 && target.length === 3) {
-            // Remove active class from all static toggles
-            baseCurrencyToggles.forEach(b => b.classList.remove('active'));
-            
-            // Update state
-            currentBaseCurrency = base;
-            currentTargetCurrency = target;
-            
-            // Update UI labels
-            updateLabels();
-
-            // Fetch new data
-            const globalLoader = document.getElementById('globalLoader');
-            if (globalLoader) globalLoader.classList.remove('hidden');
-            
-            initializeData();
-        } else {
-            alert('Inserisci codici valuta validi di 3 lettere (es. EUR, USD, BRL)');
-        }
-    });
-
-    // Handle Enter key in inputs
-    const handleEnter = (e) => {
-        if (e.key === 'Enter') btnFetchCustom.click();
-    };
-    if (customBaseInput) {
-        customBaseInput.addEventListener('keypress', handleEnter);
-        customBaseInput.addEventListener('input', activateCustomArea);
-        customBaseInput.addEventListener('blur', () => {
-            customBaseInput.value = customBaseInput.value.toUpperCase();
-            activateCustomArea();
-        });
-    }
-    if (customTargetInput) {
-        customTargetInput.addEventListener('keypress', handleEnter);
-        customTargetInput.addEventListener('input', activateCustomArea);
-        customTargetInput.addEventListener('blur', () => {
-            customTargetInput.value = customTargetInput.value.toUpperCase();
-            activateCustomArea();
-        });
-    }
-}
-
-// Handle cross selector toggle
-baseCurrencyToggles.forEach(btn => {
-    btn.addEventListener('click', () => {
-        // Remove active class from all
-        baseCurrencyToggles.forEach(b => b.classList.remove('active'));
-        // Add active to the button itself
-        btn.classList.add('active');
-
-        // Update state
-        currentBaseCurrency = btn.getAttribute('data-base');
-        currentTargetCurrency = btn.getAttribute('data-target');
         
-        // Disable the custom fetch button visually since we switched to a preset
-        if (btnFetchCustom) btnFetchCustom.classList.add('btn-inactive');
+        currentBaseCurrency = base;
+        currentTargetCurrency = target;
         
-        // Update UI labels
         updateLabels();
 
-        // Fetch new data
         const globalLoader = document.getElementById('globalLoader');
         if (globalLoader) globalLoader.classList.remove('hidden');
         
         initializeData();
+    }
+}
+
+if (btnSwap) {
+    btnSwap.addEventListener('click', () => {
+        if (!customBaseInput || !customTargetInput) return;
+        const temp = customBaseInput.value;
+        customBaseInput.value = customTargetInput.value;
+        customTargetInput.value = temp;
+        triggerCustomFetch();
     });
-});
+}
+
+const handleEnter = (e) => {
+    if (e.key === 'Enter') triggerCustomFetch();
+};
+
+if (customBaseInput) {
+    customBaseInput.addEventListener('keypress', handleEnter);
+    customBaseInput.addEventListener('input', activateCustomArea);
+    customBaseInput.addEventListener('blur', () => {
+        customBaseInput.value = customBaseInput.value.toUpperCase();
+        if (customBaseInput.value.length === 3 && customTargetInput.value.length === 3) triggerCustomFetch();
+    });
+}
+if (customTargetInput) {
+    customTargetInput.addEventListener('keypress', handleEnter);
+    customTargetInput.addEventListener('input', activateCustomArea);
+    customTargetInput.addEventListener('blur', () => {
+        customTargetInput.value = customTargetInput.value.toUpperCase();
+        if (customBaseInput.value.length === 3 && customTargetInput.value.length === 3) triggerCustomFetch();
+    });
+}
+
+// Main Cross Form Logic
+const mainBaseInput = document.getElementById('mainBase');
+const mainTargetInput = document.getElementById('mainTarget');
+const mainBaseFlag = document.getElementById('mainBaseFlag');
+const mainTargetFlag = document.getElementById('mainTargetFlag');
+const btnSwapMain = document.getElementById('btnSwapMain');
+const mainBaseContainer = document.getElementById('mainBaseContainer');
+const mainTargetContainer = document.getElementById('mainTargetContainer');
+
+function updateMainFlags() {
+    if (mainBaseFlag && mainBaseInput) {
+        mainBaseFlag.className = APP_UTILS.getFlagClass(mainBaseInput.value);
+    }
+    if (mainTargetFlag && mainTargetInput) {
+        mainTargetFlag.className = APP_UTILS.getFlagClass(mainTargetInput.value);
+    }
+}
+
+function triggerMainFetch() {
+    if (!mainBaseInput || !mainTargetInput) return;
+    const base = mainBaseInput.value;
+    const target = mainTargetInput.value;
+    
+    updateMainFlags();
+    updateGroupTitles('main');
+    
+    currentBaseCurrency = base;
+    currentTargetCurrency = target;
+    
+    updateLabels();
+
+    const globalLoader = document.getElementById('globalLoader');
+    if (globalLoader) globalLoader.classList.remove('hidden');
+    
+    initializeData();
+}
+
+if (btnSwapMain) {
+    btnSwapMain.addEventListener('click', () => {
+        if (!mainBaseInput || !mainTargetInput) return;
+        const temp = mainBaseInput.value;
+        mainBaseInput.value = mainTargetInput.value;
+        mainTargetInput.value = temp;
+        triggerMainFetch();
+    });
+}
+// Allow clicking anywhere on the containers to swap
+if (mainBaseContainer) mainBaseContainer.addEventListener('click', () => { if(btnSwapMain) btnSwapMain.click() });
+if (mainTargetContainer) mainTargetContainer.addEventListener('click', () => { if(btnSwapMain) btnSwapMain.click() });
 
 function updateLabels() {
     const pairLabel = `${currentBaseCurrency}/${currentTargetCurrency}`;
@@ -215,13 +243,35 @@ document.getElementById('exportExcelBtn').addEventListener('click', exportDataba
 
 // --- Initialization Logic ---
 document.addEventListener('DOMContentLoaded', () => {
+    // Determine active group initially (defaults to main unless custom inputs mismatch main)
+    const isCustomActive = (currentBaseCurrency !== 'EUR' && currentTargetCurrency !== 'USD') 
+                            && (currentBaseCurrency !== 'USD' && currentTargetCurrency !== 'EUR');
+    updateGroupTitles(isCustomActive ? 'custom' : 'main');
+
     // Start data fetch process on load
     initializeData();
 
-    // Set initial values for custom inputs
-    if (customBaseInput) customBaseInput.value = currentBaseCurrency;
-    if (customTargetInput) customTargetInput.value = currentTargetCurrency;
+    // Set initial values for inputs
+    if (customBaseInput) {
+        customBaseInput.value = currentBaseCurrency;
+    }
+    if (customTargetInput) {
+        customTargetInput.value = currentTargetCurrency;
+    }
     updateCustomFlags();
+    
+    // Set initial values for main cross
+    if (mainBaseInput && mainTargetInput) {
+        if (!isCustomActive) {
+            mainBaseInput.value = currentBaseCurrency;
+            mainTargetInput.value = currentTargetCurrency;
+        } else {
+            // Default them to EUR/USD if we booted custom
+            mainBaseInput.value = 'EUR';
+            mainTargetInput.value = 'USD';
+        }
+    }
+    updateMainFlags();
 
     // Listen for language changes to update UI components
     window.addEventListener('languageChanged', () => {
