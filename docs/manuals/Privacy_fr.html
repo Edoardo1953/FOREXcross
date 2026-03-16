@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide de Confidentialité et d'Accès - FOREX Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --text: #1e293b;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card);
+            padding: 50px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+        header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+        h1 {
+            font-size: 28px;
+            margin: 10px 0;
+            color: var(--primary);
+        }
+        h2 {
+            font-size: 20px;
+            margin-top: 30px;
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+        }
+        .step {
+            margin-bottom: 25px;
+        }
+        .step-number {
+            font-weight: 700;
+            color: var(--primary);
+            margin-right: 10px;
+        }
+        .icon-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        .note {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+        }
+        @media print {
+            body { padding: 0; }
+            .container { box-shadow: none; border: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="icon-box"><i class="fa-solid fa-shield-halved fa-2x"></i></div>
+            <h1>Guide de Confidentialité et d'Accès</h1>
+            <p>Instructions pour une utilisation sécurisée du FOREX Dashboard</p>
+        </header>
+
+        <section>
+            <h2>1. Accéder à la zone de confidentialité</h2>
+            <p>Pour assurer une sécurité maximale, nous avons séparé les paramètres esthétiques des paramètres de protection.</p>
+            <ul>
+                <li>Sur la <strong>Page d'accueil</strong>, repérez l'icône en forme de <strong>Clé</strong>.</li>
+                <li>En cliquant sulla icône, vous ouvrirez le panneau de partage sécurisé dédié.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>2. Création d'un lien d'accès</h2>
+            <div class="step">
+                <span class="step-number">Étape A :</span>
+                <strong>Définition du mot de passe :</strong> Saisissez un mot de passe de votre choix. Il s'agit d'une clé cryptographique qui n'est pas enregistrée dans nos systèmes.
+            </div>
+            <div class="step">
+                <span class="step-number">Étape B :</span>
+                <strong>Choix de la durée :</strong> Sélectionnez la durée pendant laquelle vous souhaitez che le lien soit actif (par exemple, 1 mois). Passé ce délai, le lien expirera automatiquement.
+            </div>
+            <div class="step">
+                <span class="step-number">Étape C :</span>
+                <strong>Génération du lien :</strong> Cliquez sur "Générer le lien". Une adresse web spéciale (Token) sera créée, contenant les informations d'expiration cryptées.
+            </div>
+        </section>
+
+        <section>
+            <h2>3. Comment fonctionne le lien pour l'utilisateur</h2>
+            <p>Lorsque le destinataire ouvre le lien :</p>
+            <ol>
+                <li>Le système détecte le jeton et bloque l'accès par un écran de sécurité.</li>
+                <li>Le mot de passe que vous avez initialement défini est demandé.</li>
+                <li>Le navigateur de l'utilisateur tente de décrypter le contenu. Si le mot de passe est correct et che le délai n'est pas dépassé, le tableau de bord s'affiche.</li>
+            </ol>
+        </section>
+
+        <div class="note">
+            <strong>Important :</strong> Étant donné que la protection s'effectue entièrement sur le navigateur (côté client), si vous oubliez le mot de passe du lien généré, il ne pourra pas essere récupéré. Vous devrez simplement générer un nouveau lien.
+        </div>
+
+        <footer>
+            &copy; 2026 FOREX Dashboard - Documentation Technique
+        </footer>
+    </div>
+</body>
+</html>

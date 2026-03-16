@@ -23,6 +23,8 @@ function initSettings() {
     
     const savedBg = localStorage.getItem('app_bg') || 'default';
     setBackground(savedBg, false);
+
+    updateManualLinks();
     
     // Add event listener for clicks outside settings container to close it
     const overlay = document.getElementById('settingsOverlay');
@@ -34,7 +36,16 @@ function initSettings() {
         });
     }
 
-    // NEW: Listen for changes from other tabs
+    const privacyOverlay = document.getElementById('privacyOverlay');
+    if (privacyOverlay) {
+        privacyOverlay.addEventListener('click', (e) => {
+            if (e.target === privacyOverlay) {
+                togglePrivacy(false);
+            }
+        });
+    }
+
+    // NEW: Listen for changes from other tabs or local changes
     window.addEventListener('storage', (e) => {
         if (e.key === 'app_theme') {
             setTheme(e.newValue, false);
@@ -42,11 +53,42 @@ function initSettings() {
         if (e.key === 'app_bg') {
             setBackground(e.newValue, false);
         }
+        if (e.key === 'app_language') {
+            updateManualLinks();
+        }
     });
+
+    window.addEventListener('languageChanged', () => {
+        updateManualLinks();
+    });
+}
+
+function updateManualLinks() {
+    const lang = localStorage.getItem('app_language') || 'en';
+    const privacyLink = document.getElementById('manualPrivacyLink');
+    if (privacyLink) {
+        // Points to the translated HTML manual
+        privacyLink.href = `docs/manuals/Privacy_${lang}.html`;
+    }
 }
 
 function toggleSettings(show) {
     const overlay = document.getElementById('settingsOverlay');
+    if (!overlay) return;
+    
+    if (show === undefined) {
+        overlay.classList.toggle('hidden');
+    } else {
+        if (show) {
+            overlay.classList.remove('hidden');
+        } else {
+            overlay.classList.add('hidden');
+        }
+    }
+}
+
+function togglePrivacy(show) {
+    const overlay = document.getElementById('privacyOverlay');
     if (!overlay) return;
     
     if (show === undefined) {
@@ -100,4 +142,84 @@ function setBackground(bg, save = true) {
             btn.classList.remove('active');
         }
     });
+}
+
+/**
+ * SHARED ACCESS LOGIC
+ */
+function generateShareLink() {
+    const password = document.getElementById('sharePassword').value;
+    const months = parseInt(document.getElementById('shareExpiry').value);
+    
+    if (!password) {
+        alert("Inserisci una password per proteggere il link.");
+        return;
+    }
+
+    const expiryDate = new Date();
+    expiryDate.setMonth(expiryDate.getMonth() + months);
+    
+    const payload = `${expiryDate.toISOString()}|FOREX_ACCESS`;
+    const token = APP_UTILS.xorEncrypt(payload, password);
+    
+    const baseUrl = window.location.href.split('?')[0].split('#')[0];
+    const shareUrl = `${baseUrl}?t=${token}`;
+    
+    const resultDiv = document.getElementById('shareLinkResult');
+    const resultInput = document.getElementById('shareLinkInput');
+    
+    resultInput.value = shareUrl;
+    resultDiv.classList.remove('hidden');
+}
+
+function copyShareLink() {
+    const input = document.getElementById('shareLinkInput');
+    input.select();
+    input.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(input.value);
+    
+    alert(getTranslation('link_generated'));
+}
+
+// Global Access Check on Load
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('t');
+    
+    if (token) {
+        showAccessPrompt(token);
+    }
+});
+
+function showAccessPrompt(token) {
+    const overlay = document.getElementById('accessOverlay');
+    if (!overlay) return;
+    
+    overlay.classList.remove('hidden');
+    
+    const loginBtn = document.getElementById('btnLogin');
+    const pwdInput = document.getElementById('accessPasswordInput');
+    const errorMsg = document.getElementById('accessError');
+    
+    loginBtn.onclick = () => {
+        const password = pwdInput.value;
+        const verification = APP_UTILS.verifyAccessToken(token, password);
+        
+        if (!verification) {
+            errorMsg.textContent = getTranslation('invalid_password');
+            errorMsg.classList.remove('hidden');
+        } else if (verification.expired) {
+            errorMsg.textContent = getTranslation('access_expired');
+            errorMsg.classList.remove('hidden');
+        } else {
+            // Success! 
+            overlay.classList.add('hidden');
+            // Clean URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    };
+
+    pwdInput.onkeypress = (e) => {
+        if (e.key === 'Enter') loginBtn.click();
+    };
 }

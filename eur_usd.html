@@ -48,29 +48,33 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <header class="top-header">
-                <div class="header-top-row">
-                    <div class="header-titles">
-                        <h1 id="pageTitle" data-i18n="page_title_historical">Cross Storici</h1>
-                        <p class="subtitle"><span data-i18n="subtitle_historical">Analisi storica</span> <span id="currentPairText">USD vs EUR</span></p>
-                        <div id="syncStatus" style="font-size: 11px; margin-top: 5px; color: var(--accent-primary); font-weight: 500;">
-                            <i class="fa-solid fa-sync fa-spin"></i> <span data-i18n="sync_init">Inizializzazione...</span>
-                        </div>
+            <header class="intro-header">
+                <div class="intro-titles">
+                    <h1 data-i18n="homepage_title">FOREX Dashboard</h1>
+                    <p data-i18n="homepage_subtitle">Cross</p>
+                    <div id="syncStatus" style="font-size: 11px; margin-top: 5px; color: var(--accent-primary); font-weight: 500;">
+                        <i class="fa-solid fa-sync fa-spin"></i> <span data-i18n="sync_init">Inizializzazione...</span>
                     </div>
-                    <div class="header-nav-pills">
-                        <a href="index.html" class="nav-pill" title="Home"><i class="fa-solid fa-house"></i> <span data-i18n="nav_calculator">Home</span></a>
-                        <button id="headerNavOverview" class="nav-pill active"><i class="fa-solid fa-chart-line"></i> <span data-i18n="nav_historical_cross">Rates</span></button>
-                        <button id="headerNavDatabase" class="nav-pill"><i class="fa-solid fa-database"></i> <span data-i18n="nav_database">Database</span></button>
-                    </div>
-                    <div class="header-actions">
-                        <div class="lang-selector">
-                            <button class="lang-btn" onclick="setLanguage('en')" title="English"><span class="fi fi-gb"></span></button>
-                            <button class="lang-btn" onclick="setLanguage('fr')" title="Français"><span class="fi fi-fr"></span></button>
-                            <button class="lang-btn" onclick="setLanguage('it')" title="Italiano"><span class="fi fi-it"></span></button>
-                            <button class="icon-btn settings-trigger" onclick="toggleSettings(true)" title="Strumenti" data-i18n-title="settings_title">
-                                <i class="fa-solid fa-gear"></i>
-                            </button>
-                        </div>
+                </div>
+                <!-- Enlarged Nav Pills in Header -->
+                <div class="header-nav-pills">
+                    <a href="index.html" class="nav-pill" title="Home"><i class="fa-solid fa-house"></i> <span data-i18n="nav_home">Home</span></a>
+                    <button id="headerNavOverview" class="nav-pill active"><i class="fa-solid fa-chart-line"></i> <span data-i18n="nav_historical_cross">Rates</span></button>
+                    <button id="headerNavDatabase" class="nav-pill"><i class="fa-solid fa-database"></i> <span data-i18n="nav_database">Database</span></button>
+                </div>
+                <div class="header-actions">
+                    <div class="lang-selector">
+                        <button class="lang-btn" onclick="setLanguage('en')" title="English"><span class="fi fi-gb"></span></button>
+                        <button class="lang-btn" onclick="setLanguage('fr')" title="Français"><span class="fi fi-fr"></span></button>
+                        <button class="lang-btn" onclick="setLanguage('it')" title="Italiano"><span class="fi fi-it"></span></button>
+                        <button class="icon-btn privacy-btn-pc" onclick="togglePrivacy(true)" title="Privacy" data-i18n-title="privacy_title" style="margin-left: 8px;">
+                            <i class="fa-solid fa-key"></i>
+                            <span class="btn-text" data-i18n="privacy_title">Privacy</span>
+                        </button>
+                        <button class="icon-btn settings-btn-pc" onclick="toggleSettings(true)" title="Strumenti" data-i18n-title="settings_title" style="margin-left: 8px;">
+                            <i class="fa-solid fa-gear"></i>
+                            <span class="btn-text" data-i18n="settings_title">Strumenti</span>
+                        </button>
                     </div>
                 </div>
             </header>
@@ -94,22 +98,25 @@
                     <div class="selector-card">
                         <span class="selector-group-title" data-i18n="group_custom">Cross Search</span>
                         <div class="custom-cross-form-row">
-                            <div class="input-with-flag">
-                                <span id="customBaseFlag" class="fi fi-eu"></span>
-                                <input type="text" id="customBase" placeholder="EUR" maxlength="3">
-                            </div>
-                            <button id="btnSwap" class="swap-btn" title="Inverti">
-                                <i class="fa-solid fa-right-left"></i>
-                            </button>
-                            <div class="input-with-flag">
-                                <span id="customTargetFlag" class="fi fi-br"></span>
-                                <input type="text" id="customTarget" placeholder="BRL" maxlength="3">
+                            <div class="custom-cross-main-row">
+                                <div class="input-with-flag">
+                                    <span id="customBaseFlag" class="fi fi-eu"></span>
+                                    <input type="text" id="customBase" placeholder="EUR" maxlength="3">
+                                </div>
+                                <button id="btnSwap" class="swap-btn" title="Inverti">
+                                    <i class="fa-solid fa-right-left"></i>
+                                </button>
+                                <div class="input-with-flag">
+                                    <span id="customTargetFlag" class="fi fi-br"></span>
+                                    <input type="text" id="customTarget" placeholder="BRL" maxlength="3">
+                                </div>
                             </div>
                             <button id="btnFetchCustom" class="btn-primary-small">
                                 <i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="btn_fetch">Search</span>
                             </button>
                             <button id="resetDataBtn" class="btn-secondary-small" title="Clear Cache" data-i18n-title="clean_cache">
                                 <i class="fa-solid fa-rotate"></i>
+                                <span class="mobile-btn-text" data-i18n="clean_cache">Clear Cache</span>
                             </button>
                         </div>
                         <p class="selector-group-notice" data-i18n="select_currency_notice">Please select the currency you require</p>
@@ -269,7 +276,50 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="settings-group">
+                    <label class="settings-group-title" data-i18n="share_access_title">Condividi Accesso</label>
+                    <p class="settings-group-desc" data-i18n="share_access_desc" style="font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">Crea un link con password per fornire accesso temporaneo a terzi.</p>
+                    <div class="settings-col">
+                        <label style="font-size: 12px; margin-bottom: 4px; display: block;" data-i18n="access_password_label">Password Accesso</label>
+                        <input type="password" id="sharePassword" placeholder="••••••••" style="width: 100%; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px 12px; border-radius: 8px; margin-bottom: 12px;">
+                        
+                        <label style="font-size: 12px; margin-bottom: 4px; display: block;" data-i18n="access_expiry_label">Durata Accesso</label>
+                        <select id="shareExpiry" style="width: 100%; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px 12px; border-radius: 8px; margin-bottom: 16px;">
+                            <option value="1" data-i18n="access_1month">1 Mese</option>
+                            <option value="3" data-i18n="access_3months">3 Mesi</option>
+                            <option value="6" data-i18n="access_6months">6 Mesi</option>
+                            <option value="12" data-i18n="access_1year">1 Anno</option>
+                        </select>
+
+                        <button class="action-btn-full" onclick="generateShareLink()" style="width: 100%; background: var(--accent-primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                            <i class="fa-solid fa-link" style="margin-right: 8px;"></i>
+                            <span data-i18n="btn_generate_link">Genera Link</span>
+                        </button>
+                        <div id="shareLinkResult" class="hidden" style="margin-top: 12px;">
+                            <input type="text" id="shareLinkInput" readonly style="width: 100%; background: rgba(0,0,0,0.2); border: 1px dashed var(--accent-primary); color: var(--accent-primary); padding: 8px 10px; border-radius: 6px; font-size: 10px; margin-bottom: 8px;">
+                            <button onclick="copyShareLink()" style="background: none; border: none; color: var(--accent-primary); font-size: 12px; cursor: pointer; text-decoration: underline;" data-i18n="copy_link">Copia Link</button>
+                        </div>
+                    </div>
                 </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Access Prompt Overlay -->
+    <div id="accessOverlay" class="access-overlay hidden">
+        <div class="access-container">
+            <div class="access-icon">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2 data-i18n="prompt_password_title">Accesso Protetto</h2>
+            <p data-i18n="prompt_password_desc">Inserisci la password fornita per accedere alla dashboard.</p>
+            
+            <div class="access-form">
+                <input type="password" id="accessPasswordInput" placeholder="••••••••">
+                <p id="accessError" class="access-error hidden" data-i18n="invalid_password">Password non valida.</p>
+                <button id="btnLogin" class="btn-login" data-i18n="btn_login">Entra</button>
             </div>
         </div>
     </div>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guida alla Privacy e Accesso - FOREX Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --text: #1e293b;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card);
+            padding: 50px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+        header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+        h1 {
+            font-size: 28px;
+            margin: 10px 0;
+            color: var(--primary);
+        }
+        h2 {
+            font-size: 20px;
+            margin-top: 30px;
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+        }
+        .step {
+            margin-bottom: 25px;
+        }
+        .step-number {
+            font-weight: 700;
+            color: var(--primary);
+            margin-right: 10px;
+        }
+        .icon-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        .note {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+        }
+        @media print {
+            body { padding: 0; }
+            .container { box-shadow: none; border: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="icon-box"><i class="fa-solid fa-shield-halved fa-2x"></i></div>
+            <h1>Guida alla Privacy e Accesso</h1>
+            <p>Istruzioni per l'uso sicuro della FOREX Dashboard</p>
+        </header>
+
+        <section>
+            <h2>1. Accesso all'Area Privacy</h2>
+            <p>Per garantire la massima sicurezza, abbiamo separato le impostazioni estetiche da quelle di protezione.</p>
+            <ul>
+                <li>Sulla <strong>Homepage</strong>, individua l'icona a forma di <strong>Chiave</strong>.</li>
+                <li>Cliccando sull'icona si aprirà il pannello dedicato alla condivisione protetta.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>2. Creazione di un Link di Accesso</h2>
+            <div class="step">
+                <span class="step-number">Passo A:</span>
+                <strong>Impostazione Password:</strong> Inserisci una password a tua scelta. Questa funge da chiave crittografica e non viene salvata nei nostri sistemi.
+            </div>
+            <div class="step">
+                <span class="step-number">Passo B:</span>
+                <strong>Scelta della Durata:</strong> Seleziona per quanto tempo vuoi che il link sia attivo (es. 1 mese). Passato questo termine, il link scadrà automaticamente.
+            </div>
+            <div class="step">
+                <span class="step-number">Passo C:</span>
+                <strong>Generazione Link:</strong> Clicca su "Genera Link". Verrà creato un indirizzo web speciale (Token) che contiene le informazioni di scadenza criptate.
+            </div>
+        </section>
+
+        <section>
+            <h2>3. Come Funziona il Link per l'Utente</h2>
+            <p>Quando il destinatario apre il link:</p>
+            <ol>
+                <li>Il sistema rileva il token e blocca l'accesso con una schermata di sicurezza.</li>
+                <li>Viene richiesta la password che hai impostato inizialmente.</li>
+                <li>Il browser dell'utente tenta di decriptare il contenuto. Se la password è corretta e il tempo non è scaduto, la dashboard viene visualizzata.</li>
+            </ol>
+        </section>
+
+        <div class="note">
+            <strong>Importante:</strong> Poiché la protezione avviene interamente sul browser (lato client), se dimentichi la password del link generato, non sarà possibile recuperarla. Dovrai semplicemente generare un nuovo link.
+        </div>
+
+        <footer>
+            &copy; 2026 FOREX Dashboard - Documentazione Tecnica
+        </footer>
+    </div>
+</body>
+</html>

@@ -62,6 +62,51 @@ const APP_UTILS = {
             case 'GBP': return `£ ${formatted}`;
             default: return `${code} ${formatted}`;
         }
+    },
+
+    /**
+     * Minimal XOR Encryption for Shared Access
+     */
+    xorEncrypt: function(text, key) {
+        if (!key) return btoa(text);
+        let result = "";
+        for (let i = 0; i < text.length; i++) {
+            result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+        }
+        return btoa(unescape(encodeURIComponent(result))); // Robust base64
+    },
+
+    xorDecrypt: function(encoded, key) {
+        if (!key) return atob(encoded);
+        try {
+            let text = decodeURIComponent(escape(atob(encoded)));
+            let result = "";
+            for (let i = 0; i < text.length; i++) {
+                result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+            }
+            return result;
+        } catch (e) {
+            return null;
+        }
+    },
+
+    /**
+     * Check if a token is valid
+     */
+    verifyAccessToken: function(token, password) {
+        const decrypted = this.xorDecrypt(token, password);
+        if (!decrypted) return null;
+        
+        const parts = decrypted.split('|');
+        if (parts.length !== 2 || parts[1] !== "FOREX_ACCESS") return null;
+        
+        const exp = new Date(parts[0]);
+        if (isNaN(exp.getTime())) return null;
+        
+        return {
+            expired: exp < new Date(),
+            expiry: exp
+        };
     }
 };
 
