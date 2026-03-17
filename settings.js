@@ -86,23 +86,73 @@ function toggleManual(show, url, titleKey) {
     if (!overlay || !iframe) return;
 
     if (show) {
-        iframe.src = url;
+        document.body.style.overflow = 'hidden';
+        document.body.style.height = '100vh';
+
+        // Link the download button
         if (downloadBtn) {
-            downloadBtn.href = url;
-            downloadBtn.setAttribute('download', url.split('/').pop());
+            downloadBtn.onclick = async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const currentUrl = iframe.src;
+                try {
+                    const resp = await fetch(currentUrl);
+                    const blob = await resp.blob();
+                    const bUrl = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = bUrl;
+                    a.download = currentUrl.split('/').pop() || 'manual.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(bUrl);
+                    document.body.removeChild(a);
+                } catch (err) {
+                    // Direct link fallback
+                    const a = document.createElement('a');
+                    a.href = currentUrl;
+                    a.download = currentUrl.split('/').pop();
+                    a.click();
+                }
+            };
         }
+
+        iframe.src = url;
         if (titleEl && titleKey) {
             titleEl.setAttribute('data-i18n', titleKey);
             if (typeof applyTranslations === 'function') applyTranslations();
         }
+        
         overlay.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
+        // Push state ONLY if not already there
+        if (!history.state || !history.state.manualOpen) {
+            history.pushState({ manualOpen: true }, "");
+        }
     } else {
         overlay.classList.add('hidden');
-        iframe.src = '';
+        iframe.src = 'about:blank';
         document.body.style.overflow = '';
+        document.body.style.height = '';
+        
+        // If we still have the state, we need to go back (unless popped by browser)
+        if (history.state && history.state.manualOpen) {
+            history.back();
+        }
     }
 }
+
+// Intercept browser back button
+window.addEventListener('popstate', (e) => {
+    const overlay = document.getElementById('manualOverlay');
+    if (overlay && !overlay.classList.contains('hidden')) {
+        // Overlay is open but state is gone (browser back clicked)
+        // We close it but DON'T call history.back() because we are already going back
+        overlay.classList.add('hidden');
+        const iframe = document.getElementById('manualIframe');
+        if (iframe) iframe.src = 'about:blank';
+        document.body.style.overflow = '';
+        document.body.style.height = '';
+    }
+});
 
 function toggleSettings(show) {
     const overlay = document.getElementById('settingsOverlay');

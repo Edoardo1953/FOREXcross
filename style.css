@@ -2367,9 +2367,9 @@ tbody tr:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(10px);
-    z-index: 2000;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(15px);
+    z-index: 99999; /* Max priority */
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -2383,24 +2383,31 @@ tbody tr:hover {
 .manual-window {
     background: var(--bg-card);
     width: 100%;
-    max-width: 1000px;
-    height: 90vh;
+    max-width: 1100px;
+    height: 95vh;
     margin: auto;
     border-radius: var(--border-radius-lg);
     border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: var(--shadow-premium);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    position: relative;
+    z-index: 100000;
 }
 
 .manual-header {
-    padding: 15px 20px;
+    padding: 12px 20px;
     background: var(--bg-sidebar);
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    flex-shrink: 0;
+    min-height: 60px;
 }
 
 .manual-header-title {
@@ -2449,9 +2456,16 @@ tbody tr:hover {
 .manual-body {
     flex: 1;
     background: white; 
+    overflow: hidden;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    z-index: 1;
 }
 
 .manual-body iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     border: none;
@@ -2463,17 +2477,36 @@ tbody tr:hover {
     }
     .manual-window {
         height: 100vh;
+        max-height: 100vh;
         border-radius: 0;
         border: none;
     }
     .manual-header {
-        padding: 10px 12px;
+        padding: 10px 15px;
+        min-height: 56px;
+        background: #0f172a; /* Solid dark background */
+        border-bottom: 2px solid var(--accent-primary);
     }
     .manual-header-title {
-        display: none; /* Hide title on small screens to fit buttons */
+        display: none; 
+    }
+    .manual-action-btn {
+        padding: 8px 12px;
+        font-size: 13px;
+        background: var(--accent-primary);
+        color: white;
+        border: none;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .manual-action-btn.btn-close {
+        background: var(--danger);
+        color: white;
     }
     .manual-action-btn span {
         font-size: 11px;
+    }
+    .manual-body {
+        height: calc(100vh - 56px);
     }
 }
 
