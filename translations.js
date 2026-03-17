@@ -106,7 +106,9 @@ const translations = {
         btn_mobile_preview: "Anteprima Cellulare",
         custom_cross_hint: "Inserisci qui le divise che stai cercando",
         btn_manual_download: "Download PDF",
-        btn_manual_close: "Chiudi"
+        btn_manual_close: "Chiudi",
+        delete_manual_confirm: "Sei sicuro di voler rimuovere questo manuale dalla vista?",
+        restore_manuals: "Visualizza manuali rimossi"
     },
     en: {
         homepage_title: "FOREX Dashboard",
@@ -214,7 +216,9 @@ const translations = {
         btn_mobile_preview: "Mobile Preview",
         custom_cross_hint: "Enter the currencies you are looking for here",
         btn_manual_download: "Download PDF",
-        btn_manual_close: "Close"
+        btn_manual_close: "Close",
+        delete_manual_confirm: "Are you sure you want to remove this manual from the view?",
+        restore_manuals: "Show removed manuals"
     },
     fr: {
         homepage_title: "FOREX Dashboard",
@@ -305,7 +309,9 @@ const translations = {
         btn_mobile_preview: "Aperçu Mobile",
         custom_cross_hint: "Entrez ici les devises que vous recherchez",
         btn_manual_download: "Télécharger PDF",
-        btn_manual_close: "Fermer"
+        btn_manual_close: "Fermer",
+        delete_manual_confirm: "Êtes-vous sûr de vouloir supprimer ce manuel de la vue ?",
+        restore_manuals: "Afficher les manuels supprimés"
     }
 };
 

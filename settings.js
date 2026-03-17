@@ -85,6 +85,45 @@ function updateManualLinks() {
             toggleManual(true, url, 'manual_user_title');
         };
     }
+
+    applyManualVisibility();
+}
+
+function deleteManual(id) {
+    if (confirm(getTranslation('delete_manual_confirm'))) {
+        let hidden = JSON.parse(localStorage.getItem('hidden_manuals') || '[]');
+        if (!hidden.includes(id)) {
+            hidden.push(id);
+            localStorage.setItem('hidden_manuals', JSON.stringify(hidden));
+            applyManualVisibility();
+        }
+    }
+}
+
+function restoreManuals() {
+    localStorage.removeItem('hidden_manuals');
+    applyManualVisibility();
+}
+
+function applyManualVisibility() {
+    const hidden = JSON.parse(localStorage.getItem('hidden_manuals') || '[]');
+    const wrappers = document.querySelectorAll('.manual-item-wrapper');
+    let visibleCount = 0;
+    
+    wrappers.forEach(wrapper => {
+        const id = wrapper.getAttribute('data-manual-id');
+        if (hidden.includes(id)) {
+            wrapper.classList.add('hidden-manual');
+        } else {
+            wrapper.classList.remove('hidden-manual');
+            visibleCount++;
+        }
+    });
+
+    const restoreLink = document.querySelector('.restore-manuals-link');
+    if (restoreLink) {
+        restoreLink.style.display = (hidden.length > 0) ? 'block' : 'none';
+    }
 }
 
 function toggleManual(show, url, titleKey) {
@@ -102,51 +141,42 @@ function toggleManual(show, url, titleKey) {
         
         iframe.src = cleanUrl;
 
-        // Optimized Download Logic
+        // Simplified Download Logic for maximum compatibility
         if (downloadBtn) {
             downloadBtn.onclick = (e) => {
                 const isLocal = window.location.protocol === 'file:';
                 
-                // If we are strictly local, external apps like Adobe struggle with 
-                // binary injections from the browser. A more direct path is safer.
                 if (isLocal) {
-                    const a = document.createElement('a');
-                    a.href = pdfUrl;
-                    a.download = filename;
-                    a.target = "_blank";
-                    document.body.appendChild(a);
-                    a.click();
-                    setTimeout(() => document.body.removeChild(a), 100);
+                    // Local access: Browsers block most "forced" download tricks.
+                    // Opening in a new tab is the only 100% reliable way.
+                    window.open(pdfUrl, '_blank');
                     return false;
                 }
 
                 e.preventDefault();
                 e.stopPropagation();
 
-                const startSave = (blobData, mimeType) => {
-                    const forcedBlob = new Blob([blobData], { type: mimeType });
+                // Web version: Try the blob "force save" method
+                fetch(pdfUrl)
+                .then(resp => {
+                    if (resp.ok) return resp.blob();
+                    throw new Error("PDF not found");
+                })
+                .then(blob => {
+                    const forcedBlob = new Blob([blob], { type: 'application/pdf' });
                     const bUrl = window.URL.createObjectURL(forcedBlob);
                     const a = document.createElement('a');
                     a.href = bUrl;
                     a.download = filename;
-                    a.target = "_blank";
                     document.body.appendChild(a);
                     a.click();
                     setTimeout(() => {
                         window.URL.revokeObjectURL(bUrl);
                         document.body.removeChild(a);
                     }, 400);
-                };
-
-                fetch(pdfUrl)
-                .then(resp => {
-                    if (resp.ok) return resp.blob().then(b => ({b, t: 'application/pdf'}));
-                    return fetch(cleanUrl).then(r => r.blob().then(b => ({b, t: 'application/octet-stream'}))); 
-                })
-                .then(data => {
-                    startSave(data.b, data.t);
                 })
                 .catch(() => {
+                    // If anything fails, just open the file directly
                     window.open(pdfUrl, '_blank');
                 });
                 return false;

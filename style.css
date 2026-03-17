@@ -2455,6 +2455,76 @@ tbody tr:hover {
     color: var(--danger);
 }
 
+.manual-item-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.manual-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 13px;
+    transition: var(--transition-fast);
+    cursor: pointer;
+}
+
+.manual-item:hover {
+    border-color: var(--primary);
+    background: rgba(59, 130, 246, 0.05);
+}
+
+.btn-delete-manual {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 8px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.btn-delete-manual:hover {
+    background: var(--danger);
+    color: white;
+}
+
+.restore-manuals-link {
+    display: block;
+    margin-top: 15px;
+    font-size: 11px;
+    color: var(--primary);
+    text-align: center;
+    text-decoration: none;
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+.restore-manuals-link:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.manual-item-wrapper.hidden-manual {
+    display: none !important;
+}
+
 .manual-body {
     flex: 1;
     background: white; 

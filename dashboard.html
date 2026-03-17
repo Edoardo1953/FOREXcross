@@ -285,15 +285,22 @@
                 <div class="settings-group">
                     <label class="settings-group-title" data-i18n="manuals_title">Manuali</label>
                     <p class="settings-group-desc" data-i18n="manuals_desc" style="font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">Guide procedurali e documentazione tecnica.</p>
-                    <div class="manual-list">
-                        <a id="manualPrivacyLink" class="manual-item" style="display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); text-decoration: none; font-size: 13px; transition: var(--transition-fast); cursor: pointer;">
-                            <i class="fa-solid fa-file-pdf" style="color: var(--danger); font-size: 16px;"></i>
-                            <span data-i18n="manual_privacy_title">Guida alla Privacy e Accesso</span>
-                        </a>
-                        <a id="manualUserLink" class="manual-item" style="display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); text-decoration: none; font-size: 13px; transition: var(--transition-fast); cursor: pointer; margin-top: 8px;">
-                            <i class="fa-solid fa-book" style="color: var(--primary); font-size: 16px;"></i>
-                            <span data-i18n="manual_user_title">Manuale d'Uso FOREXcross</span>
-                        </a>
+                    <div class="manual-list" id="manualListContainer">
+                        <div class="manual-item-wrapper" data-manual-id="privacy">
+                            <a id="manualPrivacyLink" class="manual-item">
+                                <i class="fa-solid fa-file-pdf" style="color: var(--danger); font-size: 16px;"></i>
+                                <span data-i18n="manual_privacy_title">Guida alla Privacy e Accesso</span>
+                            </a>
+                            <button class="btn-delete-manual" onclick="deleteManual('privacy')" title="Remove"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                        <div class="manual-item-wrapper" data-manual-id="user">
+                            <a id="manualUserLink" class="manual-item">
+                                <i class="fa-solid fa-book" style="color: var(--primary); font-size: 16px;"></i>
+                                <span data-i18n="manual_user_title">Manuale d'Uso FOREXcross</span>
+                            </a>
+                            <button class="btn-delete-manual" onclick="deleteManual('user')" title="Remove"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                        <a onclick="restoreManuals()" class="restore-manuals-link" data-i18n="restore_manuals">Visualizza manuali rimossi</a>
                     </div>
                 </div>
             </div>
