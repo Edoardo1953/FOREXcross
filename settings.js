@@ -86,52 +86,48 @@ function toggleManual(show, url, titleKey) {
     if (!overlay || !iframe) return;
 
     if (show) {
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         const cleanUrl = url.split('?')[0] + '?v=' + new Date().getTime();
+        const pdfUrl = url.replace('.html', '.pdf');
+        const filename = pdfUrl.split('/').pop();
+        
         iframe.src = cleanUrl;
 
-        // Download logic: Try to target the .pdf version instead of the .html
+        // Unified Download Logic: Force PDF identity
         if (downloadBtn) {
-            const pdfUrl = url.replace('.html', '.pdf');
-            const filename = pdfUrl.split('/').pop();
-            downloadBtn.download = filename;
+            downloadBtn.onclick = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
 
-            if (isMobile) {
-                // Mobile: Direct link to PDF
-                downloadBtn.href = pdfUrl;
-                downloadBtn.target = "_blank";
-                downloadBtn.onclick = null;
-            } else {
-                // PC: Try forced download, fallback to window.open
-                downloadBtn.target = "_self";
-                downloadBtn.onclick = (e) => {
-                    e.preventDefault();
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('GET', pdfUrl, true);
-                    xhr.responseType = 'blob';
-                    xhr.onload = function() {
-                        if (xhr.status === 200) {
-                            const blob = new Blob([xhr.response], { type: 'application/pdf' });
-                            const reader = new FileReader();
-                            reader.onload = function(event) {
-                                const a = document.createElement('a');
-                                a.href = event.target.result;
-                                a.download = filename;
-                                document.body.appendChild(a);
-                                a.click();
-                                document.body.removeChild(a);
-                            };
-                            reader.readAsDataURL(blob);
-                        } else {
-                            // If PDF not found or CORS error (local), open in new tab
-                            window.open(pdfUrl, '_blank');
-                        }
-                    };
-                    xhr.onerror = () => window.open(pdfUrl, '_blank');
-                    xhr.send();
-                    return false;
+                const startSave = (blobData, mimeType) => {
+                    const forcedBlob = new Blob([blobData], { type: mimeType });
+                    const bUrl = window.URL.createObjectURL(forcedBlob);
+                    const a = document.createElement('a');
+                    a.href = bUrl;
+                    a.download = filename; // Always ends in .pdf
+                    a.target = "_blank";
+                    document.body.appendChild(a);
+                    a.click();
+                    setTimeout(() => {
+                        window.URL.revokeObjectURL(bUrl);
+                        document.body.removeChild(a);
+                    }, 400);
                 };
-            }
+
+                // PC/Mobile: Fetch prioritizing PDF
+                fetch(pdfUrl)
+                .then(resp => {
+                    if (resp.ok) return resp.blob().then(b => ({b, t: 'application/pdf'}));
+                    // Fallback to HTML if PDF missing
+                    return fetch(cleanUrl).then(r => r.blob().then(b => ({b, t: 'application/pdf'}))); // Still label as PDF
+                })
+                .then(data => {
+                    startSave(data.b, data.t);
+                })
+                .catch(() => {
+                    window.open(pdfUrl, '_blank');
+                });
+                return false;
+            };
         }
 
         if (titleEl && titleKey) {
