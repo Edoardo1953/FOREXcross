@@ -1173,6 +1173,25 @@ tbody tr:hover {
     -webkit-text-fill-color: transparent;
 }
 
+.header-controls-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.lang-selector {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.secondary-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
 .intro-titles p {
     font-size: 14px;
     color: #6b7280;
