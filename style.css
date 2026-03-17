@@ -1876,19 +1876,29 @@ tbody tr:hover {
 
     .dashboard-controls-row {
         flex-direction: column;
-        padding: 15px;
-        gap: 15px;
+        padding: 5px 10px;
+        gap: 10px;
     }
 
     .selector-card {
         min-width: 0;
         width: 100%;
-        padding: 15px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px; /* Compact gap */
+    }
+
+    .selector-group-title {
+        font-size: 11px;
+        padding: 4px 10px;
+        margin-bottom: 8px;
+        letter-spacing: 1px;
     }
 
     .dashboard-data {
-        padding: 10px 15px 40px; 
-        gap: 20px;
+        padding: 5px 15px 30px; 
+        gap: 10px;
         flex: 1;
     }
 
@@ -1949,7 +1959,7 @@ tbody tr:hover {
 
     .custom-cross-form-row {
         flex-direction: column;
-        gap: 12px;
+        gap: 8px;
     }
 
     .custom-cross-main-row {
@@ -1964,6 +1974,8 @@ tbody tr:hover {
     .custom-cross-main-row .input-with-flag {
         flex: 1;
         min-width: 0;
+        padding: 6px 10px; /* More compact */
+        gap: 6px;
     }
 
     .btn-secondary-small .mobile-btn-text {
@@ -1975,13 +1987,10 @@ tbody tr:hover {
     }
 
     /* Move notice below inputs */
-    .selector-card {
-        display: flex;
-        flex-direction: column;
-    }
     .selector-group-notice {
         order: 5;
-        margin-top: 10px;
+        margin-top: 5px;
+        font-size: 11px;
     }
 }
 
