@@ -102,9 +102,24 @@ function toggleManual(show, url, titleKey) {
         
         iframe.src = cleanUrl;
 
-        // Unified Download Logic: Force PDF identity
+        // Optimized Download Logic
         if (downloadBtn) {
             downloadBtn.onclick = (e) => {
+                const isLocal = window.location.protocol === 'file:';
+                
+                // If we are strictly local, external apps like Adobe struggle with 
+                // binary injections from the browser. A more direct path is safer.
+                if (isLocal) {
+                    const a = document.createElement('a');
+                    a.href = pdfUrl;
+                    a.download = filename;
+                    a.target = "_blank";
+                    document.body.appendChild(a);
+                    a.click();
+                    setTimeout(() => document.body.removeChild(a), 100);
+                    return false;
+                }
+
                 e.preventDefault();
                 e.stopPropagation();
 
@@ -113,7 +128,7 @@ function toggleManual(show, url, titleKey) {
                     const bUrl = window.URL.createObjectURL(forcedBlob);
                     const a = document.createElement('a');
                     a.href = bUrl;
-                    a.download = filename; // Always ends in .pdf
+                    a.download = filename;
                     a.target = "_blank";
                     document.body.appendChild(a);
                     a.click();
@@ -123,12 +138,10 @@ function toggleManual(show, url, titleKey) {
                     }, 400);
                 };
 
-                // PC/Mobile: Fetch prioritizing PDF
                 fetch(pdfUrl)
                 .then(resp => {
                     if (resp.ok) return resp.blob().then(b => ({b, t: 'application/pdf'}));
-                    // Fallback to HTML if PDF missing
-                    return fetch(cleanUrl).then(r => r.blob().then(b => ({b, t: 'application/pdf'}))); // Still label as PDF
+                    return fetch(cleanUrl).then(r => r.blob().then(b => ({b, t: 'application/octet-stream'}))); 
                 })
                 .then(data => {
                     startSave(data.b, data.t);
