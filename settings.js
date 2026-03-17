@@ -86,71 +86,73 @@ function toggleManual(show, url, titleKey) {
     if (!overlay || !iframe) return;
 
     if (show) {
-        document.body.style.overflow = 'hidden';
-        document.body.style.height = '100vh';
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const cleanUrl = url.split('?')[0] + '?v=' + new Date().getTime();
+        iframe.src = cleanUrl;
 
-        // Link the download button
+        // Download logic
         if (downloadBtn) {
-            downloadBtn.onclick = async (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const currentUrl = iframe.src;
-                try {
-                    const resp = await fetch(currentUrl);
-                    const blob = await resp.blob();
-                    const bUrl = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = bUrl;
-                    a.download = currentUrl.split('/').pop() || 'manual.pdf';
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(bUrl);
-                    document.body.removeChild(a);
-                } catch (err) {
-                    // Direct link fallback
-                    const a = document.createElement('a');
-                    a.href = currentUrl;
-                    a.download = currentUrl.split('/').pop();
-                    a.click();
-                }
-            };
+            if (isMobile) {
+                // On Mobile, a direct link with target="_blank" is the most stable way 
+                // to trigger the native save/share menu without breaking the app history.
+                downloadBtn.href = url;
+                downloadBtn.target = "_blank";
+                downloadBtn.onclick = null; // Browser takes over
+            } else {
+                // On PC, we force the download using Blob and octet-stream
+                downloadBtn.onclick = (e) => {
+                    e.preventDefault();
+                    fetch(cleanUrl)
+                    .then(resp => resp.blob())
+                    .then(blob => {
+                        const downloadBlob = new Blob([blob], { type: 'application/octet-stream' });
+                        const bUrl = window.URL.createObjectURL(downloadBlob);
+                        const a = document.createElement('a');
+                        a.href = bUrl;
+                        a.download = url.split('/').pop() || 'manual.html';
+                        document.body.appendChild(a);
+                        a.click();
+                        setTimeout(() => {
+                            document.body.removeChild(a);
+                            window.URL.revokeObjectURL(bUrl);
+                        }, 100);
+                    })
+                    .catch(() => window.open(url, '_blank'));
+                    return false;
+                };
+            }
         }
 
-        iframe.src = url;
         if (titleEl && titleKey) {
             titleEl.setAttribute('data-i18n', titleKey);
             if (typeof applyTranslations === 'function') applyTranslations();
         }
         
         overlay.classList.remove('hidden');
-        // Push state ONLY if not already there
-        if (!history.state || !history.state.manualOpen) {
-            history.pushState({ manualOpen: true }, "");
+        document.body.classList.add('no-scroll');
+
+        if (!history.state || history.state.manual !== 'open') {
+            history.pushState({ manual: 'open' }, "");
         }
     } else {
         overlay.classList.add('hidden');
         iframe.src = 'about:blank';
-        document.body.style.overflow = '';
-        document.body.style.height = '';
+        document.body.classList.remove('no-scroll');
         
-        // If we still have the state, we need to go back (unless popped by browser)
-        if (history.state && history.state.manualOpen) {
+        if (history.state && history.state.manual === 'open') {
             history.back();
         }
     }
 }
 
-// Intercept browser back button
+// Global listener for back button
 window.addEventListener('popstate', (e) => {
     const overlay = document.getElementById('manualOverlay');
     if (overlay && !overlay.classList.contains('hidden')) {
-        // Overlay is open but state is gone (browser back clicked)
-        // We close it but DON'T call history.back() because we are already going back
         overlay.classList.add('hidden');
         const iframe = document.getElementById('manualIframe');
         if (iframe) iframe.src = 'about:blank';
-        document.body.style.overflow = '';
-        document.body.style.height = '';
+        document.body.classList.remove('no-scroll');
     }
 });
 
