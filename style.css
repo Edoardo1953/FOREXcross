@@ -1793,7 +1793,14 @@ tbody tr:hover {
         order: 1;
     }
     .intro-header .intro-titles h1 {
-        font-size: 24px !important;
+        font-size: 32px !important;
+    }
+    .intro-header .intro-titles p {
+        font-size: 18px !important;
+        color: var(--text-secondary);
+    }
+    .sync-status, #syncStatus {
+        display: none !important;
     }
     
     .base-currency-section {
@@ -1846,7 +1853,7 @@ tbody tr:hover {
     }
 
     .header-titles h1 {
-        font-size: 20px;
+        font-size: 28px;
         white-space: normal;
     }
 
@@ -2023,6 +2030,16 @@ tbody tr:hover {
     height: auto;
     overflow-y: visible;
 }
+.mobile-preview-active .sync-status, 
+.mobile-preview-active #syncStatus {
+    display: none !important;
+}
+.mobile-preview-active .intro-header .intro-titles h1 {
+    font-size: 32px !important;
+}
+.mobile-preview-active .intro-header .intro-titles p {
+    font-size: 18px !important;
+}
 .mobile-preview-active .top-header {
     position: relative;
     padding: 20px 15px;
@@ -2039,7 +2056,7 @@ tbody tr:hover {
     order: 1;
 }
 .mobile-preview-active .header-titles h1 {
-    font-size: 20px;
+    font-size: 28px;
     white-space: normal;
 }
 .mobile-preview-active .header-actions {
