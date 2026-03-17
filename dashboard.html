@@ -34,20 +34,7 @@
 <body>
 
     <div class="app-container">
-        <!-- Sidebar Navigation (Restored) -->
-        <aside class="sidebar">
-            <div class="logo-area">
-                <i class="fa-solid fa-chart-line logo-icon"></i>
-                <h2>FOREX<span data-i18n="sidebar_logo_dash">Dash</span></h2>
-            </div>
-            <nav class="nav-menu">
-                <a href="index.html" class="nav-item"><i class="fa-solid fa-calculator"></i> <span data-i18n="nav_calculator">Cross Calculator</span></a>
-                <button class="nav-item active" id="navOverview"><i class="fa-solid fa-chart-line"></i> <span data-i18n="nav_historical_cross">Rates</span></button>
-                <button class="nav-item" id="navDatabase"><i class="fa-solid fa-database"></i> <span data-i18n="nav_database">Database</span></button>
-            </nav>
-        </aside>
-
-        <!-- Main Content Area -->
+        <!-- Sidebar Navigation (Removed per request) -->        <!-- Main Content Area -->
         <main class="main-content">
             <!-- Top Header -->
             <header class="intro-header">
@@ -100,7 +87,7 @@
                 <div class="dashboard-controls-row">
                     <!-- Area 1: Main Crosses -->
                     <div class="selector-card">
-                        <span class="selector-group-title" data-i18n="group_main">Main Crosses</span>
+                        <span id="titleMain" class="selector-group-title" data-i18n="group_main" style="cursor: pointer;">Main Crosses</span>
                         <div class="custom-cross-form-row">
                             <div class="custom-cross-main-row" id="mainCrossRow">
                                 <div class="input-with-flag" id="mainBaseContainer" style="cursor: pointer;">
@@ -120,25 +107,25 @@
 
                     <!-- Area 2: Custom Cross Search -->
                     <div class="selector-card">
-                        <span class="selector-group-title" data-i18n="group_custom">Cross Search</span>
+                        <span id="titleCustom" class="selector-group-title" data-i18n="group_custom" style="cursor: pointer;">Cross Search</span>
                         <div class="custom-cross-form-row">
                             <div class="custom-cross-main-row">
-                                <div class="input-with-flag">
-                                    <span id="customBaseFlag" class="fi fi-eu"></span>
-                                    <input type="text" id="customBase" placeholder="EUR" maxlength="3">
+                                <div class="input-with-flag" id="customBaseContainer" style="cursor: pointer;">
+                                    <span id="customBaseFlag" class="fi fi-gb"></span>
+                                    <input type="text" id="customBase" placeholder="GBP" maxlength="3">
                                 </div>
                                 <button id="btnSwap" class="swap-btn" title="Inverti">
                                     <i class="fa-solid fa-right-left"></i>
                                 </button>
-                                <div class="input-with-flag">
-                                    <span id="customTargetFlag" class="fi fi-br"></span>
-                                    <input type="text" id="customTarget" placeholder="BRL" maxlength="3">
+                                <div class="input-with-flag" id="customTargetContainer" style="cursor: pointer;">
+                                    <span id="customTargetFlag" class="fi fi-ch"></span>
+                                    <input type="text" id="customTarget" placeholder="CHF" maxlength="3">
                                 </div>
                             </div>
                             <!-- Search button removed -->
-                            <button id="resetDataBtn" class="btn-secondary-small" title="Clear Cache" data-i18n-title="clean_cache">
+                            <button id="resetDataBtn" class="btn-secondary-small" title="Clear Cache" data-i18n-title="clean_cache" style="width: auto; padding: 0 16px;">
                                 <i class="fa-solid fa-rotate"></i>
-                                <span class="mobile-btn-text" data-i18n="clean_cache">Reset</span>
+                                <span data-i18n="clean_cache" style="margin-left: 8px; font-size: 13px; font-weight: 600;">Clear Cache</span>
                             </button>
                         </div>
                         <p class="selector-group-notice custom-cross-hint" data-i18n="custom_cross_hint">Enter the currencies you are looking for here</p>

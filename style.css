@@ -1152,8 +1152,14 @@ tbody tr:hover {
         max-width: 1100px;
     }
     .intro-header {
-        justify-content: center;
-        gap: 80px;
+        justify-content: space-between;
+        padding: 24px 4%;
+    }
+}
+
+@media (min-width: 1400px) {
+    .intro-header {
+        padding: 24px 6%;
     }
 }
 

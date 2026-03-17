@@ -131,6 +131,29 @@ const mainTargetFlag = document.getElementById('mainTargetFlag');
 const btnSwapMain = document.getElementById('btnSwapMain');
 const mainBaseContainer = document.getElementById('mainBaseContainer');
 const mainTargetContainer = document.getElementById('mainTargetContainer');
+const titleMain = document.getElementById('titleMain');
+const titleCustom = document.getElementById('titleCustom');
+const customBaseContainer = document.getElementById('customBaseContainer');
+const customTargetContainer = document.getElementById('customTargetContainer');
+
+// Title Clicks
+if (titleMain) titleMain.addEventListener('click', () => triggerMainFetch());
+if (titleCustom) titleCustom.addEventListener('click', () => triggerCustomFetch());
+
+// Custom Container Clicks
+if (customBaseContainer) {
+    customBaseContainer.addEventListener('click', (e) => {
+        if (e.target !== customBaseInput) customBaseInput.focus();
+        if (customBaseInput.value.length === 3 && customTargetInput.value.length === 3) triggerCustomFetch();
+    });
+}
+if (customTargetContainer) {
+    customTargetContainer.addEventListener('click', (e) => {
+        if (e.target !== customTargetInput) {
+            if (btnSwap) btnSwap.click();
+        }
+    });
+}
 
 function updateMainFlags() {
     if (mainBaseFlag && mainBaseInput) {
@@ -253,10 +276,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Set initial values for inputs
     if (customBaseInput) {
-        customBaseInput.value = currentBaseCurrency;
+        customBaseInput.value = isCustomActive ? currentBaseCurrency : 'GBP';
     }
     if (customTargetInput) {
-        customTargetInput.value = currentTargetCurrency;
+        customTargetInput.value = isCustomActive ? currentTargetCurrency : 'CHF';
     }
     updateCustomFlags();
     
