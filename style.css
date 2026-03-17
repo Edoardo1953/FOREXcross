@@ -2359,3 +2359,125 @@ tbody tr:hover {
     color: var(--accent-primary);
     margin-bottom: 20px;
 }
+
+/* === MANUAL OVERLAY === */
+.manual-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    animation: fadeInAuto 0.3s ease;
+}
+
+.manual-overlay.hidden {
+    display: none !important;
+}
+
+.manual-window {
+    background: var(--bg-card);
+    width: 100%;
+    max-width: 1000px;
+    height: 90vh;
+    margin: auto;
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: var(--shadow-premium);
+}
+
+.manual-header {
+    padding: 15px 20px;
+    background: var(--bg-sidebar);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.manual-header-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text-primary);
+}
+
+.manual-header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.manual-action-btn {
+    padding: 8px 16px;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.manual-action-btn:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+}
+
+.manual-action-btn.btn-close {
+    color: var(--danger);
+}
+
+.manual-action-btn.btn-close:hover {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.manual-body {
+    flex: 1;
+    background: white; 
+}
+
+.manual-body iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+@media (max-width: 768px) {
+    .manual-overlay {
+        padding: 0;
+    }
+    .manual-window {
+        height: 100vh;
+        border-radius: 0;
+        border: none;
+    }
+    .manual-header {
+        padding: 10px 12px;
+    }
+    .manual-header-title {
+        display: none; /* Hide title on small screens to fit buttons */
+    }
+    .manual-action-btn span {
+        font-size: 11px;
+    }
+}
+
+@keyframes fadeInAuto {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

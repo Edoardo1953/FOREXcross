@@ -103,7 +103,9 @@ const translations = {
         manual_privacy_title: "Guida alla Privacy e Accesso",
         dev_preview_label: "Developer Access",
         btn_mobile_preview: "Anteprima Cellulare",
-        custom_cross_hint: "Inserisci qui le divise che stai cercando"
+        custom_cross_hint: "Inserisci qui le divise che stai cercando",
+        btn_manual_download: "Download PDF",
+        btn_manual_close: "Chiudi"
     },
     en: {
         homepage_title: "FOREX Dashboard",
@@ -208,7 +210,9 @@ const translations = {
         manual_privacy_title: "Privacy and Access Guide",
         dev_preview_label: "Developer Access",
         btn_mobile_preview: "Mobile Preview",
-        custom_cross_hint: "Enter the currencies you are looking for here"
+        custom_cross_hint: "Enter the currencies you are looking for here",
+        btn_manual_download: "Download PDF",
+        btn_manual_close: "Close"
     },
     fr: {
         homepage_title: "FOREX Dashboard",
@@ -296,7 +300,9 @@ const translations = {
         manual_privacy_title: "Guide de Confidentialité et d'Accès",
         dev_preview_label: "Aperçu Développeur",
         btn_mobile_preview: "Aperçu Mobile",
-        custom_cross_hint: "Entrez ici les devises que vous recherchez"
+        custom_cross_hint: "Entrez ici les devises que vous recherchez",
+        btn_manual_download: "Télécharger PDF",
+        btn_manual_close: "Fermer"
     }
 };
 

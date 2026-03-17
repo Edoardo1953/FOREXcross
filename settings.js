@@ -67,8 +67,40 @@ function updateManualLinks() {
     const lang = localStorage.getItem('app_language') || 'en';
     const privacyLink = document.getElementById('manualPrivacyLink');
     if (privacyLink) {
-        // Points to the translated HTML manual
-        privacyLink.href = `docs/manuals/Privacy_${lang}.html`;
+        // Intercept click to show in overlay
+        privacyLink.onclick = (e) => {
+            e.preventDefault();
+            const langNow = localStorage.getItem('app_language') || 'en';
+            const url = `docs/manuals/Privacy_${langNow}.html`;
+            toggleManual(true, url, 'manual_privacy_title');
+        };
+    }
+}
+
+function toggleManual(show, url, titleKey) {
+    const overlay = document.getElementById('manualOverlay');
+    const iframe = document.getElementById('manualIframe');
+    const downloadBtn = document.getElementById('btnDownloadManual');
+    const titleEl = overlay ? overlay.querySelector('.manual-header-title') : null;
+    
+    if (!overlay || !iframe) return;
+
+    if (show) {
+        iframe.src = url;
+        if (downloadBtn) {
+            downloadBtn.href = url;
+            downloadBtn.setAttribute('download', url.split('/').pop());
+        }
+        if (titleEl && titleKey) {
+            titleEl.setAttribute('data-i18n', titleKey);
+            if (typeof applyTranslations === 'function') applyTranslations();
+        }
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    } else {
+        overlay.classList.add('hidden');
+        iframe.src = '';
+        document.body.style.overflow = '';
     }
 }
 

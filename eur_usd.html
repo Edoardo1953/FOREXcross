@@ -371,6 +371,27 @@
             <span class="btn-text" data-i18n="btn_mobile_preview">Mobile Preview</span>
         </button>
     </div>
+    <!-- Manual Overlay -->
+    <div id="manualOverlay" class="manual-overlay hidden">
+        <div class="manual-window">
+            <header class="manual-header">
+                <span class="manual-header-title" data-i18n="manual_privacy_title">Manuale</span>
+                <div class="manual-header-actions">
+                    <a id="btnDownloadManual" href="#" download class="manual-action-btn">
+                        <i class="fa-solid fa-download"></i>
+                        <span data-i18n="btn_manual_download">Download</span>
+                    </a>
+                    <button class="manual-action-btn btn-close" onclick="toggleManual(false)">
+                        <i class="fa-solid fa-xmark"></i>
+                        <span data-i18n="btn_manual_close">Chiudi</span>
+                    </button>
+                </div>
+            </header>
+            <div class="manual-body">
+                <iframe id="manualIframe" src=""></iframe>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
