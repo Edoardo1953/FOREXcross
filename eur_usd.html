@@ -51,18 +51,22 @@
                     <button id="headerNavDatabase" class="nav-pill"><i class="fa-solid fa-database"></i> <span data-i18n="nav_database">Database</span></button>
                 </div>
                 <div class="header-actions">
-                    <div class="lang-selector">
-                        <button class="lang-btn" onclick="setLanguage('en')" title="English"><span class="fi fi-gb"></span></button>
-                        <button class="lang-btn" onclick="setLanguage('fr')" title="Français"><span class="fi fi-fr"></span></button>
-                        <button class="lang-btn" onclick="setLanguage('it')" title="Italiano"><span class="fi fi-it"></span></button>
-                        <button class="icon-btn privacy-btn-pc" onclick="togglePrivacy(true)" title="Privacy" data-i18n-title="privacy_title" style="margin-left: 8px;">
-                            <i class="fa-solid fa-key"></i>
-                            <span class="btn-text" data-i18n="privacy_title">Privacy</span>
-                        </button>
-                        <button class="icon-btn settings-btn-pc" onclick="toggleSettings(true)" title="Strumenti" data-i18n-title="settings_title" style="margin-left: 8px;">
-                            <i class="fa-solid fa-gear"></i>
-                            <span class="btn-text" data-i18n="settings_title">Strumenti</span>
-                        </button>
+                    <div class="header-controls-container">
+                        <div class="lang-selector">
+                            <button class="lang-btn" onclick="setLanguage('en')" title="English"><span class="fi fi-gb"></span></button>
+                            <button class="lang-btn" onclick="setLanguage('fr')" title="Français"><span class="fi fi-fr"></span></button>
+                            <button class="lang-btn" onclick="setLanguage('it')" title="Italiano"><span class="fi fi-it"></span></button>
+                        </div>
+                        <div class="secondary-actions">
+                            <button class="icon-btn privacy-btn-pc" onclick="togglePrivacy(true)" title="Privacy" data-i18n-title="privacy_title">
+                                <i class="fa-solid fa-key"></i>
+                                <span class="btn-text" data-i18n="privacy_title">Privacy</span>
+                            </button>
+                            <button class="icon-btn settings-btn-pc" onclick="toggleSettings(true)" title="Strumenti" data-i18n-title="settings_title">
+                                <i class="fa-solid fa-gear"></i>
+                                <span class="btn-text" data-i18n="settings_title">Strumenti</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </header>

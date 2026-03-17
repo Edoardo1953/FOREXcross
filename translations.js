@@ -4,7 +4,7 @@ const translations = {
         homepage_title: "FOREX Dashboard",
         homepage_subtitle: "Tassi di Cambio",
         nav_eur_usd: "EUR/USD",
-        nav_historical_cross: "Cambi Storici",
+        nav_historical_cross: "Cambi<br>Storici",
         loading_rates: "Caricamento tassi di cambio...",
         search_placeholder: "Cerca divisa (es. CAD, Dollaro...)",
         search_add: "Cerca e aggiungi divisa...",
@@ -16,10 +16,10 @@ const translations = {
         
         // Dashboard
         nav_calculator: "Calcolatore Cambi",
-        nav_database: "Database Storico",
+        nav_database: "Database<br>Storico",
         group_main: "Main Crosses",
         group_custom: "Ricerca Cross",
-        nav_home: "Cross Calculator",
+        nav_home: "Calcolatore<br>Cross",
         label_base: "Divisa Base",
         label_target: "Divisa Target",
         btn_fetch: "Cerca Cross",
@@ -109,7 +109,7 @@ const translations = {
         homepage_title: "FOREX Dashboard",
         homepage_subtitle: "Exchange Rates",
         nav_eur_usd: "EUR/USD",
-        nav_historical_cross: "Historical Rates",
+        nav_historical_cross: "Historical<br>Rates",
         loading_rates: "Loading exchange rates...",
         search_placeholder: "Search currency (e.g. CAD, Dollar...)",
         search_add: "Search and add currency...",
@@ -121,10 +121,10 @@ const translations = {
         
         // Dashboard
         nav_calculator: "Cross Calculator",
-        nav_database: "Historical Database",
+        nav_database: "Historical<br>Database",
         group_main: "Main Crosses",
         group_custom: "Custom Cross",
-        nav_home: "Cross Calculator",
+        nav_home: "Cross<br>Calculator",
         label_base: "Base Currency",
         label_target: "Target Currency",
         btn_fetch: "Cross Currencies Search",
@@ -214,7 +214,7 @@ const translations = {
         homepage_title: "FOREX Dashboard",
         homepage_subtitle: "Taux de Change",
         nav_eur_usd: "EUR/USD",
-        nav_historical_cross: "Taux Historiques",
+        nav_historical_cross: "Taux<br>Historiques",
         loading_rates: "Chargement des taux de change...",
         search_placeholder: "Rechercher une devise (ex. CAD, Dollar...)",
         search_add: "Rechercher et ajouter une devise...",
@@ -226,10 +226,10 @@ const translations = {
         
         // Dashboard
         nav_calculator: "Calculatrice de Taux",
-        nav_database: "Base de Données Historique",
+        nav_database: "Database<br>Historique",
         group_main: "Taux Principaux",
         group_custom: "Recherche Cross",
-        nav_home: "Cross Calculator",
+        nav_home: "Calculatrice<br>Cross",
         label_base: "Devise de Base",
         label_target: "Devise Target",
         btn_fetch: "Cross Currencies Search",
@@ -323,7 +323,7 @@ function applyTranslations() {
             if (el.tagName === 'INPUT' && el.type === 'text') {
                 el.placeholder = texts[key];
             } else {
-                el.textContent = texts[key];
+                el.innerHTML = texts[key];
             }
         }
     });
