@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manuale d'Uso - FOREX Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #64748b;
+            --text: #1e293b;
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --border: #e2e8f0;
+            --accent: #3b82f6;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: var(--card);
+            padding: 60px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+            border: 1px solid var(--border);
+        }
+        header {
+            text-align: center;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 40px;
+            margin-bottom: 50px;
+        }
+        .app-logo {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        h1 {
+            font-size: 32px;
+            margin: 10px 0;
+            color: var(--text);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+        h2 {
+            font-size: 22px;
+            margin-top: 45px;
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        h2 i {
+            font-size: 18px;
+            opacity: 0.8;
+        }
+        .feature-card {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+        .feature-title {
+            font-weight: 700;
+            color: var(--text);
+            display: block;
+            margin-bottom: 8px;
+        }
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 12px;
+        }
+        .tip {
+            background: #ecfdf5;
+            border-left: 5px solid #10b981;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 12px 12px 0;
+            font-size: 15px;
+        }
+        .tip strong {
+            color: #065f46;
+            display: block;
+            margin-bottom: 5px;
+        }
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--secondary);
+            border-top: 1px solid var(--border);
+            padding-top: 30px;
+        }
+        .highlight {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        @media print {
+            body { padding: 0; background: white; }
+            .container { box-shadow: none; border: none; padding: 20px; width: 100%; max-width: 100%; }
+            header { margin-bottom: 30px; }
+        }
+        @media (max-width: 768px) {
+            .container { padding: 30px 20px; }
+            h1 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="app-logo"><i class="fa-solid fa-chart-line"></i></div>
+            <h1>Manuale d'Uso FOREXcross</h1>
+            <p class="highlight">Guida Completa alla Dashboard di Scambio Valute</p>
+        </header>
+
+        <section>
+            <h2><i class="fa-solid fa-house"></i> 1. Panoramica Generale</h2>
+            <p><strong>FOREXcross</strong> è una dashboard avanzata progettata per il monitoraggio in tempo reale e l'analisi storica dei tassi di cambio. L'applicazione offre una visione chiara dei mercati valutari mondiali, con strumenti specifici per il calcolo dei tassi incrociati e la consultazione di database storici.</p>
+        </section>
+
+        <section>
+            <h2><i class="fa-solid fa-layer-group"></i> 2. Funzionalità Principali</h2>
+            
+            <div class="feature-card">
+                <span class="feature-title">Dashboard Exchange Rates</span>
+                <p>La schermata principale mostra i tassi di cambio correnti riferiti all'Euro (EUR) o al Dollaro (USD). I dati vengono aggiornati periodicamente per garantire precisione.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-title">Main Crosses</span>
+                <p>Accesso rapido alle coppie di valute più scambiate (EUR/USD, GBP/USD, USD/JPY). Cliccando sulla coppia desiderata, l'intera dashboard si aggiorna per mostrare i dati relativi.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-title">Custom Cross (Calcolo Personalizzato)</span>
+                <p>Strumento potente per calcolare il cambio tra qualsiasi coppia di valute non presente nei menu rapidi. Seleziona la valuta di origine, quella di destinazione e ottieni istantaneamente il tasso di conversione.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2><i class="fa-solid fa-clock-rotate-left"></i> 3. Analisi Storica e Database</h2>
+            <p>L'app permette di viaggiare nel tempo per consultare l'andamento delle valute:</p>
+            <ul>
+                <li><strong>Historical Rates:</strong> Visualizza i tassi di chiusura di date passate.</li>
+                <li><strong>Historical Database:</strong> Accesso a un archivio completo per analisi comparative estese.</li>
+                <li><strong>Grafici Interattivi:</strong> Le variazioni sono rappresentate graficamente per una comprensione immediata dei trend di mercato.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2><i class="fa-solid fa-mobile-screen-button"></i> 4. Esperienza Multi-Dispositivo</h2>
+            <p>FOREXcross è ottimizzata per ogni schermo:</p>
+            <ul>
+                <li><strong>PC & Tablet:</strong> Visione completa con menu laterale e grafici espansi.</li>
+                <li><strong>Mobile (CELL):</strong> Interfaccia compatta con menu a scomparsa. È possibile testare la visione mobile anche da PC usando il tasto <strong>"CELL"</strong> nell'intestazione.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2><i class="fa-solid fa-gears"></i> 5. Strumenti e Privacy</h2>
+            <p>Attraverso l'icona dell'ingranaggio (Settings) o della chiave (Privacy) puoi:</p>
+            <ul>
+                <li><strong>Manuali:</strong> Consultare e scaricare questa guida e la documentazione sulla privacy.</li>
+                <li><strong>Clear Cache:</strong> Pulire i dati temporanei per velocizzare l'applicazione.</li>
+                <li><strong>Condivisione Accesso:</strong> Generare link protetti da password e con scadenza temporale per permettere a collaboratori di visualizzare la dashboard in sicreazza.</li>
+            </ul>
+        </section>
+
+        <div class="tip">
+            <strong>💡 Suggerimento Pro:</strong>
+            Usa la funzione "Download PDF" all'interno dei manuali per conservare una copia locale dei documenti sul tuo dispositivo, accessibile anche senza connessione internet.
+        </div>
+
+        <footer>
+            &copy; 2026 FOREXcross Dashboard - Versione 2.5
+            <br>Sviluppato per analisi finanziarie di precisione.
+        </footer>
+    </div>
+</body>
+</html>

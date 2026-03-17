@@ -64,15 +64,25 @@ function initSettings() {
 }
 
 function updateManualLinks() {
-    const lang = localStorage.getItem('app_language') || 'en';
+    const langNow = localStorage.getItem('app_language') || 'en';
+    
     const privacyLink = document.getElementById('manualPrivacyLink');
     if (privacyLink) {
-        // Intercept click to show in overlay
         privacyLink.onclick = (e) => {
             e.preventDefault();
-            const langNow = localStorage.getItem('app_language') || 'en';
             const url = `docs/manuals/Privacy_${langNow}.html`;
             toggleManual(true, url, 'manual_privacy_title');
+        };
+    }
+
+    const userLink = document.getElementById('manualUserLink');
+    if (userLink) {
+        userLink.onclick = (e) => {
+            e.preventDefault();
+            // Since we only have the IT version for now, fallback to it if file doesn't exist?
+            // Actually, let's just use the lang code as with privacy.
+            const url = `docs/manuals/Manual_User_${langNow}.html`;
+            toggleManual(true, url, 'manual_user_title');
         };
     }
 }
