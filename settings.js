@@ -92,32 +92,41 @@ function toggleManual(show, url, titleKey) {
 
         // Download logic
         if (downloadBtn) {
+            downloadBtn.href = url;
+            const filename = url.split('/').pop() || 'manual.html';
+            downloadBtn.download = filename;
+
             if (isMobile) {
-                // On Mobile, a direct link with target="_blank" is the most stable way 
-                // to trigger the native save/share menu without breaking the app history.
-                downloadBtn.href = url;
+                // Mobile: Native share/save menu via target _blank
                 downloadBtn.target = "_blank";
-                downloadBtn.onclick = null; // Browser takes over
+                downloadBtn.onclick = null;
             } else {
-                // On PC, we force the download using Blob and octet-stream
+                // PC: Force Download via Blob & XHR (more robust than fetch in some local contexts)
+                downloadBtn.target = "_self";
                 downloadBtn.onclick = (e) => {
                     e.preventDefault();
-                    fetch(cleanUrl)
-                    .then(resp => resp.blob())
-                    .then(blob => {
-                        const downloadBlob = new Blob([blob], { type: 'application/octet-stream' });
-                        const bUrl = window.URL.createObjectURL(downloadBlob);
-                        const a = document.createElement('a');
-                        a.href = bUrl;
-                        a.download = url.split('/').pop() || 'manual.html';
-                        document.body.appendChild(a);
-                        a.click();
-                        setTimeout(() => {
-                            document.body.removeChild(a);
-                            window.URL.revokeObjectURL(bUrl);
-                        }, 100);
-                    })
-                    .catch(() => window.open(url, '_blank'));
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', cleanUrl, true);
+                    xhr.responseType = 'blob';
+                    xhr.onload = function() {
+                        if (xhr.status === 200 || xhr.status === 0) {
+                            const blob = new Blob([xhr.response], { type: 'application/octet-stream' });
+                            const bUrl = window.URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = bUrl;
+                            a.download = filename;
+                            document.body.appendChild(a);
+                            a.click();
+                            setTimeout(() => {
+                                document.body.removeChild(a);
+                                window.URL.revokeObjectURL(bUrl);
+                            }, 100);
+                        } else {
+                            window.open(url, '_blank');
+                        }
+                    };
+                    xhr.onerror = () => window.open(url, '_blank');
+                    xhr.send();
                     return false;
                 };
             }
