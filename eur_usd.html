@@ -72,42 +72,23 @@
             </header>
 
             <div id="dashboardData" class="dashboard-data">
-                <div class="dashboard-controls-row">
-                    <!-- Area 1: Main Crosses -->
-                    <div class="selector-card">
-                        <span id="titleMain" class="selector-group-title" data-i18n="group_main" style="cursor: pointer;">Main Crosses</span>
-                        <div class="custom-cross-form-row">
-                            <div class="custom-cross-main-row" id="mainCrossRow">
-                                <div class="input-with-flag" id="mainBaseContainer" style="cursor: pointer;">
-                                    <span id="mainBaseFlag" class="fi fi-eu"></span>
-                                    <input type="text" id="mainBase" value="EUR" readonly style="cursor: pointer; pointer-events: none;">
-                                </div>
-                                <button id="btnSwapMain" class="swap-btn" title="Inverti">
-                                    <i class="fa-solid fa-right-left"></i>
-                                </button>
-                                <div class="input-with-flag" id="mainTargetContainer" style="cursor: pointer;">
-                                    <span id="mainTargetFlag" class="fi fi-us"></span>
-                                    <input type="text" id="mainTarget" value="USD" readonly style="cursor: pointer; pointer-events: none;">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Area 2: Custom Search -->
-                    <div class="selector-card">
-                        <span id="titleCustom" class="selector-group-title" data-i18n="group_custom" style="cursor: pointer;">Cross Search</span>
+                <!-- Currency Selectors Row - Centered -->
+                <div class="dashboard-controls-row centered">
+                    <!-- Area: Custom Cross Search -->
+                    <div class="selector-card custom-search-only">
+                        <span id="titleCustom" class="selector-group-title active" data-i18n="group_custom" style="cursor: pointer;">Cross Search</span>
                         <div class="custom-cross-form-row">
                             <div class="custom-cross-main-row">
                                 <div class="input-with-flag" id="customBaseContainer" style="cursor: pointer;">
-                                    <span id="customBaseFlag" class="fi fi-gb"></span>
-                                    <input type="text" id="customBase" placeholder="GBP" maxlength="3">
+                                    <span id="customBaseFlag" class="fi fi-eu"></span>
+                                    <input type="text" id="customBase" value="EUR" placeholder="EUR" maxlength="3">
                                 </div>
                                 <button id="btnSwap" class="swap-btn" title="Inverti">
                                     <i class="fa-solid fa-right-left"></i>
                                 </button>
                                 <div class="input-with-flag" id="customTargetContainer" style="cursor: pointer;">
-                                    <span id="customTargetFlag" class="fi fi-ch"></span>
-                                    <input type="text" id="customTarget" placeholder="CHF" maxlength="3">
+                                    <span id="customTargetFlag" class="fi fi-us"></span>
+                                    <input type="text" id="customTarget" value="USD" placeholder="USD" maxlength="3">
                                 </div>
                             </div>
                             <!-- Search button removed -->

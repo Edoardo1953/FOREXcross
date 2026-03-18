@@ -87,46 +87,25 @@
             <!-- Dashboard Content -->
             <div id="dashboardData" class="dashboard-data">
                 
-                <!-- Currency Selectors Row (Inside Dashboard Data now) -->
-                <div class="dashboard-controls-row">
-                    <!-- Area 1: Main Crosses -->
-                    <div class="selector-card">
-                        <span id="titleMain" class="selector-group-title" data-i18n="group_main" style="cursor: pointer;">Main Crosses</span>
-                        <div class="custom-cross-form-row">
-                            <div class="custom-cross-main-row" id="mainCrossRow">
-                                <div class="input-with-flag" id="mainBaseContainer" style="cursor: pointer;">
-                                    <span id="mainBaseFlag" class="fi fi-eu"></span>
-                                    <input type="text" id="mainBase" value="EUR" readonly style="cursor: pointer; pointer-events: none;">
-                                </div>
-                                <button id="btnSwapMain" class="swap-btn" title="Inverti">
-                                    <i class="fa-solid fa-right-left"></i>
-                                </button>
-                                <div class="input-with-flag" id="mainTargetContainer" style="cursor: pointer;">
-                                    <span id="mainTargetFlag" class="fi fi-us"></span>
-                                    <input type="text" id="mainTarget" value="USD" readonly style="cursor: pointer; pointer-events: none;">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Area 2: Custom Cross Search -->
-                    <div class="selector-card">
-                        <span id="titleCustom" class="selector-group-title" data-i18n="group_custom" style="cursor: pointer;">Cross Search</span>
+                <!-- Currency Selectors Row - Centered -->
+                <div class="dashboard-controls-row centered">
+                    <!-- Area: Custom Cross Search -->
+                    <div class="selector-card custom-search-only">
+                        <span id="titleCustom" class="selector-group-title active" data-i18n="group_custom" style="cursor: pointer;">Cross Search</span>
                         <div class="custom-cross-form-row">
                             <div class="custom-cross-main-row">
                                 <div class="input-with-flag" id="customBaseContainer" style="cursor: pointer;">
-                                    <span id="customBaseFlag" class="fi fi-gb"></span>
-                                    <input type="text" id="customBase" placeholder="GBP" maxlength="3">
+                                    <span id="customBaseFlag" class="fi fi-eu"></span>
+                                    <input type="text" id="customBase" value="EUR" placeholder="EUR" maxlength="3">
                                 </div>
                                 <button id="btnSwap" class="swap-btn" title="Inverti">
                                     <i class="fa-solid fa-right-left"></i>
                                 </button>
                                 <div class="input-with-flag" id="customTargetContainer" style="cursor: pointer;">
-                                    <span id="customTargetFlag" class="fi fi-ch"></span>
-                                    <input type="text" id="customTarget" placeholder="CHF" maxlength="3">
+                                    <span id="customTargetFlag" class="fi fi-us"></span>
+                                    <input type="text" id="customTarget" value="USD" placeholder="USD" maxlength="3">
                                 </div>
                             </div>
-                            <!-- Search button removed -->
                             <button id="resetDataBtn" class="btn-secondary-small" title="Clear Cache" data-i18n-title="clean_cache" style="width: auto; padding: 0 16px;">
                                 <i class="fa-solid fa-rotate"></i>
                                 <span data-i18n="clean_cache" style="margin-left: 8px; font-size: 13px; font-weight: 600;">Clear Cache</span>
@@ -202,19 +181,26 @@
 
                         <!-- FILTERS AREA -->
                         <div class="filters-bar" style="display: flex; gap: 15px; margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px;">
-                            <div>
-                                <label style="display:block; font-size:12px; margin-bottom:5px; color:var(--text-secondary)" data-i18n="period_label">Periodo (Mese/Anno)</label>
-                                <select id="filterPeriod" style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); min-width: 150px;">
-                                    <option value="all" data-i18n="all_periods">Tutti i periodi</option>
-                                </select>
+                            <div style="display: flex; gap: 6px; align-items: flex-end;">
+                                <div>
+                                    <label style="display:block; font-size:11px; margin-bottom:4px; color:var(--text-secondary); white-space:nowrap;" data-i18n="period_from">Da (Mese/Anno)</label>
+                                    <select id="filterPeriodFrom" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); min-width: 140px; font-weight: 500;">
+                                        <option value="all" data-i18n="all_periods">Tutti i periodi</option>
+                                    </select>
+                                </div>
+                                <div style="margin-top: 25px; color: var(--text-muted); font-size: 14px;">–</div>
+                                <div>
+                                    <label style="display:block; font-size:11px; margin-bottom:4px; color:var(--text-secondary); white-space:nowrap;" data-i18n="period_to">A (Mese/Anno)</label>
+                                    <select id="filterPeriodTo" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); min-width: 140px; font-weight: 500;">
+                                        <option value="all" data-i18n="all_periods">Tutti i periodi</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div>
                                 <label style="display:block; font-size:12px; margin-bottom:5px; color:var(--text-secondary)" data-i18n="closing_only_label">Solo Chiusure Mensili</label>
                                 <select id="filterClosing" style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); min-width: 150px;">
                                     <option value="all" data-i18n="show_all">Mostra tutto</option>
                                     <option value="closingOnly" data-i18n="yellow_rows_only">Month End</option>
                                 </select>
-                            </div>
                         </div>
                     </div>
 

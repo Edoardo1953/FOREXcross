@@ -735,6 +735,10 @@ body {
     align-items: stretch;
 }
 
+.dashboard-controls-row.centered {
+    justify-content: center;
+}
+
 .selector-card {
     flex: 1;
     min-width: 280px;
@@ -748,6 +752,20 @@ body {
     box-shadow: var(--shadow-md);
     position: relative;
     overflow: hidden;
+}
+
+.selector-card.custom-search-only {
+    flex: 0 1 450px; /* Limit width on PC/Tablet */
+    min-width: 320px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .selector-card.custom-search-only {
+        flex: 1;
+        width: 100%;
+        max-width: 100%;
+    }
 }
 
 .selector-card::before {
@@ -769,10 +787,11 @@ body {
     border: 1px solid var(--accent-primary);
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    padding: 8px 16px;
+    padding: 8px 24px;
     border-radius: var(--border-radius-sm);
-    display: inline-block;
-    margin-bottom: 12px;
+    display: block; /* Changed to block to allow centering */
+    margin: 0 auto 12px; /* Centered */
+    width: fit-content;
     text-align: center;
     transition: all 0.3s ease;
     cursor: default;

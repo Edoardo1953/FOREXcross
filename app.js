@@ -48,13 +48,7 @@ const btnSwap = document.getElementById('btnSwap');
 function updateGroupTitles(activeGroup) {
     const titles = document.querySelectorAll('.selector-group-title');
     titles.forEach(t => {
-        if (activeGroup === 'main' && t.getAttribute('data-i18n') === 'group_main') {
-            t.classList.add('active');
-        } else if (activeGroup === 'custom' && t.getAttribute('data-i18n') === 'group_custom') {
-            t.classList.add('active');
-        } else {
-            t.classList.remove('active');
-        }
+        t.classList.add('active');
     });
 }
 
@@ -123,21 +117,11 @@ if (customTargetInput) {
     });
 }
 
-// Main Cross Form Logic
-const mainBaseInput = document.getElementById('mainBase');
-const mainTargetInput = document.getElementById('mainTarget');
-const mainBaseFlag = document.getElementById('mainBaseFlag');
-const mainTargetFlag = document.getElementById('mainTargetFlag');
-const btnSwapMain = document.getElementById('btnSwapMain');
-const mainBaseContainer = document.getElementById('mainBaseContainer');
-const mainTargetContainer = document.getElementById('mainTargetContainer');
-const titleMain = document.getElementById('titleMain');
 const titleCustom = document.getElementById('titleCustom');
 const customBaseContainer = document.getElementById('customBaseContainer');
 const customTargetContainer = document.getElementById('customTargetContainer');
 
-// Title Clicks
-if (titleMain) titleMain.addEventListener('click', () => triggerMainFetch());
+// // Title Clicks
 if (titleCustom) titleCustom.addEventListener('click', () => triggerCustomFetch());
 
 // Custom Container Clicks
@@ -155,46 +139,23 @@ if (customTargetContainer) {
     });
 }
 
-function updateMainFlags() {
-    if (mainBaseFlag && mainBaseInput) {
-        mainBaseFlag.className = APP_UTILS.getFlagClass(mainBaseInput.value);
-    }
-    if (mainTargetFlag && mainTargetInput) {
-        mainTargetFlag.className = APP_UTILS.getFlagClass(mainTargetInput.value);
-    }
-}
+// Removed updateMainFlags function
+// Removed triggerMainFetch function
 
-function triggerMainFetch() {
-    if (!mainBaseInput || !mainTargetInput) return;
-    const base = mainBaseInput.value;
-    const target = mainTargetInput.value;
-    
-    updateMainFlags();
-    updateGroupTitles('main');
-    
-    currentBaseCurrency = base;
-    currentTargetCurrency = target;
-    
-    updateLabels();
-
-    const globalLoader = document.getElementById('globalLoader');
-    if (globalLoader) globalLoader.classList.remove('hidden');
-    
-    initializeData();
-}
-
-if (btnSwapMain) {
-    btnSwapMain.addEventListener('click', () => {
-        if (!mainBaseInput || !mainTargetInput) return;
-        const temp = mainBaseInput.value;
-        mainBaseInput.value = mainTargetInput.value;
-        mainTargetInput.value = temp;
-        triggerMainFetch();
-    });
-}
-// Allow clicking anywhere on the containers to swap
-if (mainBaseContainer) mainBaseContainer.addEventListener('click', () => { if(btnSwapMain) btnSwapMain.click() });
-if (mainTargetContainer) mainTargetContainer.addEventListener('click', () => { if(btnSwapMain) btnSwapMain.click() });
+// Custom Container Clicks (duplicate, keeping the first one)
+// if (customBaseContainer) {
+//     customBaseContainer.addEventListener('click', (e) => {
+//         if (e.target !== customBaseInput) customBaseInput.focus();
+//         if (customBaseInput.value.length === 3 && customTargetInput.value.length === 3) triggerCustomFetch();
+//     });
+// }
+// if (customTargetContainer) {
+//     customTargetContainer.addEventListener('click', (e) => {
+//         if (e.target !== customTargetInput) {
+//             if (btnSwap) btnSwap.click();
+//         }
+//     });
+// }
 
 function updateLabels() {
     const pairLabel = `${currentBaseCurrency}/${currentTargetCurrency}`;
@@ -266,35 +227,23 @@ document.getElementById('exportExcelBtn').addEventListener('click', exportDataba
 
 // --- Initialization Logic ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Determine active group initially (defaults to main unless custom inputs mismatch main)
-    const isCustomActive = (currentBaseCurrency !== 'EUR' && currentTargetCurrency !== 'USD') 
-                            && (currentBaseCurrency !== 'USD' && currentTargetCurrency !== 'EUR');
-    updateGroupTitles(isCustomActive ? 'custom' : 'main');
+    // ALWAYS Default to EUR / USD on load as requested
+    currentBaseCurrency = 'EUR';
+    currentTargetCurrency = 'USD';
+
+    updateGroupTitles();
 
     // Start data fetch process on load
     initializeData();
 
     // Set initial values for inputs
     if (customBaseInput) {
-        customBaseInput.value = isCustomActive ? currentBaseCurrency : 'GBP';
+        customBaseInput.value = currentBaseCurrency;
     }
     if (customTargetInput) {
-        customTargetInput.value = isCustomActive ? currentTargetCurrency : 'CHF';
+        customTargetInput.value = currentTargetCurrency;
     }
     updateCustomFlags();
-    
-    // Set initial values for main cross
-    if (mainBaseInput && mainTargetInput) {
-        if (!isCustomActive) {
-            mainBaseInput.value = currentBaseCurrency;
-            mainTargetInput.value = currentTargetCurrency;
-        } else {
-            // Default them to EUR/USD if we booted custom
-            mainBaseInput.value = 'EUR';
-            mainTargetInput.value = 'USD';
-        }
-    }
-    updateMainFlags();
 
     // Listen for language changes to update UI components
     window.addEventListener('languageChanged', () => {
@@ -684,6 +633,12 @@ function renderChart() {
         const cutoff = new Date(); cutoff.setMonth(cutoff.getMonth() - 1);
         chartData = chartData.filter(d => d.dateObj >= cutoff);
     }
+    
+    // Fallback: Se il filtro ha svuotato i dati (es. valute con dati vecchi come RUB) 
+    // ma abbiamo dati nello storico, mostriamo gli ultimi 30 record disponibili.
+    if (chartData.length === 0 && historicalRateList.length > 0) {
+        chartData = [...historicalRateList].slice(-30);
+    }
 
     const labels = chartData.map(d => d.dateStr); // Use daily date string rather than Month Label
     const dataPoints = chartData.map(d => d.rate);
@@ -837,13 +792,18 @@ function renderFullDatabaseTable(limit = 100) {
         return;
     }
 
-    const filterPeriodSelect = document.getElementById('filterPeriod');
+    const filterPeriodFromSelect = document.getElementById('filterPeriodFrom');
+    const filterPeriodToSelect = document.getElementById('filterPeriodTo');
     const filterClosingSelect = document.getElementById('filterClosing');
 
     // Add event listeners lazily if they dont exist
-    if (filterPeriodSelect && !filterPeriodSelect.dataset.listenerAdded) {
-        filterPeriodSelect.addEventListener('change', () => renderFullDatabaseTable());
-        filterPeriodSelect.dataset.listenerAdded = 'true';
+    if (filterPeriodFromSelect && !filterPeriodFromSelect.dataset.listenerAdded) {
+        filterPeriodFromSelect.addEventListener('change', () => renderFullDatabaseTable());
+        filterPeriodFromSelect.dataset.listenerAdded = 'true';
+    }
+    if (filterPeriodToSelect && !filterPeriodToSelect.dataset.listenerAdded) {
+        filterPeriodToSelect.addEventListener('change', () => renderFullDatabaseTable());
+        filterPeriodToSelect.dataset.listenerAdded = 'true';
     }
     if (filterClosingSelect && !filterClosingSelect.dataset.listenerAdded) {
         filterClosingSelect.addEventListener('change', () => renderFullDatabaseTable());
@@ -855,27 +815,31 @@ function renderFullDatabaseTable(limit = 100) {
     historicalRateList.forEach(d => {
         const mm = String(d.dateObj.getMonth() + 1).padStart(2, '0');
         const yyyy = d.dateObj.getFullYear();
-        uniquePeriods.add(`${mm}/${yyyy}`);
+        // Use YYYY-MM for value to allow easy string comparison for range
+        uniquePeriods.add(`${yyyy}-${mm}`);
     });
 
-    if (filterPeriodSelect && (filterPeriodSelect.options.length - 1 !== uniquePeriods.size)) {
-        const prevChoice = filterPeriodSelect.value;
-        filterPeriodSelect.innerHTML = `<option value="all">${getTranslation('all_periods')}</option>`;
-        
-        const sortedPeriods = Array.from(uniquePeriods).sort((a, b) => {
-            const [mA, yA] = a.split('/');
-            const [mB, yB] = b.split('/');
-            if (yA !== yB) return Number(yB) - Number(yA);
-            return Number(mB) - Number(mA);
+    if (filterPeriodFromSelect && (filterPeriodFromSelect.options.length - 1 !== uniquePeriods.size)) {
+        const prevFrom = filterPeriodFromSelect.value;
+        const prevTo = filterPeriodToSelect ? filterPeriodToSelect.value : 'all';
+
+        const sortedVal = Array.from(uniquePeriods).sort().reverse(); // Newest first
+
+        [filterPeriodFromSelect, filterPeriodToSelect].forEach(sel => {
+            if (!sel) return;
+            sel.innerHTML = `<option value="all">${getTranslation('all_periods')}</option>`;
+            sortedVal.forEach(val => {
+                const [y, m] = val.split('-');
+                sel.add(new Option(`${getTranslation('mese_prefix')}${m}/${y}`, val));
+            });
         });
 
-        sortedPeriods.forEach(p => {
-            filterPeriodSelect.add(new Option(`${getTranslation('mese_prefix')}${p}`, p));
-        });
-        filterPeriodSelect.value = prevChoice;
+        filterPeriodFromSelect.value = prevFrom;
+        if(filterPeriodToSelect) filterPeriodToSelect.value = prevTo;
     }
 
-    const selectedPeriod = filterPeriodSelect ? filterPeriodSelect.value : 'all';
+    const selectedFrom = filterPeriodFromSelect ? filterPeriodFromSelect.value : 'all';
+    const selectedTo = filterPeriodToSelect ? filterPeriodToSelect.value : 'all';
     const selectedClosing = filterClosingSelect ? filterClosingSelect.value : 'all';
 
     const monthlyClosingsSet = new Set(getMonthlyClosings().map(m => m.dateStr));
@@ -890,10 +854,10 @@ function renderFullDatabaseTable(limit = 100) {
         const isClosing = monthlyClosingsSet.has(data.dateStr);
 
         if (selectedClosing === 'closingOnly' && !isClosing) continue;
-        if (selectedPeriod !== 'all') {
-            const dataPeriod = `${String(data.dateObj.getMonth() + 1).padStart(2, '0')}/${data.dateObj.getFullYear()}`;
-            if (dataPeriod !== selectedPeriod) continue;
-        }
+        
+        const dataYYYYMM = `${data.dateObj.getFullYear()}-${String(data.dateObj.getMonth() + 1).padStart(2, '0')}`;
+        if (selectedFrom !== 'all' && dataYYYYMM < selectedFrom) continue;
+        if (selectedTo !== 'all' && dataYYYYMM > selectedTo) continue;
 
         matchCount++;
         const tr = document.createElement('tr');
@@ -908,14 +872,14 @@ function renderFullDatabaseTable(limit = 100) {
         fragment.appendChild(tr);
 
         // Limit for initial render to avoid freeze, but allow "Show All"
-        if (limit && matchCount >= limit && selectedPeriod === 'all' && selectedClosing === 'all') break;
+        if (limit && matchCount >= limit && selectedFrom === 'all' && selectedTo === 'all' && selectedClosing === 'all') break;
     }
 
     tbody.innerHTML = '';
     tbody.appendChild(fragment);
 
     // Se ci sono più dati del limite, aggiungiamo il tasto "Mostra Tutto" in una riga separata (non nel fragment per performance)
-    if (limit && matchCount >= limit && sortedList.length > limit && selectedPeriod === 'all' && selectedClosing === 'all') {
+    if (limit && matchCount >= limit && sortedList.length > limit && selectedFrom === 'all' && selectedTo === 'all' && selectedClosing === 'all') {
         const moreRow = document.createElement('tr');
         moreRow.innerHTML = `
             <td colspan="4" style="text-align:center; padding:20px;">
@@ -938,9 +902,11 @@ function exportDatabaseToExcel() {
     const monthlyClosingsSet = new Set(getMonthlyClosings().map(m => m.dateStr));
 
     // Get filter values from UI for export consistency
-    const filterPeriodSelect = document.getElementById('filterPeriod');
+    const filterPeriodFromSelect = document.getElementById('filterPeriodFrom');
+    const filterPeriodToSelect = document.getElementById('filterPeriodTo');
     const filterClosingSelect = document.getElementById('filterClosing');
-    const selectedPeriod = filterPeriodSelect ? filterPeriodSelect.value : 'all';
+    const selectedFrom = filterPeriodFromSelect ? filterPeriodFromSelect.value : 'all';
+    const selectedTo = filterPeriodToSelect ? filterPeriodToSelect.value : 'all';
     const selectedClosing = filterClosingSelect ? filterClosingSelect.value : 'all';
 
     // Prepara i dati per l'esportazione
@@ -964,10 +930,9 @@ function exportDatabaseToExcel() {
         // Apply Filters to exported data too
         if (selectedClosing === 'closingOnly' && !isClosing) return;
 
-        if (selectedPeriod !== 'all') {
-            const dataPeriod = `${String(data.dateObj.getMonth() + 1).padStart(2, '0')}/${data.dateObj.getFullYear()}`;
-            if (dataPeriod !== selectedPeriod) return;
-        }
+        const dataYYYYMM = `${data.dateObj.getFullYear()}-${String(data.dateObj.getMonth() + 1).padStart(2, '0')}`;
+        if (selectedFrom !== 'all' && dataYYYYMM < selectedFrom) return;
+        if (selectedTo !== 'all' && dataYYYYMM > selectedTo) return;
 
         exportData.push([
             data.dateStr,
