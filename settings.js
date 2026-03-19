@@ -79,10 +79,17 @@ function updateManualLinks() {
     if (userLink) {
         userLink.onclick = (e) => {
             e.preventDefault();
-            // Since we only have the IT version for now, fallback to it if file doesn't exist?
-            // Actually, let's just use the lang code as with privacy.
             const url = `docs/manuals/Manual_User_${langNow}.html`;
             toggleManual(true, url, 'manual_user_title');
+        };
+    }
+
+    const advLink = document.getElementById('manualAdvancedLink');
+    if (advLink) {
+        advLink.onclick = (e) => {
+            e.preventDefault();
+            const url = `docs/manuals/Manual_Advanced_${langNow}.html`;
+            toggleManual(true, url, 'manual_advanced_title');
         };
     }
 
@@ -141,44 +148,27 @@ function toggleManual(show, url, titleKey) {
         
         iframe.src = cleanUrl;
 
-        // Simplified Download Logic for maximum compatibility
+        // Update Download logic: Invoke browser print on the iframe
         if (downloadBtn) {
             downloadBtn.onclick = (e) => {
-                const isLocal = window.location.protocol === 'file:';
-                
-                if (isLocal) {
-                    // Local access: Browsers block most "forced" download tricks.
-                    // Opening in a new tab is the only 100% reliable way.
-                    window.open(pdfUrl, '_blank');
-                    return false;
-                }
-
                 e.preventDefault();
                 e.stopPropagation();
-
-                // Web version: Try the blob "force save" method
-                fetch(pdfUrl)
-                .then(resp => {
-                    if (resp.ok) return resp.blob();
-                    throw new Error("PDF not found");
-                })
-                .then(blob => {
-                    const forcedBlob = new Blob([blob], { type: 'application/pdf' });
-                    const bUrl = window.URL.createObjectURL(forcedBlob);
-                    const a = document.createElement('a');
-                    a.href = bUrl;
-                    a.download = filename;
-                    document.body.appendChild(a);
-                    a.click();
-                    setTimeout(() => {
-                        window.URL.revokeObjectURL(bUrl);
-                        document.body.removeChild(a);
-                    }, 400);
-                })
-                .catch(() => {
-                    // If anything fails, just open the file directly
-                    window.open(pdfUrl, '_blank');
-                });
+                
+                try {
+                    // Try to use the standard iframe print method
+                    if (iframe.contentWindow) {
+                        iframe.contentWindow.focus();
+                        iframe.contentWindow.print();
+                    } else {
+                        throw new Error("Iframe window not accessible");
+                    }
+                } catch (err) {
+                    // Fallback: just open the manual URL in a new window for printing
+                    // Check if URL already has query params
+                    const separator = url.includes('?') ? '&' : '?';
+                    window.open(url + separator + 'print=1', '_blank');
+                }
+                
                 return false;
             };
         }

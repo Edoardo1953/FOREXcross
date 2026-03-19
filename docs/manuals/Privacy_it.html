@@ -139,5 +139,17 @@
             &copy; 2026 FOREX Dashboard - Documentazione Tecnica
         </footer>
     </div>
+
+    <!-- Script Autoprint on Load -->
+    <script>
+        window.addEventListener('load', () => {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('print') === '1') {
+                setTimeout(() => {
+                    window.print();
+                }, 500);
+            }
+        });
+    </script>
 </body>
 </html>
