@@ -2018,6 +2018,32 @@ tbody tr:hover {
         margin-top: 5px;
         font-size: 11px;
     }
+
+    /* Historical Database Filters Mobile */
+    .filters-bar {
+        flex-direction: column !important;
+        gap: 12px !important;
+        align-items: stretch !important;
+    }
+    .filter-group-date {
+        justify-content: space-between !important;
+        width: 100% !important;
+    }
+    .filter-group-date > div {
+        flex: 1;
+    }
+    .filter-group-date select {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+    .filter-group-closing {
+        width: 100% !important;
+        border-top: 1px solid rgba(255,255,255,0.05);
+        padding-top: 12px;
+    }
+    .filter-group-closing select {
+        width: 100% !important;
+    }
 }
 
 /* Reduplicate styles for the simulator class */
@@ -2614,4 +2640,31 @@ tbody tr:hover {
 .no-scroll {
     overflow: hidden !important;
     height: 100vh !important;
+    }
+
+/* Database Filters Mobile Simulator Correction */
+.mobile-preview-active .filters-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: stretch !important;
+}
+.mobile-preview-active .filter-group-date {
+    justify-content: space-between !important;
+    width: 100% !important;
+    display: flex !important;
+}
+.mobile-preview-active .filter-group-date > div {
+    flex: 1;
+}
+.mobile-preview-active .filter-group-date select {
+    width: 100% !important;
+    min-width: 0 !important;
+}
+.mobile-preview-active .filter-group-closing {
+    width: 100% !important;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 12px;
+}
+.mobile-preview-active .filter-group-closing select {
+    width: 100% !important;
 }

@@ -180,8 +180,8 @@
                         </div>
 
                         <!-- FILTERS AREA -->
-                        <div class="filters-bar" style="display: flex; gap: 15px; margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px;">
-                            <div style="display: flex; gap: 6px; align-items: flex-end;">
+                        <div class="filters-bar" style="display: flex; gap: 15px; margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px; flex-wrap: wrap;">
+                            <div class="filter-group-date" style="display: flex; gap: 6px; align-items: flex-end;">
                                 <div>
                                     <label style="display:block; font-size:11px; margin-bottom:4px; color:var(--text-secondary); white-space:nowrap;" data-i18n="period_from">Da (Mese/Anno)</label>
                                     <select id="filterPeriodFrom" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); min-width: 140px; font-weight: 500;">
@@ -196,11 +196,13 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="filter-group-closing">
                                 <label style="display:block; font-size:12px; margin-bottom:5px; color:var(--text-secondary)" data-i18n="closing_only_label">Solo Chiusure Mensili</label>
                                 <select id="filterClosing" style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); min-width: 150px;">
                                     <option value="all" data-i18n="show_all">Mostra tutto</option>
                                     <option value="closingOnly" data-i18n="yellow_rows_only">Month End</option>
                                 </select>
+                            </div>
                         </div>
                     </div>
 
