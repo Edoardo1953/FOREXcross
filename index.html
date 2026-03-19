@@ -158,15 +158,6 @@
                 <button class="close-settings" onclick="toggleSettings(false)"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="settings-body">
-                <div class="settings-group">
-                    <label class="settings-group-title" data-i18n="dev_preview_label">Developer Access</label>
-                    <div class="settings-row">
-                        <span data-i18n="btn_mobile_preview">Anteprima Cellulare</span>
-                        <div class="theme-switch-wrapper">
-                            <button id="btnToggleMobilePreview" class="theme-switch-btn" onclick="toggleMobilePreview()">OFF</button>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="settings-group">
                     <label class="settings-group-title" data-i18n="theme_label">Colore App</label>
@@ -281,13 +272,6 @@
             });
         }
     </script>
-    <!-- Floating Mobile Preview Button (PC only) -->
-    <div class="floating-mobile-container">
-        <button class="floating-mobile-btn dev-btn-pc" onclick="toggleMobilePreview()" title="Mobile View" data-i18n-title="btn_mobile_preview">
-            <i class="fa-solid fa-mobile-screen-button"></i>
-            <span class="btn-text" data-i18n="btn_mobile_preview">Mobile Preview</span>
-        </button>
-    </div>
     <!-- Manual Overlay -->
     <div id="manualOverlay" class="manual-overlay hidden">
         <div class="manual-window">

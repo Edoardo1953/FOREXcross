@@ -278,54 +278,7 @@ function setBackground(bg, save = true) {
     });
 }
 
-/**
- * DEVELOPER PREVIEW: MOBILE SIMULATOR
- */
-function toggleMobilePreview() {
-    const isMobileMode = document.documentElement.classList.toggle('mobile-preview-active');
-    
-    // Update both settings buttons and header buttons
-    const toggles = document.querySelectorAll('#btnToggleMobilePreview');
-    toggles.forEach(btn => {
-        if (isMobileMode) {
-            btn.classList.add('active');
-            btn.textContent = 'ON';
-        } else {
-            btn.classList.remove('active');
-            btn.textContent = 'OFF';
-        }
-    });
 
-    const headerBtns = document.querySelectorAll('.dev-btn-pc');
-    headerBtns.forEach(btn => {
-        if (isMobileMode) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
-    });
-    
-    // Persist for the session
-    localStorage.setItem('dev_mobile_preview', isMobileMode);
-}
-
-// Check initial state
-document.addEventListener('DOMContentLoaded', () => {
-    if (localStorage.getItem('dev_mobile_preview') === 'true') {
-        document.documentElement.classList.add('mobile-preview-active');
-        
-        const toggles = document.querySelectorAll('#btnToggleMobilePreview');
-        toggles.forEach(btn => {
-            btn.classList.add('active');
-            btn.textContent = 'ON';
-        });
-
-        const headerBtns = document.querySelectorAll('.dev-btn-pc');
-        headerBtns.forEach(btn => {
-            btn.classList.add('active');
-        });
-    }
-});
 
 /**
  * SHARED ACCESS LOGIC

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'forexcross-v3';
+const CACHE_NAME = 'forexcross-v4';
 const ASSETS = [
   'index.html',
   'dashboard.html',
@@ -15,6 +15,7 @@ const ASSETS = [
 
 // Install Service Worker
 self.addEventListener('install', (event) => {
+  self.skipWaiting(); // Force the new service worker to become active immediately
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log('Caching assets');

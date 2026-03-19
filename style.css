@@ -1729,34 +1729,6 @@ tbody tr:hover {
     background: var(--bg-hover);
 }
 
-/* ===================================================
-   DEVELOPER PREVIEW: MOBILE SIMULATOR
-   =================================================== */
-.mobile-preview-active {
-    background-color: rgba(0, 0, 0, 0.75);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-}
-
-.mobile-preview-active body {
-    width: 390px !important;
-    height: 800px !important;
-    margin: 0 !important;
-    border: 12px solid #222;
-    border-radius: 45px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 0 50px rgba(0,0,0,0.5);
-    display: block !important;
-}
-
-.mobile-preview-active .app-container {
-    height: 100% !important;
-    width: 100% !important;
-}
 
 /* ===================================================
    RESPONSIVE DESIGN - MOBILE
@@ -2296,59 +2268,6 @@ tbody tr:hover {
     margin-top: -8px;
 }
 
-.floating-mobile-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 9999;
-}
-
-.floating-mobile-btn {
-    width: auto !important;
-    height: 48px !important;
-    border-radius: 24px !important;
-    background: var(--accent-gradient) !important;
-    color: white !important;
-    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4) !important;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 0 20px !important;
-    border: none !important;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    white-space: nowrap;
-}
-
-.floating-mobile-btn i {
-    color: white !important;
-    font-size: 18px;
-}
-
-.floating-mobile-btn:hover {
-    transform: scale(1.05) translateY(-2px);
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5) !important;
-    filter: brightness(1.1);
-}
-
-.floating-mobile-btn.active {
-    background: var(--accent-danger) !important;
-    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4) !important;
-}
-
-.floating-mobile-btn .btn-text {
-    display: inline;
-    font-size: 13px;
-    font-weight: 700;
-    color: white;
-}
-
-@media (max-width: 900px) {
-    .floating-mobile-container {
-        display: none; /* Hide on real mobile devices to save space, it's a dev tool */
-    }
-}
 
 /* In simulator mode: hide the old header btn-pc elements only (not the floating btn) */
 .mobile-preview-active .intro-header .dev-btn-pc,
@@ -2641,30 +2560,3 @@ tbody tr:hover {
     overflow: hidden !important;
     height: 100vh !important;
     }
-
-/* Database Filters Mobile Simulator Correction */
-.mobile-preview-active .filters-bar {
-    flex-direction: column !important;
-    gap: 12px !important;
-    align-items: stretch !important;
-}
-.mobile-preview-active .filter-group-date {
-    justify-content: space-between !important;
-    width: 100% !important;
-    display: flex !important;
-}
-.mobile-preview-active .filter-group-date > div {
-    flex: 1;
-}
-.mobile-preview-active .filter-group-date select {
-    width: 100% !important;
-    min-width: 0 !important;
-}
-.mobile-preview-active .filter-group-closing {
-    width: 100% !important;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: 12px;
-}
-.mobile-preview-active .filter-group-closing select {
-    width: 100% !important;
-}
