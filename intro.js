@@ -293,7 +293,10 @@ function renderSearchResults(query = '') {
         li.className = 'search-result-item';
         li.innerHTML = `
             <div class="result-info">
-                <span class="result-code">${code}</span>
+                <div class="result-top-line">
+                    <span class="${APP_UTILS.getFlagClass(code)}"></span>
+                    <span class="result-code">${code}</span>
+                </div>
                 <span class="result-name">${name}</span>
             </div>
             <i class="fa-solid fa-plus" style="color: var(--accent-primary)"></i>

@@ -96,14 +96,14 @@
                             <div class="custom-cross-main-row">
                                 <div class="input-with-flag" id="customBaseContainer" style="cursor: pointer;">
                                     <span id="customBaseFlag" class="fi fi-eu"></span>
-                                    <input type="text" id="customBase" value="EUR" placeholder="EUR" maxlength="3">
+                                    <input type="text" id="customBase" value="EUR" placeholder="EUR" maxlength="3" readonly style="cursor: pointer;">
                                 </div>
                                 <button id="btnSwap" class="swap-btn" title="Inverti">
                                     <i class="fa-solid fa-right-left"></i>
                                 </button>
                                 <div class="input-with-flag" id="customTargetContainer" style="cursor: pointer;">
                                     <span id="customTargetFlag" class="fi fi-us"></span>
-                                    <input type="text" id="customTarget" value="USD" placeholder="USD" maxlength="3">
+                                    <input type="text" id="customTarget" value="USD" placeholder="USD" maxlength="3" readonly style="cursor: pointer;">
                                 </div>
                             </div>
                             <button id="resetDataBtn" class="btn-secondary-small" title="Clear Cache" data-i18n-title="clean_cache" style="width: auto; padding: 0 16px;">
@@ -224,6 +224,21 @@
                 </div>
             </div>
         </main>
+    </div>
+
+    <!-- Search Overlay -->
+    <div id="searchOverlay" class="search-overlay hidden">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-wrapper">
+                    <button id="closeSearch" class="icon-btn"><i class="fa-solid fa-chevron-left"></i></button>
+                    <input type="text" id="searchInput" data-i18n="search_placeholder" placeholder="Cerca divisa (es. CAD, Dollaro...)" autocomplete="off">
+                </div>
+            </div>
+            <ul id="searchResults" class="search-results">
+                <!-- Results injected via JS -->
+            </ul>
+        </div>
     </div>
 
     <!-- SheetJS and Chart.js -->

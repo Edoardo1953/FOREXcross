@@ -16,6 +16,14 @@ let currentTargetCurrency = 'USD';
 // NEW: Global Sync Controller to avoid multiple overlapping syncs
 let syncAbortController = null;
 
+// --- SEARCH STATE ---
+let allAvailableCurrencies = {};
+let currentSearchTarget = 'base'; // 'base' or 'target'
+const searchOverlay = document.getElementById('searchOverlay');
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+const closeSearch = document.getElementById('closeSearch');
+
 // Auto-detect pair from URL
 if (window.location.pathname.includes('eur_usd')) {
     currentBaseCurrency = 'EUR';
@@ -100,22 +108,8 @@ const handleEnter = (e) => {
     if (e.key === 'Enter') triggerCustomFetch();
 };
 
-if (customBaseInput) {
-    customBaseInput.addEventListener('keypress', handleEnter);
-    customBaseInput.addEventListener('input', activateCustomArea);
-    customBaseInput.addEventListener('blur', () => {
-        customBaseInput.value = customBaseInput.value.toUpperCase();
-        if (customBaseInput.value.length === 3 && customTargetInput.value.length === 3) triggerCustomFetch();
-    });
-}
-if (customTargetInput) {
-    customTargetInput.addEventListener('keypress', handleEnter);
-    customTargetInput.addEventListener('input', activateCustomArea);
-    customTargetInput.addEventListener('blur', () => {
-        customTargetInput.value = customTargetInput.value.toUpperCase();
-        if (customBaseInput.value.length === 3 && customTargetInput.value.length === 3) triggerCustomFetch();
-    });
-}
+// Input listeners removed since we use search overlay now
+
 
 const titleCustom = document.getElementById('titleCustom');
 const customBaseContainer = document.getElementById('customBaseContainer');
@@ -127,16 +121,99 @@ if (titleCustom) titleCustom.addEventListener('click', () => triggerCustomFetch(
 // Custom Container Clicks
 if (customBaseContainer) {
     customBaseContainer.addEventListener('click', (e) => {
-        if (e.target !== customBaseInput) customBaseInput.focus();
-        if (customBaseInput.value.length === 3 && customTargetInput.value.length === 3) triggerCustomFetch();
+        openSearchOverlay('base');
     });
 }
 if (customTargetContainer) {
     customTargetContainer.addEventListener('click', (e) => {
-        if (e.target !== customTargetInput) {
-            if (btnSwap) btnSwap.click();
-        }
+        openSearchOverlay('target');
     });
+}
+
+// --- SEARCH OVERLAY LOGIC ---
+async function fetchAllAvailableCurrencies() {
+    const saved = localStorage.getItem('frankfurter_currencies');
+    if (saved) {
+        try {
+            allAvailableCurrencies = JSON.parse(saved);
+        } catch (e) {}
+    }
+
+    try {
+        const response = await fetch('https://api.frankfurter.app/currencies');
+        if (response.ok) {
+            allAvailableCurrencies = await response.json();
+            localStorage.setItem('frankfurter_currencies', JSON.stringify(allAvailableCurrencies));
+        }
+    } catch (e) {
+        console.warn("Could not fetch full currency list", e);
+    }
+}
+
+function openSearchOverlay(target) {
+    currentSearchTarget = target;
+    if (searchOverlay) {
+        searchOverlay.classList.remove('hidden');
+        renderSearchResults('');
+        searchResults.scrollTop = 0;
+        setTimeout(() => searchInput.focus(), 100);
+    }
+}
+
+function setupSearchListeners() {
+    if (closeSearch) closeSearch.addEventListener('click', () => searchOverlay.classList.add('hidden'));
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toUpperCase();
+            renderSearchResults(query);
+        });
+    }
+}
+
+function renderSearchResults(query = '') {
+    if (!searchResults) return;
+    searchResults.innerHTML = '';
+    
+    const filtered = Object.entries(allAvailableCurrencies).filter(([code, name]) => {
+        return code.includes(query) || name.toUpperCase().includes(query);
+    });
+
+    if (Object.keys(allAvailableCurrencies).length === 0) {
+        searchResults.innerHTML = `<li style="text-align:center; padding: 20px; color: var(--text-secondary); opacity: 0.7; font-size: 13px;">${getTranslation('loading_rates') || 'Caricamento divise...'}</li>`;
+        return;
+    }
+
+    filtered.forEach(([code, name]) => {
+        const li = document.createElement('li');
+        li.className = 'search-result-item';
+        li.innerHTML = `
+            <div class="result-info">
+                <div class="result-top-line">
+                    <span class="${APP_UTILS.getFlagClass(code)}"></span>
+                    <span class="result-code">${code}</span>
+                </div>
+                <span class="result-name">${name}</span>
+            </div>
+            <i class="fa-solid fa-plus" style="color: var(--accent-primary)"></i>
+        `;
+        li.addEventListener('click', () => selectCurrency(code));
+        searchResults.appendChild(li);
+    });
+}
+
+function selectCurrency(code) {
+    if (currentSearchTarget === 'base') {
+        customBaseInput.value = code;
+    } else {
+        customTargetInput.value = code;
+    }
+    
+    if (searchOverlay) searchOverlay.classList.add('hidden');
+    if (searchInput) searchInput.value = '';
+    
+    updateCustomFlags();
+    triggerCustomFetch();
 }
 
 // Removed updateMainFlags function
@@ -244,6 +321,10 @@ document.addEventListener('DOMContentLoaded', () => {
         customTargetInput.value = currentTargetCurrency;
     }
     updateCustomFlags();
+    
+    // Init search overlay
+    fetchAllAvailableCurrencies();
+    setupSearchListeners();
 
     // Listen for language changes to update UI components
     window.addEventListener('languageChanged', () => {

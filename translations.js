@@ -16,7 +16,7 @@ const translations = {
         
         // Dashboard
         nav_calculator: "Calcolatore Cambi",
-        nav_database: "Database<br>Storico",
+        nav_database: "Database",
         group_main: "Main Crosses",
         group_custom: "Ricerca Cross",
         nav_home: "Calcolatore<br>Cross",
@@ -47,8 +47,8 @@ const translations = {
         col_last_day: "Ultimo Giorno",
         col_closing_rate: "Tasso Chiusura",
         col_monthly_avg: "Media Mensile",
-        db_title: "Historical Database",
-        subtitle_database: "Historical Database",
+        db_title: "Database",
+        subtitle_database: "Database",
         export_excel: "Esporta in Excel",
         period_label: "Periodo (Mese/Anno)",
         all_periods: "Tutti i periodi",
@@ -129,7 +129,7 @@ const translations = {
         
         // Dashboard
         nav_calculator: "Cross Calculator",
-        nav_database: "Historical<br>Database",
+        nav_database: "Database",
         group_main: "Main Crosses",
         group_custom: "Custom Cross",
         nav_home: "Cross<br>Calculator",
@@ -160,8 +160,8 @@ const translations = {
         col_last_day: "Last Day",
         col_closing_rate: "Closing Rate",
         col_monthly_avg: "Monthly Average",
-        db_title: "Historical Database",
-        subtitle_database: "Historical Database",
+        db_title: "Database",
+        subtitle_database: "Database",
         export_excel: "Export to Excel",
         period_label: "Period (Month/Year)",
         all_periods: "All periods",
@@ -242,7 +242,7 @@ const translations = {
         
         // Dashboard
         nav_calculator: "Calculatrice de Taux",
-        nav_database: "Database<br>Historique",
+        nav_database: "Database",
         group_main: "Taux Principaux",
         group_custom: "Recherche Cross",
         nav_home: "Calculatrice<br>Cross",
@@ -273,8 +273,8 @@ const translations = {
         col_last_day: "Dernier Jour",
         col_closing_rate: "Taux de Clôture",
         col_monthly_avg: "Moyenne Mensuelle",
-        db_title: "Historical Database",
-        subtitle_database: "Historical Database",
+        db_title: "Database",
+        subtitle_database: "Database",
         export_excel: "Exporter vers Excel",
         period_label: "Période (Mois/Année)",
         all_periods: "Toutes les périodes",

@@ -1646,6 +1646,18 @@ tbody tr:hover {
 .search-result-item .result-info {
     display: flex;
     flex-direction: column;
+    gap: 2px;
+}
+
+.result-top-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.result-top-line .fi {
+    font-size: 1.1em;
+    border-radius: 2px;
 }
 
 .search-result-item .result-code {
