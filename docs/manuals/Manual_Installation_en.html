@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Installation - FOREXcross</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #10b981;
+            --secondary: #64748b;
+            --text: #1e293b;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --border: #e2e8f0;
+            --accent: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card);
+            padding: 50px;
+            border-radius: 24px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+        }
+        header {
+            text-align: center;
+            border-bottom: 4px solid var(--primary);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+        .header-badge {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .app-logo {
+            font-size: 56px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        h1 {
+            font-size: 32px;
+            margin: 10px 0;
+            color: var(--text);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+        h2 {
+            font-size: 22px;
+            margin-top: 40px;
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center; gap: 12px;
+        }
+        .step-card {
+            background: #fdfdfd;
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: 16px;
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+        .step-content {
+            flex-grow: 1;
+        }
+        .step-content strong {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+        .alert-box {
+            background: #eff6ff;
+            border-left: 6px solid var(--accent);
+            padding: 25px;
+            margin: 40px 0;
+            border-radius: 0 16px 16px 0;
+        }
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--secondary);
+            border-top: 1px solid var(--border);
+            padding-top: 30px;
+        }
+        @media print {
+            body { padding: 0; background: white; }
+            .container { box-shadow: none; border: none; padding: 10px; width: 100%; max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-badge">Installation Guide</div>
+            <div class="app-logo"><i class="fa-solid fa-mobile-screen-button"></i></div>
+            <h1>Add to Home Screen</h1>
+            <p style="color: var(--secondary); font-weight: 500;">Transform the Web App into a native application on your mobile device.</p>
+        </header>
+
+        <section id="android-guide">
+            <h2><i class="fa-brands fa-android"></i> For Android Devices (Chrome)</h2>
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <strong>Open the site in Chrome</strong>
+                    Navigate to our App's address using the Google Chrome browser on your smartphone.
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <strong>Open the Options Menu</strong>
+                    Tap the <strong>three dots</strong> (⋮) icon in the top right corner of the Chrome bar.
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <strong>Install the App</strong>
+                    Select <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>.
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <strong>Confirm</strong>
+                    Tap "Add" in the window that appears. The App icon will instantly appear on your home screen alongside your other applications.
+                </div>
+            </div>
+        </section>
+
+        <section id="ios-guide">
+            <h2><i class="fa-brands fa-apple"></i> For iOS / iPhone Devices (Safari)</h2>
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <strong>Open the site in Safari</strong>
+                    It is essential to use <strong>Safari</strong> on iPhone to correctly install the App.
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <strong>Tap the Share icon</strong>
+                    Press the <strong>Share</strong> button (the square icon with an upward arrow) located in the bottom bar.
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <strong>Add to Home</strong>
+                    Scroll down the list of options and tap <strong>"Add to Home Screen"</strong>.
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <strong>Complete the operation</strong>
+                    Tap <strong>"Add"</strong> in the top right corner. The FOREXcross icon will appear on your iPhone's home screen.
+                </div>
+            </div>
+        </section>
+
+        <div class="alert-box">
+            <strong><i class="fa-solid fa-circle-info"></i> Why install it?</strong>
+            Once added to the home screen, the App will open without the browser bars, providing a faster, smoother, and more professional full-screen experience, just like an application downloaded from official Stores.
+        </div>
+
+        <footer>
+            &copy; 2026 FOREXcross Dashboard - Quick Guide.
+            <br>Your professional finance at your fingertips.
+        </footer>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('print') === '1') {
+                setTimeout(() => {
+                    window.print();
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>

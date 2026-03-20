@@ -93,6 +93,15 @@ function updateManualLinks() {
         };
     }
 
+    const installLink = document.getElementById('manualInstallLink');
+    if (installLink) {
+        installLink.onclick = (e) => {
+            e.preventDefault();
+            const url = `docs/manuals/Manual_Installation_${langNow}.html`;
+            toggleManual(true, url, 'manual_install_title');
+        };
+    }
+
     applyManualVisibility();
 }
 

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Installation Mobile - FOREXcross</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #10b981;
+            --secondary: #64748b;
+            --text: #1e293b;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --border: #e2e8f0;
+            --accent: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card);
+            padding: 50px;
+            border-radius: 24px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+        }
+        header {
+            text-align: center;
+            border-bottom: 4px solid var(--primary);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+        .header-badge {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .app-logo {
+            font-size: 56px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        h1 {
+            font-size: 32px;
+            margin: 10px 0;
+            color: var(--text);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+        h2 {
+            font-size: 22px;
+            margin-top: 40px;
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center; gap: 12px;
+        }
+        .step-card {
+            background: #fdfdfd;
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: 16px;
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+        .step-content {
+            flex-grow: 1;
+        }
+        .step-content strong {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+        .alert-box {
+            background: #eff6ff;
+            border-left: 6px solid var(--accent);
+            padding: 25px;
+            margin: 40px 0;
+            border-radius: 0 16px 16px 0;
+        }
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--secondary);
+            border-top: 1px solid var(--border);
+            padding-top: 30px;
+        }
+        @media print {
+            body { padding: 0; background: white; }
+            .container { box-shadow: none; border: none; padding: 10px; width: 100%; max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-badge">Guide d'Installation</div>
+            <div class="app-logo"><i class="fa-solid fa-mobile-screen-button"></i></div>
+            <h1>Ajouter à l'écran d'accueil</h1>
+            <p style="color: var(--secondary); font-weight: 500;">Transformez la Web App en une application native sur votre mobile.</p>
+        </header>
+
+        <section id="android-guide">
+            <h2><i class="fa-brands fa-android"></i> Pour les Appareils Android (Chrome)</h2>
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <strong>Ouvrez le site dans Chrome</strong>
+                    Naviguez vers l'adresse de notre application en utilisant le navigateur Google Chrome sur votre smartphone.
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <strong>Ouvrez le menu Options</strong>
+                    Appuyez sur l'icône avec les <strong>trois points</strong> (⋮) dans le coin supérieur droit de la barre Chrome.
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <strong>Installez l'application</strong>
+                    Sélectionnez <strong>"Installer l'application"</strong> ou <strong>"Ajouter à l'écran d'accueil"</strong>.
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <strong>Confirmez</strong>
+                    Appuyez sur "Ajouter" dans la fenêtre qui apparaît. L'icône de l'application apparaîtra instantanément sur votre écran d'accueil avec vos autres applications.
+                </div>
+            </div>
+        </section>
+
+        <section id="ios-guide">
+            <h2><i class="fa-brands fa-apple"></i> Pour les Appareils iOS / iPhone (Safari)</h2>
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <strong>Ouvrez le site dans Safari</strong>
+                    Il est essentiel d'utiliser <strong>Safari</strong> sur iPhone pour pouvoir installer l'application correctement.
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <strong>Appuyez sur l'icône Partager</strong>
+                    Appuyez sur le bouton <strong>Partager</strong> (le carré avec une flèche vers le haut) situé dans la barre inférieure.
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <strong>Ajouter à l'écran d'accueil</strong>
+                    Faites défiler la liste des options vers le bas et appuyez sur <strong>"Sur l'écran d'accueil"</strong>.
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <strong>Terminez l'opération</strong>
+                    Appuyez sur <strong>"Ajouter"</strong> dans le coin supérieur droit. L'icône FOREXcross apparaîtra sur l'écran d'accueil de votre iPhone.
+                </div>
+            </div>
+        </section>
+
+        <div class="alert-box">
+            <strong><i class="fa-solid fa-circle-info"></i> Pourquoi l'installer ?</strong>
+            Une fois ajoutée à l'écran d'accueil, l'application s'ouvrira sans les barres du navigateur, vous offrant une expérience plein écran plus rapide, plus fluide et plus professionnelle, tout comme une application téléchargée sur les Stores officiels.
+        </div>
+
+        <footer>
+            &copy; 2026 FOREXcross Dashboard - Guide Rapide.
+            <br>Votre finance professionnelle au bout des doigts.
+        </footer>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('print') === '1') {
+                setTimeout(() => {
+                    window.print();
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>
