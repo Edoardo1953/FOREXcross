@@ -13,6 +13,10 @@
     }
 })();
 
+// Global Admin State
+let isAdminMode = false;
+const ADMIN_PASSWORD = "edo2bia"; // Custom password per user request
+
 document.addEventListener('DOMContentLoaded', () => {
     initSettings();
 });
@@ -25,6 +29,7 @@ function initSettings() {
     setBackground(savedBg, false);
 
     updateManualLinks();
+    applyAdminUI(); // Initial Admin UI state
     
     // Add event listener for clicks outside settings container to close it
     const overlay = document.getElementById('settingsOverlay');
@@ -287,7 +292,48 @@ function setBackground(bg, save = true) {
     });
 }
 
+/**
+ * ADMIN MODE LOGIC
+ */
+function setAdminMode(mode) {
+    if (mode === 'admin') {
+        if (isAdminMode) return; // Already admin
+        
+        const pwd = prompt(getTranslation('admin_password_prompt'));
+        if (pwd === ADMIN_PASSWORD) {
+            isAdminMode = true;
+            document.body.classList.add('admin-active');
+        } else {
+            if (pwd !== null) {
+                alert(getTranslation('admin_password_error'));
+            }
+            // Reset switches visually for cancel or wrong pwd
+            isAdminMode = false;
+            document.body.classList.remove('admin-active');
+        }
+    } else {
+        isAdminMode = false;
+        document.body.classList.remove('admin-active');
+    }
+    
+    applyAdminUI();
+}
 
+function applyAdminUI() {
+    const btns = document.querySelectorAll('.admin-switch-btn');
+    btns.forEach(btn => {
+        const mode = btn.getAttribute('data-mode');
+        if (mode === 'admin' && isAdminMode) {
+            btn.classList.add('active');
+        } else if (mode === 'user' && !isAdminMode) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    // Handle elements that might need programmatic show/hide beyond body class
+}
 
 /**
  * SHARED ACCESS LOGIC

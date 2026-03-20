@@ -271,6 +271,7 @@
                     </div>
                 </div>
 
+
                 <div class="settings-group">
                     <label class="settings-group-title" data-i18n="manuals_title">Manuali</label>
                     <p class="settings-group-desc" data-i18n="manuals_desc" style="font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">Guide procedurali e documentazione tecnica.</p>
@@ -280,14 +281,14 @@
                                 <i class="fa-solid fa-file-pdf" style="color: var(--danger); font-size: 16px;"></i>
                                 <span data-i18n="manual_privacy_title">Guida alla Privacy e Accesso</span>
                             </a>
-                            <button class="btn-delete-manual" onclick="deleteManual('privacy')" title="Remove"><i class="fa-solid fa-trash-can"></i></button>
+                            <button class="btn-delete-manual admin-only" onclick="deleteManual('privacy')" title="Remove"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
                         <div class="manual-item-wrapper" data-manual-id="advanced">
                             <a id="manualAdvancedLink" class="manual-item">
                                 <i class="fa-solid fa-square-poll-vertical" style="color: #8b5cf6; font-size: 16px;"></i>
                                 <span data-i18n="manual_advanced_title">Manuale d'Uso Avanzato v2.5</span>
                             </a>
-                            <button class="btn-delete-manual" onclick="deleteManual('advanced')" title="Remove"><i class="fa-solid fa-trash-can"></i></button>
+                            <button class="btn-delete-manual admin-only" onclick="deleteManual('advanced')" title="Remove"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
                     </div>
                 </div>
@@ -343,6 +344,16 @@
                         <div id="shareLinkResult" class="hidden" style="margin-top: 12px;">
                             <input type="text" id="shareLinkInput" readonly style="width: 100%; background: rgba(0,0,0,0.2); border: 1px dashed var(--accent-primary); color: var(--accent-primary); padding: 8px 10px; border-radius: 6px; font-size: 10px; margin-bottom: 8px;">
                             <button onclick="copyShareLink()" style="background: none; border: none; color: var(--accent-primary); font-size: 12px; cursor: pointer; text-decoration: underline;" data-i18n="copy_link">Copia Link</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-group" style="padding-top: 20px; border-top: 1px solid var(--border-color); margin-top: 20px;">
+                    <label class="settings-group-title" data-i18n="admin_section_title">Configurazione</label>
+                    <div class="settings-row">
+                        <span data-i18n="admin_mode_label">Profilo</span>
+                        <div class="theme-switch-wrapper">
+                            <button class="admin-switch-btn" data-mode="user" onclick="setAdminMode('user')" data-i18n="admin_mode_user">USER</button>
+                            <button class="admin-switch-btn" data-mode="admin" onclick="setAdminMode('admin')" data-i18n="admin_mode_admin">ADMIN</button>
                         </div>
                     </div>
                 </div>

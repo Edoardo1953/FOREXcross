@@ -23,6 +23,19 @@
 }
 
 /* split layout base */
+.admin-only {
+    display: none !important;
+}
+
+body.admin-active .admin-only {
+    display: flex !important;
+}
+
+/* Specific for manual delete button */
+body.admin-active .btn-delete-manual.admin-only {
+    display: block !important;
+}
+
 .split-content {
     display: flex;
     flex: 1;
@@ -325,7 +338,7 @@ body, .intro-app-container, .main-content, .intro-header, .numpad-section, .sett
     gap: 4px;
 }
 
-.theme-switch-btn, .bg-switch-btn {
+.theme-switch-btn, .bg-switch-btn, .admin-switch-btn {
     padding: 8px 16px;
     border-radius: var(--border-radius-sm);
     border: none;
@@ -337,7 +350,7 @@ body, .intro-app-container, .main-content, .intro-header, .numpad-section, .sett
     transition: all 0.2s;
 }
 
-.theme-switch-btn.active, .bg-switch-btn.active {
+.theme-switch-btn.active, .bg-switch-btn.active, .admin-switch-btn.active {
     background: var(--bg-card);
     color: var(--text-primary);
     opacity: 1;
@@ -349,8 +362,7 @@ body, .intro-app-container, .main-content, .intro-header, .numpad-section, .sett
     background-color: var(--bg-sidebar);
 }
 
-[data-theme='light'] .theme-switch-btn[data-theme='light'].active,
-[data-theme='light'] .bg-switch-btn.active {
+[data-theme='light'] .admin-switch-btn.active {
     background-color: #ffffff;
 }
 

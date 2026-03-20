@@ -112,7 +112,13 @@ const translations = {
         btn_manual_close: "Chiudi",
         delete_manual_confirm: "Sei sicuro di voler rimuovere questo manuale dalla vista?",
         restore_manuals: "Visualizza manuali rimossi",
-        manual_install_title: "Installazione su Cellulare"
+        manual_install_title: "Installazione su Cellulare",
+        admin_section_title: "Configurazione",
+        admin_mode_label: "Profilo",
+        admin_mode_user: "USER",
+        admin_mode_admin: "ADMIN",
+        admin_password_prompt: "Inserisci la Password per accedere come ADMIN",
+        admin_password_error: "Password errata."
     },
     en: {
         homepage_title: "FOREX Dashboard",
@@ -226,7 +232,13 @@ const translations = {
         btn_manual_close: "Close",
         delete_manual_confirm: "Are you sure you want to remove this manual from the view?",
         restore_manuals: "Show removed manuals",
-        manual_install_title: "Mobile Installation Guide"
+        manual_install_title: "Mobile Installation Guide",
+        admin_section_title: "Configuration",
+        admin_mode_label: "Profile",
+        admin_mode_user: "USER",
+        admin_mode_admin: "ADMIN",
+        admin_password_prompt: "Enter Password to login as ADMIN",
+        admin_password_error: "Incorrect password."
     },
     fr: {
         homepage_title: "FOREX Dashboard",
@@ -321,7 +333,13 @@ const translations = {
         btn_manual_close: "Fermer",
         delete_manual_confirm: "Êtes-vous sûr de vouloir supprimer ce manuel de la vue ?",
         restore_manuals: "Afficher les manuels supprimés",
-        manual_install_title: "Installation sur Mobile"
+        manual_install_title: "Installation sur Mobile",
+        admin_section_title: "Configuration",
+        admin_mode_label: "Profil",
+        admin_mode_user: "USER",
+        admin_mode_admin: "ADMIN",
+        admin_password_prompt: "Entrez le mot de passe pour ADMIN",
+        admin_password_error: "Mot de passe incorrect."
     }
 };
 
