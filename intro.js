@@ -44,8 +44,8 @@ async function initApp() {
     // Rendi subito visibili le righe locali (previeni lo schermo vuoto)
     renderCurrencyList(); 
     
-    // Recupera la lista completa nomi divise in sottofondo (non blocca la UI)
-    fetchAllAvailableCurrencies();
+    // Recupera la lista completa nomi divise in sottofondo
+    await fetchAllAvailableCurrencies();
     
     // Recupera i tassi (con timeout e fallback rapido)
     await fetchAndRenderRates();
@@ -243,7 +243,7 @@ function renderCurrencyList() {
         searchOverlay.classList.remove('hidden');
         renderSearchResults(''); // Init with all available values
         searchResults.scrollTop = 0;
-        searchInput.focus();
+        setTimeout(() => searchInput.focus(), 100);
     });
     currencyListEl.appendChild(addBtn);
 }
@@ -277,10 +277,15 @@ function renderSearchResults(query = '') {
         return code.includes(query) || name.toUpperCase().includes(query);
     });
 
+    if (Object.keys(allAvailableCurrencies).length === 0) {
+        searchResults.innerHTML = `<li style="text-align:center; padding: 20px; color: var(--text-secondary); opacity: 0.7; font-size: 13px;">${getTranslation('loading_rates') || 'Caricamento divise...'}</li>`;
+        return;
+    }
+
     filtered.forEach(([code, name]) => {
         // Skip if already in list OR base currency
-        const isAlreadyDisplayed = displayedCurrencies.some(c => c.code.trim().toUpperCase() === code.trim().toUpperCase());
-        const isBase = baseCurrency.trim().toUpperCase() === code.trim().toUpperCase();
+        const isAlreadyDisplayed = displayedCurrencies.some(c => c?.code?.trim()?.toUpperCase() === code?.trim()?.toUpperCase());
+        const isBase = baseCurrency?.trim()?.toUpperCase() === code?.trim()?.toUpperCase();
         
         if (isAlreadyDisplayed || isBase) return;
 
@@ -299,8 +304,8 @@ function renderSearchResults(query = '') {
 }
 
 function addCurrency(code, name) {
-    const ucCode = code.trim().toUpperCase();
-    if (displayedCurrencies.some(c => c.code.trim().toUpperCase() === ucCode)) {
+    const ucCode = code?.trim()?.toUpperCase();
+    if (!ucCode || displayedCurrencies.some(c => c?.code?.trim()?.toUpperCase() === ucCode)) {
         console.warn(`Duplicate currency blocked: ${ucCode}`);
         searchOverlay.classList.add('hidden');
         return;

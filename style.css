@@ -1621,7 +1621,7 @@ tbody tr:hover {
 }
 
 .search-results {
-    flex: 1;
+    flex-grow: 1;
     overflow-y: auto;
     padding: 10px 0;
     max-width: 600px;
