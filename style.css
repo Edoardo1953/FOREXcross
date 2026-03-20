@@ -2178,6 +2178,60 @@ tbody tr:hover {
 
 /* Tablet: medium range tweaks (769px - 1024px) */
 
+@media (min-width: 769px) {
+    /* Custom Cross Search - Enlargement for PC/Tablet */
+    .selector-card.custom-search-only {
+        flex: 0 1 600px; /* Increased from 450px */
+        padding: 30px;   /* Increased from 18px */
+    }
+    
+    .selector-group-title {
+        font-size: 18px; /* Increased from 14px */
+        padding: 12px 36px;
+        margin-bottom: 20px;
+    }
+    
+    .custom-cross-form-row .input-with-flag {
+        padding: 10px 18px; /* Increased padding */
+    }
+    
+    .input-with-flag input {
+        font-size: 20px; /* Increased from 14px */
+        width: 100px;    /* Increased from 60px */
+        height: 40px;
+    }
+    
+    .input-with-flag .fi {
+        font-size: 2em; /* Larger flags */
+    }
+
+    .swap-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2em;
+    }
+
+    .btn-secondary-small {
+        height: 60px;
+        padding: 0 24px !important;
+    }
+
+    .btn-secondary-small span {
+        font-size: 15px !important;
+    }
+
+    /* Homepage - Nav Pill Enlargement */
+    .intro-page .header-nav-pills .nav-pill {
+        padding: 16px 40px; /* Increased from 12px 28px */
+        font-size: 18px;    /* Increased from 15px */
+        gap: 12px;
+    }
+    
+    .intro-page .header-nav-pills .nav-pill i {
+        font-size: 20px;
+    }
+}
+
 @media (min-width: 1025px) {
     /* Full width database view for PC */
     body.database-view-active .sidebar {
