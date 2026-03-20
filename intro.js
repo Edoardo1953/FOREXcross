@@ -241,6 +241,8 @@ function renderCurrencyList() {
     addBtn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i> ${getTranslation('search_add')}`;
     addBtn.addEventListener('click', () => {
         searchOverlay.classList.remove('hidden');
+        renderSearchResults(''); // Init with all available values
+        searchResults.scrollTop = 0;
         searchInput.focus();
     });
     currencyListEl.appendChild(addBtn);
@@ -270,13 +272,17 @@ function setupSearchListeners() {
 
 function renderSearchResults(query = '') {
     searchResults.innerHTML = '';
+    searchResults.scrollTop = 0; // Alway reset scroll to top on new query
     const filtered = Object.entries(allAvailableCurrencies).filter(([code, name]) => {
         return code.includes(query) || name.toUpperCase().includes(query);
     });
 
     filtered.forEach(([code, name]) => {
-        // Skip if already in list
-        if (displayedCurrencies.find(c => c.code === code)) return;
+        // Skip if already in list OR base currency
+        const isAlreadyDisplayed = displayedCurrencies.some(c => c.code.trim().toUpperCase() === code.trim().toUpperCase());
+        const isBase = baseCurrency.trim().toUpperCase() === code.trim().toUpperCase();
+        
+        if (isAlreadyDisplayed || isBase) return;
 
         const li = document.createElement('li');
         li.className = 'search-result-item';
@@ -293,6 +299,13 @@ function renderSearchResults(query = '') {
 }
 
 function addCurrency(code, name) {
+    const ucCode = code.trim().toUpperCase();
+    if (displayedCurrencies.some(c => c.code.trim().toUpperCase() === ucCode)) {
+        console.warn(`Duplicate currency blocked: ${ucCode}`);
+        searchOverlay.classList.add('hidden');
+        return;
+    }
+
     const newCurr = {
         code: code,
         name: allAvailableCurrencies[code] || name,
