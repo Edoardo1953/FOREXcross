@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" />
 
     <!-- Custom CSS with versioning to force refresh -->
-    <link rel="stylesheet" href="style.css?v=4.3.8">
+    <link rel="stylesheet" href="style.css?v=4.3.9">
 
     <!-- Translations Logic -->
     <script src="translations.js"></script>
@@ -116,9 +116,12 @@
             </div>
 
             <div class="split-right numpad-mobile-hidden" id="mobileNumpadContainer">
-                <button id="closeNumpadBtn" class="mobile-only close-numpad-btn"><i class="fa-solid fa-chevron-down"></i></button>
                 <!-- Fixed Bottom Numpad -->
                 <section class="numpad-section">
+                    <div class="numpad-mobile-header mobile-only">
+                        <span data-i18n="nav_calculator">Calcolatore</span>
+                        <button id="closeNumpadBtn" class="close-numpad-internal"><i class="fa-solid fa-chevron-down"></i></button>
+                    </div>
                     <div class="numpad-grid">
                         <button class="num-key" data-key="7">7</button>
                         <button class="num-key" data-key="8">8</button>
