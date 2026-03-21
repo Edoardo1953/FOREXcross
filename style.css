@@ -1006,35 +1006,39 @@ margin: 0;
 
     /* Mobile Header Optimization */
     .intro-header {
-        padding: 10px 15px; /* Very compact */
+        padding: 10px 15px;
     }
 
+    /* Two-column header on mobile: Logo+Title LEFT | Flags+Tools RIGHT */
     .header-inner {
         display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        gap: 8px !important; /* Tight gap */
+        flex-direction: row !important;
+        flex-wrap: wrap !important;       /* Allows Ricerca Cross to wrap below */
+        align-items: flex-start !important;
+        justify-content: space-between !important;
+        gap: 6px !important;
     }
 
+    /* Left column: takes all available space */
     .intro-titles.centered {
-        width: 100%;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
+        flex: 1 !important;
+        min-width: 0 !important;
+        align-items: flex-start !important;
+        text-align: left !important;
         margin: 0 !important;
     }
 
-    /* Logo + Title: keep on SAME ROW on mobile */
+    /* Logo stays LEFT of title, same row, bigger on mobile */
     .title-with-icon-main {
-        flex-direction: row !important;  /* Logo LEFT of title */
+        flex-direction: row !important;
         gap: 10px !important;
         align-items: center !important;
-        justify-content: center !important;
+        justify-content: flex-start !important;
     }
 
     .forex-logo-icon-img {
-        width: 45px !important; /* Compact for mobile */
-        height: 45px !important;
+        width: 60px !important;
+        height: 60px !important;
     }
 
     .header-text-container {
@@ -1052,23 +1056,32 @@ margin: 0;
         letter-spacing: 2px;
     }
 
+    /* Right column: flags on top, tools below (stacked) */
     .header-actions {
-        width: 100%;
-        justify-content: center;
+        flex-shrink: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-end !important;
+        gap: 6px !important;
+        justify-content: flex-start !important;
     }
 
-    /* Ricerca Cross: below title row, centered */
+    .lang-selector {
+        justify-content: flex-end;
+    }
+
+    .secondary-actions {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+    }
+
+    /* Ricerca Cross: wraps to its own full-width row below */
     .custom-cross-header-pill {
         order: 10;
-        flex: none;
-        width: 100%;
+        flex: 0 0 100% !important;        /* Full width, forces line-wrap */
         justify-content: center;
-        margin-top: 0;
-    }
-
-    .header-text-container {
-        align-items: flex-start !important;
-        text-align: left !important;
+        margin-top: 4px;
     }
 
     .intro-titles.centered h1 {
