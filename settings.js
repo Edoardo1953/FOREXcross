@@ -414,3 +414,72 @@ function showAccessPrompt(token) {
         if (e.key === 'Enter') loginBtn.click();
     };
 }
+
+/**
+ * PWA Update Management
+ */
+async function checkForUpdates() {
+    const btn = document.getElementById('btnCheckUpdates');
+    const originalContent = btn ? btn.innerHTML : '';
+    
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${getTranslation('update_wait')}`;
+    }
+
+    if (!('serviceWorker' in navigator)) {
+        alert("PWA non supportata su questo browser.");
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalContent;
+        }
+        return;
+    }
+
+    try {
+        const registration = await navigator.serviceWorker.getRegistration();
+        if (registration) {
+            // Force a check for service worker update
+            await registration.update();
+            
+            // Listen for the controlling service worker changing
+            if (registration.waiting) {
+                // New worker is already there!
+                if (confirm(getTranslation('update_found'))) {
+                    registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                    window.location.reload();
+                }
+            } else {
+                // Check every second for a brief moment
+                let found = false;
+                for (let i = 0; i < 5; i++) {
+                    await new Promise(r => setTimeout(r, 1000));
+                    if (registration.waiting) {
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if (found) {
+                    if (confirm(getTranslation('update_found'))) {
+                        registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                        window.location.reload();
+                    }
+                } else {
+                    alert(getTranslation('update_no_new'));
+                }
+            }
+        } else {
+            // No registration found, maybe first install?
+            window.location.reload();
+        }
+    } catch (error) {
+        console.error("Update check failed", error);
+        window.location.reload(); // Fallback to hard reload
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalContent;
+        }
+    }
+}

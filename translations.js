@@ -122,7 +122,11 @@ const translations = {
         admin_mode_user: "USER",
         admin_mode_admin: "ADMIN",
         admin_password_prompt: "Inserisci la Password per accedere come ADMIN",
-        admin_password_error: "Password errata."
+        admin_password_error: "Password errata.",
+        update_section_title: "Aggiornamenti",
+        btn_check_updates: "Controlla Aggiornamenti",
+        update_no_new: "L'app è già all'ultima versione.",
+        update_found: "Nuova versione trovata! Ricaricamento..."
     },
     en: {
         homepage_title: "FOREX<br>Dashboard",
@@ -246,7 +250,11 @@ const translations = {
         admin_mode_user: "USER",
         admin_mode_admin: "ADMIN",
         admin_password_prompt: "Enter Password to login as ADMIN",
-        admin_password_error: "Incorrect password."
+        admin_password_error: "Incorrect password.",
+        update_section_title: "Updates",
+        btn_check_updates: "Check for Updates",
+        update_no_new: "App is already up to date.",
+        update_found: "New version found! Reloading..."
     },
     fr: {
         homepage_title: "FOREX<br>Dashboard",
@@ -370,7 +378,11 @@ const translations = {
         admin_mode_user: "USER",
         admin_mode_admin: "ADMIN",
         admin_password_prompt: "Entrez le mot de passe pour ADMIN",
-        admin_password_error: "Mot de passe incorrect."
+        admin_password_error: "Mot de passe incorrect.",
+        update_section_title: "Mises à jour",
+        btn_check_updates: "Vérifier les mises à jour",
+        update_no_new: "L'application est déjà à jour.",
+        update_found: "Nouvelle version trouvée ! Rechargement..."
     }
 };
 

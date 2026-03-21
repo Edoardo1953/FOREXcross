@@ -18,10 +18,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" />
 
     <!-- Custom CSS with versioning to force refresh -->
-    <link rel="stylesheet" href="style.css?v=4.4.5">
+    <link rel="stylesheet" href="style.css?v=4.4.6">
     
     <!-- Translations Logic -->
-    <script src="translations.js?v=4.4.5"></script>
+    <script src="translations.js?v=4.4.6"></script>
     <script src="utils.js"></script>
     <script src="settings.js"></script>
 
@@ -44,6 +44,13 @@
                             <h1 data-i18n="homepage_title">FOREX Dashboard</h1>
                             <p class="header-subtitle" data-i18n="homepage_subtitle">Exchange Rates</p>
                         </div>
+                    </div>
+                    <!-- Moved Custom Cross Search here for both PC and Mobile -->
+                    <div class="custom-cross-header-pill">
+                        <a href="dashboard.html" class="btn-header-custom" data-i18n-title="title_nav_historical">
+                            <i class="fa-solid fa-magnifying-glass-chart"></i>
+                            <span data-i18n="group_custom">Custom Cross Search</span>
+                        </a>
                     </div>
                 </div>
 
@@ -74,13 +81,7 @@
             <div class="split-left">
                 <!-- Mobile Navigation Area Removed from Homepage for cleaner flow -->
 
-                <!-- Mobile Only Custom Cross Button -->
-                <div class="mobile-only mobile-custom-cross-area">
-                    <a href="dashboard.html" class="btn-mobile-custom" data-i18n-title="title_nav_historical">
-                        <i class="fa-solid fa-magnifying-glass-chart"></i>
-                        <span data-i18n="group_custom">Custom Cross Search</span>
-                    </a>
-                </div>
+                <!-- Mobile Only Custom Cross Button REMOVED (now in header) -->
                 
                 <!-- Base Currency Display -->
                 <section class="base-currency-section">
@@ -110,7 +111,7 @@
                     <!-- NEW: Dedicated area for Add Currency Search (Outside UL for stability) -->
                     <div id="homeAddCurrencyArea"></div>
                     
-                    <!-- Spazio extra per far scorrere la lista sopra il tastierino su mobile -->
+                    <!-- Extra space to scroll past fixed elements on mobile -->
                     <div class="spacer-numpad mobile-only"></div>
                 </section>
             </div>
@@ -150,17 +151,13 @@
                     </div>
                     
                     <div class="numpad-empty-area PC-tablet-only">
-                        <!-- Centered button here in PC/Tablet currently empty zone -->
-                        <a href="dashboard.html" class="btn-numpad-custom" data-i18n-title="title_nav_historical">
-                            <i class="fa-solid fa-magnifying-glass-chart"></i>
-                            <span data-i18n="group_custom">Custom Cross Search</span>
-                        </a>
+                        <!-- Custom Cross button removed from here, moved to title area -->
                     </div>
                 </section>
             </div>
             
-            <!-- Floating Numpad Toggle Button (Mobile Only) -->
-            <button id="toggleNumpadBtn" class="mobile-only floating-numpad-btn" title="Apri Tastierino" data-i18n-title="btn_open_numpad">
+            <!-- Floating Numpad Toggle Button (Now for both Mobile and PC/Tablet) -->
+            <button id="toggleNumpadBtn" class="floating-numpad-btn" title="Apri Tastierino" data-i18n-title="btn_open_numpad">
                 <i class="fa-solid fa-calculator"></i>
             </button>
         </div>
@@ -241,6 +238,16 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="settings-group" style="padding-top: 15px; border-top: 1px solid var(--border-color);">
+                    <label class="settings-group-title" data-i18n="update_section_title">Aggiornamenti</label>
+                    <p class="settings-group-desc" style="font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">Verifica se sono disponibili nuove versioni dell'app. (Versione v4.4.5)</p>
+                    <button id="btnCheckUpdates" class="action-btn-full" onclick="checkForUpdates()" style="width: 100%; background: var(--bg-card); color: var(--accent-primary); border: 2px solid var(--accent-primary); padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <i class="fa-solid fa-rotate"></i>
+                        <span data-i18n="btn_check_updates">Controlla Aggiornamenti</span>
+                    </button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -310,7 +317,7 @@
     </div>
 
     <!-- Intro Logic JS -->
-    <script src="intro.js?v=4.4.5"></script>
+    <script src="intro.js?v=4.4.6"></script>
 
     <!-- Register Service Worker -->
     <script>
@@ -343,24 +350,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Search Overlay -->
-    <div id="searchOverlay" class="settings-overlay hidden">
-        <div class="settings-container">
-            <div class="settings-header">
-                <h2 data-i18n="search_add">Cerca Divisa</h2>
-                <button id="closeSearch" class="close-settings"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="settings-body">
-                <div class="search-input-wrapper">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="searchInput" placeholder="..." data-i18n-placeholder="search_placeholder">
-                </div>
-                <ul id="searchResults" class="search-results-list">
-                    <!-- Results from JS -->
-                </ul>
-            </div>
-        </div>
-    </div>
 </body>
 </html>
+
