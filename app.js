@@ -261,8 +261,8 @@ function updateLabels() {
 // getFlagClass moved to APP_UTILS
 
 // Navigation View Logic
-const navOverviewTriggers = document.querySelectorAll('#navOverview, #headerNavOverview');
-const navDatabaseTriggers = document.querySelectorAll('#navDatabase, #headerNavDatabase');
+const navOverviewTriggers = document.querySelectorAll('#navOverview, #headerNavOverview, #mobileNavOverview');
+const navDatabaseTriggers = document.querySelectorAll('#navDatabase, #headerNavDatabase, #mobileNavDatabase');
 const viewOverview = document.getElementById('viewOverview');
 const viewDatabase = document.getElementById('viewDatabase');
 
@@ -891,7 +891,7 @@ function renderFullDatabaseTable(limit = 100) {
         filterClosingSelect.dataset.listenerAdded = 'true';
     }
 
-    // Refresh Dropdown PERIODS (only if needed or count changed)
+    // Refresh Dropdown PERIODS (only if needed, count changed, or language changed)
     const uniquePeriods = new Set();
     historicalRateList.forEach(d => {
         const mm = String(d.dateObj.getMonth() + 1).padStart(2, '0');
@@ -900,7 +900,9 @@ function renderFullDatabaseTable(limit = 100) {
         uniquePeriods.add(`${yyyy}-${mm}`);
     });
 
-    if (filterPeriodFromSelect && (filterPeriodFromSelect.options.length - 1 !== uniquePeriods.size)) {
+    const currentLangToken = currentLanguage;
+    if (filterPeriodFromSelect && (filterPeriodFromSelect.options.length - 1 !== uniquePeriods.size || filterPeriodFromSelect.dataset.lastLang !== currentLangToken)) {
+        filterPeriodFromSelect.dataset.lastLang = currentLangToken;
         const prevFrom = filterPeriodFromSelect.value;
         const prevTo = filterPeriodToSelect ? filterPeriodToSelect.value : 'all';
 
@@ -965,7 +967,7 @@ function renderFullDatabaseTable(limit = 100) {
         moreRow.innerHTML = `
             <td colspan="4" style="text-align:center; padding:20px;">
                 <button class="btn-primary-small" style="margin:0 auto;" onclick="renderFullDatabaseTable(0)">
-                    <i class="fa-solid fa-list"></i> Mostra tutto lo storico (${sortedList.length} righe)
+                    <i class="fa-solid fa-list"></i> ${getTranslation('show_all_history', {count: sortedList.length})}
                 </button>
             </td>
         `;

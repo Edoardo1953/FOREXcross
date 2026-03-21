@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" />
     
     <!-- Custom CSS with versioning to force refresh -->
-    <link rel="stylesheet" href="style.css?v=4.4.3">
+    <link rel="stylesheet" href="style.css?v=4.4.4">
 
     <!-- Translations Logic -->
     <script src="translations.js"></script>
@@ -116,7 +116,7 @@
                                     <span id="customBaseFlag" class="fi fi-eu"></span>
                                     <input type="text" id="customBase" value="EUR" placeholder="EUR" maxlength="3" readonly style="cursor: pointer;">
                                 </div>
-                                <button id="btnSwap" class="swap-btn" title="Inverti">
+                                <button id="btnSwap" class="swap-btn" title="Inverti" data-i18n-title="btn_swap_title">
                                     <i class="fa-solid fa-right-left"></i>
                                 </button>
                                 <div class="input-with-flag" id="customTargetContainer" style="cursor: pointer;">
@@ -303,21 +303,21 @@
                                 <i class="fa-solid fa-file-pdf" style="color: var(--danger); font-size: 16px;"></i>
                                 <span data-i18n="manual_privacy_title">Guida alla Privacy e Accesso</span>
                             </a>
-                            <button class="btn-delete-manual admin-only" onclick="deleteManual('privacy')" title="Remove"><i class="fa-solid fa-trash-can"></i></button>
+                            <button class="btn-delete-manual admin-only" onclick="deleteManual('privacy')" title="Remove" data-i18n-title="remove_manual"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
                         <div class="manual-item-wrapper" data-manual-id="advanced">
                             <a id="manualAdvancedLink" class="manual-item">
                                 <i class="fa-solid fa-square-poll-vertical" style="color: #8b5cf6; font-size: 16px;"></i>
                                 <span data-i18n="manual_advanced_title">Manuale d'Uso Avanzato v2.5</span>
                             </a>
-                            <button class="btn-delete-manual admin-only" onclick="deleteManual('advanced')" title="Remove"><i class="fa-solid fa-trash-can"></i></button>
+                            <button class="btn-delete-manual admin-only" onclick="deleteManual('advanced')" title="Remove" data-i18n-title="remove_manual"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
                         <div class="manual-item-wrapper" data-manual-id="install">
                             <a id="manualInstallLink" class="manual-item">
                                 <i class="fa-solid fa-mobile-screen-button" style="color: #10b981; font-size: 16px;"></i>
                                 <span data-i18n="manual_install_title">Installazione su Cellulare</span>
                             </a>
-                            <button class="btn-delete-manual admin-only" onclick="deleteManual('install')" title="Remove"><i class="fa-solid fa-trash-can"></i></button>
+                            <button class="btn-delete-manual admin-only" onclick="deleteManual('install')" title="Remove" data-i18n-title="remove_manual"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
                     </div>
                 </div>
@@ -388,7 +388,7 @@
             </div>
         </div>
     </div>
-    <script src="app.js"></script>
+    <script src="app.js?v=4.4.4"></script>
 
     <!-- Register Service Worker -->
     <script>

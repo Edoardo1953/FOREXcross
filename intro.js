@@ -247,7 +247,8 @@ function renderCurrencyList() {
     });
     // --- NEW: Stable Add Currency Area Handling (outside the dynamic list) ---
     const addArea = document.getElementById('homeAddCurrencyArea');
-    if (addArea && !addArea.innerHTML) {
+    if (addArea) {
+        addArea.innerHTML = ''; // Always clear to allow fresh translation
         const addBtn = document.createElement('div');
         addBtn.className = 'add-currency-btn';
         // Inline style for maximum safety and the dashed border you like!
