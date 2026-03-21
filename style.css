@@ -1,7 +1,7 @@
 :root {
     /* Color Palette - Premium Blue & Black Theme */
     --accent-primary: #3b82f6;    /* Electric Blue */
-    --accent-secondary: #0ea5e9;  /* Cyan */
+    --accent-secondary: #0ea5e9;  /* v=4.3.2 */
     --accent-success: #10b981;    /* Emerald */
     --accent-warning: #f59e0b;    /* Amber */
     --accent-danger: #ef4444;     /* Rose */
@@ -2053,17 +2053,20 @@ tbody tr:hover {
 
 .add-currency-btn {
     display: flex;
-    justify-content: center;
+    justify-content: center !important;
     align-items: center;
-    padding: 18px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px dashed var(--border-color);
-    border-radius: 16px;
+    padding: 15px !important;
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px dashed var(--border-color) !important;
+    border-radius: 12px !important;
+    margin-top: 15px !important;
     margin: 10px 20px;
     cursor: pointer;
-    color: var(--text-secondary);
+    color: var(--accent-primary) !important;
     transition: all 0.2s;
-    font-weight: 500;
+    font-weight: 600 !important;
+    min-height: 50px !important;
+    width: 100% !important;
 }
 
 .add-currency-btn:hover {

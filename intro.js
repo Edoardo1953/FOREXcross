@@ -180,6 +180,20 @@ function renderCurrencyList() {
                 amountEl.textContent = APP_UTILS.formatNumber(calculatedAmount);
             }
         });
+        
+        // Safety: ensure add-button is still there
+        if (!currencyListEl.querySelector('.add-currency-btn')) {
+            const addBtn = document.createElement('li');
+            addBtn.className = 'add-currency-btn';
+            addBtn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i> ${getTranslation('search_add')}`;
+            addBtn.addEventListener('click', () => {
+                searchOverlay.classList.remove('hidden');
+                renderSearchResults(''); 
+                searchResults.scrollTop = 0;
+                setTimeout(() => searchInput.focus(), 100);
+            });
+            currencyListEl.appendChild(addBtn);
+        }
         return;
     }
 
