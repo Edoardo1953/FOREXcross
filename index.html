@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" />
 
     <!-- Custom CSS with versioning to force refresh -->
-    <link rel="stylesheet" href="style.css?v=1.6">
+    <link rel="stylesheet" href="style.css?v=2.6">
 
     <!-- Translations Logic -->
     <script src="translations.js"></script>
@@ -35,34 +35,36 @@
     <div class="intro-app-container">
         <!-- Top Navigation Area -->
         <header class="intro-header">
-            <div class="intro-titles">
-                <h1 data-i18n="homepage_title">FOREX Dashboard</h1>
-                <p data-i18n="homepage_subtitle">Cross</p>
-            </div>
-            
-            <div class="header-nav-pills">
-                <a href="dashboard.html" class="nav-pill" data-i18n-title="title_nav_historical" title="Vai ai Cambi Storici">
-                    <i class="fa-solid fa-magnifying-glass-chart"></i>
-                    <span data-i18n="group_custom">Custom Cross Search</span>
-                </a>
-            </div>
-
-            <div class="header-actions">
-                <div class="header-controls-container">
-                    <div class="lang-selector">
-                        <button class="lang-btn" onclick="setLanguage('en')" title="English"><span class="fi fi-gb"></span></button>
-                        <button class="lang-btn" onclick="setLanguage('fr')" title="Français"><span class="fi fi-fr"></span></button>
-                        <button class="lang-btn" onclick="setLanguage('it')" title="Italiano"><span class="fi fi-it"></span></button>
+            <div class="header-inner">
+                <div class="header-spacer" style="flex:1;"></div>
+                
+                <div class="intro-titles centered">
+                    <div class="title-with-icon-main">
+                        <img src="icon-512.png" alt="FOREX Icon" class="forex-logo-icon-img">
+                        <div class="header-text-container">
+                            <h1 data-i18n="homepage_title">FOREX Dashboard</h1>
+                            <p class="header-subtitle" data-i18n="homepage_subtitle">Exchange Rates</p>
+                        </div>
                     </div>
-                    <div class="secondary-actions">
-                        <button class="icon-btn privacy-btn-pc" onclick="togglePrivacy(true)" title="Privacy" data-i18n-title="privacy_title">
-                            <i class="fa-solid fa-key"></i>
-                            <span class="btn-text" data-i18n="privacy_title">Privacy</span>
-                        </button>
-                        <button class="icon-btn settings-btn-pc" onclick="toggleSettings(true)" title="Strumenti" data-i18n-title="settings_title">
-                            <i class="fa-solid fa-gear"></i>
-                            <span class="btn-text" data-i18n="settings_title">Strumenti</span>
-                        </button>
+                </div>
+
+                <div class="header-actions">
+                    <div class="header-controls-container">
+                        <div class="lang-selector">
+                            <button class="lang-btn" onclick="setLanguage('en')" title="English"><span class="fi fi-gb"></span></button>
+                            <button class="lang-btn" onclick="setLanguage('fr')" title="Français"><span class="fi fi-fr"></span></button>
+                            <button class="lang-btn" onclick="setLanguage('it')" title="Italiano"><span class="fi fi-it"></span></button>
+                        </div>
+                        <div class="secondary-actions">
+                            <button class="icon-btn privacy-btn-pc" onclick="togglePrivacy(true)" title="Privacy" data-i18n-title="privacy_title">
+                                <i class="fa-solid fa-key"></i>
+                                <span class="btn-text" data-i18n="privacy_title">Privacy</span>
+                            </button>
+                            <button class="icon-btn settings-btn-pc" onclick="toggleSettings(true)" title="Strumenti" data-i18n-title="settings_title">
+                                <i class="fa-solid fa-gear"></i>
+                                <span class="btn-text" data-i18n="settings_title">Strumenti</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -128,6 +130,14 @@
                         <button class="num-key" data-key="0">0</button>
                         <button class="num-key" data-key=",">,</button>
 
+                    </div>
+                    
+                    <div class="numpad-empty-area PC-tablet-only">
+                        <!-- Centered button here in PC/Tablet currently empty zone -->
+                        <a href="dashboard.html" class="btn-numpad-custom" data-i18n-title="title_nav_historical">
+                            <i class="fa-solid fa-magnifying-glass-chart"></i>
+                            <span data-i18n="group_custom">Custom Cross Search</span>
+                        </a>
                     </div>
                 </section>
             </div>

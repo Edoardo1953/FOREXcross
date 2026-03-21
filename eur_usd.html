@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" />
     
     <!-- Custom CSS with versioning to force refresh -->
-    <link rel="stylesheet" href="style.css?v=1.5">
+    <link rel="stylesheet" href="style.css?v=2.6">
 
     <!-- Translations Logic -->
     <script src="translations.js"></script>
@@ -37,35 +37,43 @@
         <!-- Main Content -->
         <main class="main-content">
             <header class="intro-header">
-                <div class="intro-titles">
-                    <h1 data-i18n="homepage_title">FOREX Dashboard</h1>
-                    <p data-i18n="homepage_subtitle">Cross</p>
-                    <div id="syncStatus" style="font-size: 11px; margin-top: 5px; color: var(--accent-primary); font-weight: 500;">
-                        <i class="fa-solid fa-sync fa-spin"></i> <span data-i18n="sync_init">Inizializzazione...</span>
-                    </div>
-                </div>
-                <!-- Enlarged Nav Pills in Header -->
-                <div class="header-nav-pills">
-                    <a href="index.html" class="nav-pill" title="Home"><i class="fa-solid fa-house"></i> <span data-i18n="nav_home">Home</span></a>
-                    <button id="headerNavOverview" class="nav-pill active"><i class="fa-solid fa-chart-line"></i> <span data-i18n="nav_historical_cross">Rates</span></button>
-                    <button id="headerNavDatabase" class="nav-pill"><i class="fa-solid fa-database"></i> <span data-i18n="nav_database">Database</span></button>
-                </div>
-                <div class="header-actions">
-                    <div class="header-controls-container">
-                        <div class="lang-selector">
-                            <button class="lang-btn" onclick="setLanguage('en')" title="English"><span class="fi fi-gb"></span></button>
-                            <button class="lang-btn" onclick="setLanguage('fr')" title="Français"><span class="fi fi-fr"></span></button>
-                            <button class="lang-btn" onclick="setLanguage('it')" title="Italiano"><span class="fi fi-it"></span></button>
+                <div class="header-inner">
+                    <div class="header-spacer" style="flex:1;"></div>
+                    <div class="intro-titles centered">
+                        <div class="title-with-icon-main">
+                            <img src="icon-512.png" alt="FOREX Icon" class="forex-logo-icon-img">
+                            <div class="header-text-container">
+                                <h1 data-i18n="homepage_title">FOREX Dashboard</h1>
+                                <p class="header-subtitle" data-i18n="homepage_subtitle">Exchange Rates</p>
+                            </div>
                         </div>
-                        <div class="secondary-actions">
-                            <button class="icon-btn privacy-btn-pc" onclick="togglePrivacy(true)" title="Privacy" data-i18n-title="privacy_title">
-                                <i class="fa-solid fa-key"></i>
-                                <span class="btn-text" data-i18n="privacy_title">Privacy</span>
-                            </button>
-                            <button class="icon-btn settings-btn-pc" onclick="toggleSettings(true)" title="Strumenti" data-i18n-title="settings_title">
-                                <i class="fa-solid fa-gear"></i>
-                                <span class="btn-text" data-i18n="settings_title">Strumenti</span>
-                            </button>
+                        <div id="syncStatus" style="font-size: 11px; margin-top: 5px; color: var(--accent-primary); font-weight: 500;">
+                            <i class="fa-solid fa-sync fa-spin"></i> <span data-i18n="sync_init">Inizializzazione...</span>
+                        </div>
+                    </div>
+                    <!-- Enlarged Nav Pills in Header -->
+                    <div class="header-nav-pills">
+                        <a href="index.html" class="nav-pill" title="Home"><i class="fa-solid fa-house"></i> <span data-i18n="nav_home">Home</span></a>
+                        <button id="headerNavOverview" class="nav-pill active"><i class="fa-solid fa-chart-line"></i> <span data-i18n="nav_historical_cross">Rates</span></button>
+                        <button id="headerNavDatabase" class="nav-pill"><i class="fa-solid fa-database"></i> <span data-i18n="nav_database">Database</span></button>
+                    </div>
+                    <div class="header-actions">
+                        <div class="header-controls-container">
+                            <div class="lang-selector">
+                                <button class="lang-btn" onclick="setLanguage('en')" title="English"><span class="fi fi-gb"></span></button>
+                                <button class="lang-btn" onclick="setLanguage('fr')" title="Français"><span class="fi fi-fr"></span></button>
+                                <button class="lang-btn" onclick="setLanguage('it')" title="Italiano"><span class="fi fi-it"></span></button>
+                            </div>
+                            <div class="secondary-actions">
+                                <button class="icon-btn privacy-btn-pc" onclick="togglePrivacy(true)" title="Privacy" data-i18n-title="privacy_title">
+                                    <i class="fa-solid fa-key"></i>
+                                    <span class="btn-text" data-i18n="privacy_title">Privacy</span>
+                                </button>
+                                <button class="icon-btn settings-btn-pc" onclick="toggleSettings(true)" title="Strumenti" data-i18n-title="settings_title">
+                                    <i class="fa-solid fa-gear"></i>
+                                    <span class="btn-text" data-i18n="settings_title">Strumenti</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -92,9 +100,8 @@
                                 </div>
                             </div>
                             <!-- Search button removed -->
-                            <button id="resetDataBtn" class="btn-secondary-small" title="Clear Cache" data-i18n-title="clean_cache" style="width: auto; padding: 0 16px;">
+                            <button id="resetDataBtn" class="btn-secondary-small btn-round" title="Clear Cache" data-i18n-title="clean_cache">
                                 <i class="fa-solid fa-rotate"></i>
-                                <span data-i18n="clean_cache" style="margin-left: 8px; font-size: 13px; font-weight: 600;">Clear Cache</span>
                             </button>
                         </div>
                     </div>
