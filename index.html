@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" />
 
     <!-- Custom CSS with versioning to force refresh -->
-    <link rel="stylesheet" href="style.css?v=2.7">
+    <link rel="stylesheet" href="style.css?v=2.8">
 
     <!-- Translations Logic -->
     <script src="translations.js"></script>
@@ -73,6 +73,14 @@
         <!-- Main Split Content -->
         <div class="split-content">
             <div class="split-left">
+                <!-- Mobile Only Custom Cross Button -->
+                <div class="mobile-only mobile-custom-cross-area">
+                    <a href="dashboard.html" class="btn-mobile-custom" data-i18n-title="title_nav_historical">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i>
+                        <span data-i18n="group_custom">Custom Cross Search</span>
+                    </a>
+                </div>
+                
                 <!-- Base Currency Display -->
                 <section class="base-currency-section">
                     <div class="currency-row base-row" id="baseRow">

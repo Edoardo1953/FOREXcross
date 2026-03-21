@@ -799,6 +799,80 @@ body {
     .PC-tablet-only {
         display: none !important;
     }
+    
+    .mobile-only {
+        display: block !important;
+    }
+
+    /* Mobile Header Optimization */
+    .intro-header {
+        padding: 20px 15px; /* Reduced vertical padding */
+    }
+
+    .header-inner {
+        gap: 15px;
+        justify-content: flex-start; /* Move content to the left */
+    }
+
+    .forex-logo-icon-img {
+        width: 60px; /* Smaller icon for mobile */
+        height: 60px;
+    }
+
+    .intro-titles.centered {
+        flex: 0; /* Only take needed space on left */
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .intro-titles.centered h1 {
+        font-size: 28px; /* Compact title for mobile */
+        line-height: 0.85;
+    }
+
+    .header-subtitle {
+        font-size: 11px;
+        letter-spacing: 2px;
+    }
+
+    .header-spacer {
+        display: none !important; /* Hide spacer to push content left */
+    }
+
+    /* Mobile Button Styling */
+    .mobile-custom-cross-area {
+        margin: 0 0 25px 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .btn-mobile-custom {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 16px 24px;
+        background: var(--accent-gradient);
+        color: white;
+        text-decoration: none;
+        border-radius: 18px;
+        font-weight: 700;
+        font-size: 16px;
+        width: 100%;
+        max-width: 340px;
+        box-shadow: 0 8px 15px rgba(59, 130, 246, 0.3);
+        transition: transform 0.2s;
+    }
+
+    .btn-mobile-custom:active {
+        transform: scale(0.98);
+        box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2);
+    }
+
+    .btn-mobile-custom i {
+        font-size: 20px;
+    }
 }
 
 .btn-numpad-action:hover {
