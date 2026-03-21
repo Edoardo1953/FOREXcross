@@ -1,7 +1,7 @@
 :root {
     /* Color Palette - Premium Blue & Black Theme */
     --accent-primary: #3b82f6;    /* Electric Blue */
-    --accent-secondary: #0ea5e9;  /* v=4.4.1 */
+    --accent-secondary: #0ea5e9;  /* v=4.4.2 */
     --accent-success: #10b981;    /* Emerald */
     --accent-warning: #f59e0b;    /* Amber */
     --accent-danger: #ef4444;     /* Rose */
@@ -2361,8 +2361,36 @@ tbody tr:hover {
         display: none !important;
     }
     
+    .intro-page {
+        height: auto !important;
+        overflow: visible !important;
+    }
+    
+    .intro-app-container {
+        height: auto !important;
+        overflow: visible !important;
+        max-width: 100% !important;
+    }
+
+    .split-content {
+        flex-direction: column !important;
+        height: auto !important;
+        overflow: visible !important;
+        display: block !important; /* Use block to allow natural document flow */
+    }
+    
+    .split-left {
+        flex: none !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+        padding-bottom: 20px !important;
+    }
+
     .currency-list {
-        padding-bottom: 450px !important; /* MASSIVE PADDING: ensure last items scroll ABOVE the fixed search bar area */
+        height: auto !important;
+        overflow: visible !important;
+        padding-bottom: 480px !important; /* Ensure last items scroll ABOVE the fixed search bar area */
         margin-bottom: 0 !important;
     }
 
