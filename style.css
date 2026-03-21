@@ -923,9 +923,9 @@ margin: 0;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     color: var(--accent-primary);
-    width: 65px; /* Enlarged from 55px */
-    height: 65px;
-    border-radius: 18px;
+    width: 70px; /* Further enlarged from 65px for PC/Tablet presence */
+    height: 70px;
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2251,15 +2251,15 @@ tbody tr:hover {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
-    padding: 18px !important;
-    background: rgba(59, 130, 246, 0.05) !important;
-    border: 2px dashed rgba(59, 130, 246, 0.6) !important;
-    border-radius: 16px !important;
-    margin: 0 !important; /* Managed by the flex parent now */
+    padding: 24px !important; /* Enlarged for PC/Tablet presence */
+    background: rgba(59, 130, 246, 0.08) !important;
+    border: 2px dashed rgba(59, 130, 246, 0.7) !important;
+    border-radius: 20px !important;
+    margin: 0 !important;
     cursor: pointer !important;
     color: #3b82f6 !important;
-    font-weight: 700 !important;
-    min-height: 55px !important;
+    font-weight: 800 !important;
+    min-height: 70px !important; 
     width: 100% !important;
     transition: all 0.3s ease !important;
     box-sizing: border-box !important;
@@ -2407,18 +2407,16 @@ tbody tr:hover {
         right: 0 !important;
         margin: 0 auto !important;
         width: 100% !important;
-        max-width: 650px !important;
+        max-width: 650px !important; /* Perfect match with the currency list width above */
         background: var(--bg-main) !important;
-        border-top: 1px solid var(--border-color);
-        padding: 12px 18px calc(env(safe-area-inset-bottom, 5px) + 20px) 18px !important; 
-        z-index: 9999 !important; /* Highest possible to stay on top of everything! */
+        border-top: 2px solid var(--border-color); /* Slightly stronger border */
+        padding: 15px 20px calc(env(safe-area-inset-bottom, 5px) + 20px) 20px !important; 
+        z-index: 9999 !important; 
         box-sizing: border-box !important;
         display: flex !important;
         align-items: center !important;
-        gap: 15px !important;
-        box-shadow: 0 -20px 40px rgba(0,0,0,0.6) !important;
-        visibility: visible !important;
-        opacity: 1 !important;
+        gap: 20px !important; /* More breathing room */
+        box-shadow: 0 -15px 45px rgba(0,0,0,0.6) !important;
     }
 
     .spacer-numpad {
