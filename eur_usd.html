@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" />
     
     <!-- Custom CSS with versioning to force refresh -->
-    <link rel="stylesheet" href="style.css?v=4.2.1">
+    <link rel="stylesheet" href="style.css?v=4.3.1">
 
     <!-- Translations Logic -->
     <script src="translations.js"></script>
@@ -51,12 +51,13 @@
                             <i class="fa-solid fa-sync fa-spin"></i> <span data-i18n="sync_init">Inizializzazione...</span>
                         </div>
                     </div>
-                    <!-- Enlarged Nav Pills in Header -->
-                    <div class="header-nav-pills">
+                    <!-- PC-Only Nav Pills in Header -->
+                    <div class="header-nav-pills PC-tablet-only">
                         <a href="index.html" class="nav-pill" title="Home"><i class="fa-solid fa-house"></i> <span data-i18n="nav_home">Home</span></a>
                         <button id="headerNavOverview" class="nav-pill active"><i class="fa-solid fa-chart-line"></i> <span data-i18n="nav_historical_cross">Rates</span></button>
                         <button id="headerNavDatabase" class="nav-pill"><i class="fa-solid fa-database"></i> <span data-i18n="nav_database">Database</span></button>
                     </div>
+
                     <div class="header-actions">
                         <div class="header-controls-container">
                             <div class="lang-selector">
@@ -78,6 +79,15 @@
                     </div>
                 </div>
             </header>
+
+            <!-- Mobile Navigation Area -->
+            <div class="mobile-only mobile-nav-area">
+                <div class="header-nav-pills">
+                    <a href="index.html" class="nav-pill" title="Home"><i class="fa-solid fa-house"></i> <span data-i18n="nav_home">Home</span></a>
+                    <button class="nav-pill active" onclick="switchView('overview')"><i class="fa-solid fa-chart-line"></i> <span data-i18n="nav_historical_cross">Rates</span></button>
+                    <button class="nav-pill" onclick="switchView('database')"><i class="fa-solid fa-database"></i> <span data-i18n="nav_database">Database</span></button>
+                </div>
+            </div>
 
             <div id="dashboardData" class="dashboard-data">
                 <!-- Currency Selectors Row - Centered -->

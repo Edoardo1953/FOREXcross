@@ -143,11 +143,18 @@ body.admin-active .btn-delete-manual.admin-only {
         left: 0;
         z-index: 100;
     }
+    .split-left {
+        max-height: none !important; /* Allow natural page scroll */
+        height: auto !important;
+        overflow-y: visible !important;
+        padding-bottom: 20px !important;
+    }
     .mobile-only {
-        display: block;
+        display: block !important;
     }
     .spacer-numpad.mobile-only {
-        height: 310px; /* Further reduced space for the even more compact keypad */
+        height: 340px !important; /* Ensure last currency/search is visible above numpad */
+        width: 100%;
     }
 }
 
