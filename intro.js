@@ -224,19 +224,22 @@ function renderCurrencyList() {
 
         currencyListEl.appendChild(li);
     });
-
-    const addBtn = document.createElement('li');
-    addBtn.className = 'add-currency-btn';
-    // Forced inline style for maximum safety and visibility
-    addBtn.style.cssText = "display: flex !important; justify-content: center !important; align-items: center !important; padding: 16px !important; background: rgba(59, 130, 246, 0.1) !important; border: 2px dashed #3b82f6 !important; border-radius: 12px !important; margin: 20px !important; cursor: pointer !important; color: #3b82f6 !important; font-weight: 700 !important; min-height: 55px !important; width: calc(100% - 40px) !important; visibility: visible !important; opacity: 1 !important;";
-    addBtn.innerHTML = `<i class="fa-solid fa-plus-circle" style="margin-right: 8px;"></i> ${getTranslation('search_add')}`;
-    addBtn.addEventListener('click', () => {
-        searchOverlay.classList.remove('hidden');
-        renderSearchResults(''); // Init with all available values
-        searchResults.scrollTop = 0;
-        setTimeout(() => searchInput.focus(), 100);
-    });
-    currencyListEl.appendChild(addBtn);
+    // --- NEW: Stable Add Currency Area Handling (outside the dynamic list) ---
+    const addArea = document.getElementById('homeAddCurrencyArea');
+    if (addArea && !addArea.innerHTML) {
+        const addBtn = document.createElement('div');
+        addBtn.className = 'add-currency-btn';
+        // Inline style for maximum safety and the dashed border you like!
+        addBtn.style.cssText = "display: flex !important; justify-content: center !important; align-items: center !important; padding: 18px !important; background: rgba(59, 130, 246, 0.05) !important; border: 2px dashed rgba(59, 130, 246, 0.6) !important; border-radius: 16px !important; margin: 20px 0 !important; cursor: pointer !important; color: #3b82f6 !important; font-weight: 700 !important; min-height: 55px !important; width: 100% !important; visibility: visible !important; opacity: 1 !important; box-sizing: border-box !important;";
+        addBtn.innerHTML = `<i class="fa-solid fa-plus-circle" style="margin-right: 10px; font-size: 20px;"></i> ${getTranslation('search_add')}`;
+        addBtn.addEventListener('click', () => {
+            searchOverlay.classList.remove('hidden');
+            renderSearchResults(''); 
+            searchResults.scrollTop = 0;
+            setTimeout(() => searchInput.focus(), 100);
+        });
+        addArea.appendChild(addBtn);
+    }
 }
 
 function removeCurrency(code) {
