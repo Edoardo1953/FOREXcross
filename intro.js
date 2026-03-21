@@ -67,13 +67,16 @@ function setupNumpadToggle() {
     
     if (toggleBtn && container) {
         toggleBtn.addEventListener('click', () => {
-            const isActive = container.classList.toggle('numpad-mobile-active');
-            toggleBtn.classList.toggle('btn-active');
-            
-            // If opening, maybe focus? Or just scroll?
-            if (isActive) {
-                // Potential feedback logic here
-            }
+            container.classList.add('numpad-mobile-active');
+            toggleBtn.classList.add('btn-active');
+        });
+    }
+    
+    const closeBtn = document.getElementById('closeNumpadBtn');
+    if (closeBtn && container && toggleBtn) {
+        closeBtn.addEventListener('click', () => {
+            container.classList.remove('numpad-mobile-active');
+            toggleBtn.classList.remove('btn-active');
         });
     }
 }
