@@ -103,6 +103,13 @@
 
                 <!-- Dynamic Rest Cross Rates -->
                 <section class="cross-rates-section">
+                    <div class="divise-estere-header">
+                        <h3 data-i18n="group_forex">Divise Estere</h3>
+                        <button id="toggleNumpadBtn" class="inline-numpad-btn" title="Apri Tastierino" data-i18n-title="btn_open_numpad">
+                            <i class="fa-solid fa-calculator"></i>
+                        </button>
+                    </div>
+                    
                     <ul class="currency-list" id="currencyList">
                         <!-- Items injected via JS -->
                          <li class="loading-state"><span data-i18n="loading_rates">Caricamento tassi di cambio...</span> <i class="fa-solid fa-spinner fa-spin"></i></li>
@@ -110,6 +117,7 @@
                     
                     <!-- NEW: Dedicated area for Add Currency Search (Outside UL for stability) -->
                     <div id="homeAddCurrencyArea"></div>
+
                     
                     <!-- Extra space to scroll past fixed elements on mobile -->
                     <div class="spacer-numpad mobile-only"></div>
@@ -156,10 +164,6 @@
                 </section>
             </div>
             
-            <!-- Floating Numpad Toggle Button (Now for both Mobile and PC/Tablet) -->
-            <button id="toggleNumpadBtn" class="floating-numpad-btn" title="Apri Tastierino" data-i18n-title="btn_open_numpad">
-                <i class="fa-solid fa-calculator"></i>
-            </button>
         </div>
 
     </div>
