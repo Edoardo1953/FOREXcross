@@ -2156,6 +2156,46 @@ tbody tr:hover {
     transform: scale(0.95);
 }
 
+.numpad-mobile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background: var(--accent-gradient);
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+    margin-bottom: 15px;
+    border-radius: 20px 20px 0 0;
+}
+
+.numpad-mobile-header span {
+    font-size: 15px;
+    font-weight: 800;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.close-numpad-internal {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    width: 55px;
+    height: 42px;
+    border-radius: 12px;
+    display: none; /* Hidden by default (PC/Tablet) */
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+@media (max-width: 768px) {
+    .close-numpad-internal {
+        display: flex !important;
+    }
+}
+
 .numpad-grid .ac-key, .numpad-grid .backspace-key {
     background-color: #f1f5f9; /* Light grey background */
     color: var(--accent-danger); /* Use red for AC and Delete for clear visibility */
@@ -2465,12 +2505,12 @@ tbody tr:hover {
         display: block !important;
     }
 
-    /* --- NEW: Mobile Numpad Header and Close Controls --- */
+    /* --- NEW: Unified Numpad Header (Mobile Top Strip / PC Header) --- */
     .numpad-mobile-header {
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
-        padding: 8px 20px 10px 20px !important;
+        padding: 12px 20px !important;
         background: var(--accent-gradient) !important; /* Premium Blue Header */
         border-bottom: 2px solid rgba(255,255,255,0.1);
         margin-bottom: 15px;
@@ -2537,7 +2577,8 @@ tbody tr:hover {
     .numpad-mobile-active {
         display: flex !important;
         transform: translateY(0) !important;
-        z-index: 2000 !important; /* Above everything */
+        z-index: 10001 !important; /* ABOVE the bottom toolbar (9999) */
+        padding-bottom: calc(env(safe-area-inset-bottom, 5px) + 20px) !important;
     }
 
     .numpad-mobile-hidden {
