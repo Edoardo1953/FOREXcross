@@ -142,7 +142,7 @@ body.admin-active .btn-delete-manual.admin-only {
         display: block;
     }
     .spacer-numpad.mobile-only {
-        height: 380px; /* space for fixed numpad on mobile */
+        height: 340px; /* Reduced space for fixed numpad on mobile */
     }
 }
 
@@ -815,8 +815,8 @@ body {
     }
 
     .forex-logo-icon-img {
-        width: 60px; /* Smaller icon for mobile */
-        height: 60px;
+        width: 75px; /* Enlarged for better mobile presence */
+        height: 75px;
     }
 
     .intro-titles.centered {
@@ -826,7 +826,7 @@ body {
     }
 
     .intro-titles.centered h1 {
-        font-size: 28px; /* Compact title for mobile */
+        font-size: 30px; /* Slightly larger title for the 75px logo */
         line-height: 0.85;
     }
 
@@ -852,15 +852,15 @@ body {
         align-items: center;
         justify-content: center;
         gap: 12px;
-        padding: 16px 24px;
+        padding: 14px 24px;
         background: var(--accent-gradient);
         color: white;
         text-decoration: none;
         border-radius: 18px;
         font-weight: 700;
-        font-size: 16px;
-        width: 100%;
-        max-width: 340px;
+        font-size: 15px;
+        width: 90%; /* Centered and centered */
+        max-width: 320px;
         box-shadow: 0 8px 15px rgba(59, 130, 246, 0.3);
         transition: transform 0.2s;
     }
