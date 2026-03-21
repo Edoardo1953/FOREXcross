@@ -725,19 +725,20 @@ body {
 .header-text-container {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-start; /* Aligned to the left for vertical stacking */
     justify-content: center;
+    text-align: left; /* Aligns F over D */
 }
 
 .intro-titles.centered h1 {
-    font-size: 52px; /* Restored to massive premium title */
+    font-size: 52px; /* Large premium title */
     font-weight: 900;
     background: linear-gradient(135deg, #fff, #3b82f6);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    letter-spacing: 1.5px;
-    line-height: 1;
+    letter-spacing: 0px; /* Reset for better vertical stacking */
+    line-height: 0.9; /* Keeps words close together for the F-above-D effect */
     margin: 0;
 }
 
@@ -758,7 +759,7 @@ body {
 
 /* === NUMPAD EMPTY AREA (PC/TABLET) === */
 .numpad-empty-area {
-    margin-top: 25px; /* Moved closer to the keypad as requested */
+    margin-top: 70px; /* Lowered even more for better visual balance */
     margin-bottom: 40px;
     padding: 0 24px;
     display: flex;

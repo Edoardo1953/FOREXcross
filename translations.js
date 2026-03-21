@@ -1,7 +1,7 @@
 
 const translations = {
     it: {
-        homepage_title: "FOREX Dashboard",
+        homepage_title: "FOREX<br>Dashboard",
         homepage_subtitle: "Exchange Rates",
         nav_eur_usd: "EUR/USD",
         nav_historical_cross: "Cambi<br>Storici",
@@ -121,7 +121,7 @@ const translations = {
         admin_password_error: "Password errata."
     },
     en: {
-        homepage_title: "FOREX Dashboard",
+        homepage_title: "FOREX<br>Dashboard",
         homepage_subtitle: "Exchange Rates",
         nav_eur_usd: "EUR/USD",
         nav_historical_cross: "Historical<br>Rates",
@@ -241,7 +241,7 @@ const translations = {
         admin_password_error: "Incorrect password."
     },
     fr: {
-        homepage_title: "FOREX Dashboard",
+        homepage_title: "FOREX<br>Dashboard",
         homepage_subtitle: "Exchange Rates",
         nav_eur_usd: "EUR/USD",
         nav_historical_cross: "Taux<br>Historiques",
