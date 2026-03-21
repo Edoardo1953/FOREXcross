@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" />
 
     <!-- Custom CSS with versioning to force refresh -->
-    <link rel="stylesheet" href="style.css?v=4.3.5">
+    <link rel="stylesheet" href="style.css?v=4.3.7">
 
     <!-- Translations Logic -->
     <script src="translations.js"></script>
@@ -306,7 +306,7 @@
     </div>
 
     <!-- Intro Logic JS -->
-    <script src="intro.js?v=1.6"></script>
+    <script src="intro.js?v=4.3.7"></script>
 
     <!-- Register Service Worker -->
     <script>
@@ -336,6 +336,25 @@
             </header>
             <div class="manual-body">
                 <iframe id="manualIframe" src=""></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Overlay -->
+    <div id="searchOverlay" class="settings-overlay hidden">
+        <div class="settings-container">
+            <div class="settings-header">
+                <h2 data-i18n="search_add">Cerca Divisa</h2>
+                <button id="closeSearch" class="close-settings"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="settings-body">
+                <div class="search-input-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="searchInput" placeholder="..." data-i18n-placeholder="search_placeholder">
+                </div>
+                <ul id="searchResults" class="search-results-list">
+                    <!-- Results from JS -->
+                </ul>
             </div>
         </div>
     </div>

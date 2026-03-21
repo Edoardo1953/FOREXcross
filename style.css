@@ -1,7 +1,7 @@
 :root {
     /* Color Palette - Premium Blue & Black Theme */
     --accent-primary: #3b82f6;    /* Electric Blue */
-    --accent-secondary: #0ea5e9;  /* v=4.3.5 */
+    --accent-secondary: #0ea5e9;  /* v=4.3.7 */
     --accent-success: #10b981;    /* Emerald */
     --accent-warning: #f59e0b;    /* Amber */
     --accent-danger: #ef4444;     /* Rose */
@@ -150,31 +150,49 @@ body.admin-active .btn-delete-manual.admin-only {
         padding-bottom: 20px !important;
     }
     .numpad-section {
-        box-shadow: 0 -5px 15px rgba(0,0,0,0.2) !important;
-        border-radius: 20px 20px 0 0 !important;
+        box-shadow: 0 -10px 30px rgba(0,0,0,0.5) !important;
+        border-radius: 24px 24px 0 0 !important;
     }
     
-    /* Toggle Numpad States */
+    /* Toggle Numpad States - Fix Visibility */
     .numpad-mobile-hidden {
+        display: none !important; /* Start as none */
         transform: translateY(110%) !important;
         transition: transform 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28) !important;
-        visibility: hidden;
+        z-index: 300 !important;
     }
     
     .numpad-mobile-active {
+        display: flex !important; /* Force show */
         transform: translateY(0) !important;
         visibility: visible !important;
     }
 
+    #homeAddCurrencyArea {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        background: linear-gradient(to top, rgba(0,0,0,0.9) 70%, transparent) !important;
+        padding: 10px 15px 35px 15px !important; /* Increased bottom padding for iOS/safe areas */
+        z-index: 150 !important;
+        box-sizing: border-box !important;
+    }
+
+    .add-currency-btn {
+        margin: 0 !important; /* Reset margin for fixed area */
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+    }
+
     .floating-numpad-btn {
         position: fixed;
-        bottom: 25px;
+        bottom: 90px; /* Elevated above the search bar */
         right: 20px;
         width: 65px;
         height: 65px;
         border-radius: 50%;
-        background: #000 !important; /* Black background as requested */
-        color: var(--accent-primary) !important; /* Blue icon */
+        background: #000 !important;
+        color: var(--accent-primary) !important;
         border: 2px solid var(--accent-primary);
         box-shadow: 0 10px 25px rgba(0,0,0,0.6);
         z-index: 200;
@@ -186,19 +204,8 @@ body.admin-active .btn-delete-manual.admin-only {
         transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     
-    .floating-numpad-btn:active {
-        transform: scale(0.85);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-    }
-    
-    .floating-numpad-btn.btn-active {
-        transform: rotate(180deg);
-        background: var(--accent-primary) !important;
-        color: #fff !important;
-    }
-
     .spacer-numpad.mobile-only {
-        height: 100px !important; /* Minimal spacer when numpad is hidden */
+        height: 150px !important; /* Space to scroll past for the fixed footer */
     }
 }
 
@@ -1033,6 +1040,38 @@ body {
 
     .btn-mobile-custom i {
         font-size: 20px;
+    }
+
+    /* Search Results Optimization for Mobile Touch */
+    .settings-overlay {
+        z-index: 2500 !important; /* Above everything including floating buttons */
+        padding-top: 10px !important;
+    }
+
+    .search-results-list {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        max-height: 65vh !important;
+        padding-bottom: 50px !important;
+    }
+
+    .search-result-item {
+        padding: 18px 15px !important;
+        background: rgba(255,255,255,0.04) !important;
+        border: 1px solid rgba(255,255,255,0.05) !important;
+        border-radius: 16px !important;
+        min-height: 60px !important;
+    }
+
+    .search-result-item .result-code {
+        font-size: 18px !important;
+        font-weight: 700 !important;
+    }
+
+    .search-result-item .result-name {
+        font-size: 13px !important;
+        opacity: 0.8;
     }
 }
 
