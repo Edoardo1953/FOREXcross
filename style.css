@@ -691,6 +691,11 @@ body {
     margin: 0 15px 25px;
     box-shadow: var(--shadow-premium);
     transition: var(--transition-normal);
+    /* Prevent zoom and movement on touch */
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .intro-header {
@@ -864,7 +869,7 @@ body {
         background-color: var(--bg-card) !important;
         border: 1px solid var(--border-color) !important;
         border-radius: 28px !important;
-        margin: 0 12px 12px !important;
+        margin: 0 12px 2px !important; /* Lowered to touch the bottom area */
         padding: 10px !important;
         width: calc(100% - 24px) !important;
         height: auto !important;
