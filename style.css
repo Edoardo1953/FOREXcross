@@ -38,6 +38,7 @@ body.admin-active .btn-delete-manual.admin-only {
 
 .split-content {
     display: flex;
+    flex-direction: row; /* Horizontal for PC */
     flex: 1;
     overflow: hidden;
     height: calc(100vh - 80px); /* header approx height */
@@ -65,7 +66,11 @@ body.admin-active .btn-delete-manual.admin-only {
 
 /* mobile only helper */
 .mobile-only {
-    display: none;
+    display: none !important;
+}
+
+.PC-tablet-only {
+    display: block !important;
 }
 
 /* shift 1 to the left */
@@ -718,12 +723,12 @@ body {
 }
 
 .intro-titles.centered {
-    flex: 0; /* No longer forcing full width to center it precisely in the middle */
+    flex: 0; 
     text-align: left;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-right: auto; /* Pushes the header-actions (flags/tools) to the far right */
+    margin-right: auto;
 }
 
 .title-with-icon-main {
@@ -821,12 +826,20 @@ body {
     }
     
     .mobile-only {
-        display: block !important;
+        display: flex !important; /* Changed from block to flex for the nav area */
+        flex-direction: column;
+        align-items: center;
     }
 
     /* Mobile Header Optimization */
     .intro-header {
         padding: 20px 15px; /* Reduced vertical padding */
+    }
+
+    .split-content {
+        flex-direction: column !important; /* Stack for mobile */
+        height: auto !important; /* Allow growing */
+        overflow: visible !important;
     }
 
     .header-inner {
@@ -857,6 +870,48 @@ body {
 
     .header-spacer {
         display: none !important; /* Hide spacer to push content left */
+    }
+
+    /* Mobile Navigation Area */
+    .mobile-nav-area {
+        margin: 15px -20px 25px; /* Offset parent padding */
+        padding: 5px 15px;
+        width: calc(100% + 40px);
+        display: flex;
+        justify-content: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .mobile-nav-area .header-nav-pills {
+        background: transparent;
+        border: none;
+        padding: 0;
+        gap: 8px;
+        flex-wrap: nowrap;
+        margin-left: 0 !important; /* Override desktop left-align */
+        margin-right: 0 !important;
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    .mobile-nav-area .nav-pill {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+        padding: 12px 10px;
+        font-size: 11px;
+        white-space: nowrap;
+        flex-direction: column; /* Stack icon and text for mobile */
+        gap: 6px;
+        min-width: 90px;
+    }
+
+    .mobile-nav-area .nav-pill.active {
+        background: var(--accent-primary);
+        color: white;
+        border-color: transparent;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
     }
 
     /* Card-style Floating Keypad */
@@ -952,7 +1007,7 @@ body {
 
 .header-top-row {
     display: grid;
-    grid-template-columns: 1fr auto 1fr; /* 3 columns: titles, nav, actions */
+    grid-template-columns: auto auto 1fr; /* Cluster Title and Nav on the left */
     align-items: center;
     gap: 20px;
     max-width: 1400px;
@@ -966,8 +1021,17 @@ body {
 }
 
 .header-nav-pills {
-    display: flex;
-    justify-content: center;
+    display: flex !important;
+    flex-direction: row !important; /* Force horizontal */
+    align-items: center !important;
+    gap: 15px !important;      
+    margin-left: 15px !important; 
+    width: auto !important;
+}
+
+.header-nav-pills .nav-pill {
+    flex-direction: row !important; /* Icon next to text */
+    gap: 8px !important;
 }
 
 .header-actions {
@@ -1662,8 +1726,8 @@ tbody tr:hover {
     border-bottom: none; /* Removing border to use separation */
     border: 1px solid var(--border-color); /* Add full border */
     border-radius: var(--border-radius-md); /* Card look */
-    margin: 0 auto 10px auto; /* Margin for separation and centering */
-    max-width: 600px;    /* Bring symbol and value closer */
+    margin: 0 auto 10px auto; /* Centered */
+    max-width: 600px;    /* Original approved width */
     transition: var(--transition-normal);
 }
 
