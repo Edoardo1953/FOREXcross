@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" />
 
     <!-- Custom CSS with versioning to force refresh -->
-    <link rel="stylesheet" href="style.css?v=4.3.4">
+    <link rel="stylesheet" href="style.css?v=4.3.5">
 
     <!-- Translations Logic -->
     <script src="translations.js"></script>
@@ -115,7 +115,7 @@
                 </section>
             </div>
 
-            <div class="split-right">
+            <div class="split-right numpad-mobile-hidden" id="mobileNumpadContainer">
                 <!-- Fixed Bottom Numpad -->
                 <section class="numpad-section">
                     <div class="numpad-grid">
@@ -154,6 +154,11 @@
                     </div>
                 </section>
             </div>
+            
+            <!-- Floating Numpad Toggle Button (Mobile Only) -->
+            <button id="toggleNumpadBtn" class="mobile-only floating-numpad-btn" title="Apri Tastierino">
+                <i class="fa-solid fa-calculator"></i>
+            </button>
         </div>
 
     </div>

@@ -52,12 +52,30 @@ async function initApp() {
     
     setupNumpad();
     setupSearchListeners();
+    setupNumpadToggle();
 
     // Listen for language changes to update UI strings
     window.addEventListener('languageChanged', () => {
         updateBaseCurrencyDisplay();
         renderCurrencyList();
     });
+}
+
+function setupNumpadToggle() {
+    const toggleBtn = document.getElementById('toggleNumpadBtn');
+    const container = document.getElementById('mobileNumpadContainer');
+    
+    if (toggleBtn && container) {
+        toggleBtn.addEventListener('click', () => {
+            const isActive = container.classList.toggle('numpad-mobile-active');
+            toggleBtn.classList.toggle('btn-active');
+            
+            // If opening, maybe focus? Or just scroll?
+            if (isActive) {
+                // Potential feedback logic here
+            }
+        });
+    }
 }
 
 function loadPersistentCurrencies() {

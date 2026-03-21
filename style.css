@@ -1,7 +1,7 @@
 :root {
     /* Color Palette - Premium Blue & Black Theme */
     --accent-primary: #3b82f6;    /* Electric Blue */
-    --accent-secondary: #0ea5e9;  /* v=4.3.4 */
+    --accent-secondary: #0ea5e9;  /* v=4.3.5 */
     --accent-success: #10b981;    /* Emerald */
     --accent-warning: #f59e0b;    /* Amber */
     --accent-danger: #ef4444;     /* Rose */
@@ -149,12 +149,56 @@ body.admin-active .btn-delete-manual.admin-only {
         overflow-y: visible !important;
         padding-bottom: 20px !important;
     }
-    .mobile-only {
-        display: block !important;
+    .numpad-section {
+        box-shadow: 0 -5px 15px rgba(0,0,0,0.2) !important;
+        border-radius: 20px 20px 0 0 !important;
     }
+    
+    /* Toggle Numpad States */
+    .numpad-mobile-hidden {
+        transform: translateY(110%) !important;
+        transition: transform 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28) !important;
+        visibility: hidden;
+    }
+    
+    .numpad-mobile-active {
+        transform: translateY(0) !important;
+        visibility: visible !important;
+    }
+
+    .floating-numpad-btn {
+        position: fixed;
+        bottom: 25px;
+        right: 20px;
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        background: #000 !important; /* Black background as requested */
+        color: var(--accent-primary) !important; /* Blue icon */
+        border: 2px solid var(--accent-primary);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+        z-index: 200;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .floating-numpad-btn:active {
+        transform: scale(0.85);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    }
+    
+    .floating-numpad-btn.btn-active {
+        transform: rotate(180deg);
+        background: var(--accent-primary) !important;
+        color: #fff !important;
+    }
+
     .spacer-numpad.mobile-only {
-        height: 340px !important; /* Ensure last currency/search is visible above numpad */
-        width: 100%;
+        height: 100px !important; /* Minimal spacer when numpad is hidden */
     }
 }
 
