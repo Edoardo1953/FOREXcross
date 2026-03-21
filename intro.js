@@ -170,32 +170,7 @@ function renderCurrencyList() {
     const existingRows = currencyListEl.querySelectorAll('.currency-row');
     const codesToDisplay = displayedCurrencies.filter(c => c.code !== baseCurrency);
     
-    if (existingRows.length === codesToDisplay.length && existingRows.length > 0) {
-        existingRows.forEach((row, idx) => {
-            const curr = codesToDisplay[idx];
-            const rate = currentRates[curr.code] || 0;
-            const calculatedAmount = baseAmountNum * rate;
-            const amountEl = row.querySelector('.curr-amount');
-            if (amountEl) {
-                amountEl.textContent = APP_UTILS.formatNumber(calculatedAmount);
-            }
-        });
-        
-        // Safety: ensure add-button is still there
-        if (!currencyListEl.querySelector('.add-currency-btn')) {
-            const addBtn = document.createElement('li');
-            addBtn.className = 'add-currency-btn';
-            addBtn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i> ${getTranslation('search_add')}`;
-            addBtn.addEventListener('click', () => {
-                searchOverlay.classList.remove('hidden');
-                renderSearchResults(''); 
-                searchResults.scrollTop = 0;
-                setTimeout(() => searchInput.focus(), 100);
-            });
-            currencyListEl.appendChild(addBtn);
-        }
-        return;
-    }
+
 
     currencyListEl.innerHTML = '';
     // Use already declared variables
@@ -252,7 +227,9 @@ function renderCurrencyList() {
 
     const addBtn = document.createElement('li');
     addBtn.className = 'add-currency-btn';
-    addBtn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i> ${getTranslation('search_add')}`;
+    // Forced inline style for maximum safety and visibility
+    addBtn.style.cssText = "display: flex !important; justify-content: center !important; align-items: center !important; padding: 16px !important; background: rgba(59, 130, 246, 0.1) !important; border: 2px dashed #3b82f6 !important; border-radius: 12px !important; margin: 20px !important; cursor: pointer !important; color: #3b82f6 !important; font-weight: 700 !important; min-height: 55px !important; width: calc(100% - 40px) !important; visibility: visible !important; opacity: 1 !important;";
+    addBtn.innerHTML = `<i class="fa-solid fa-plus-circle" style="margin-right: 8px;"></i> ${getTranslation('search_add')}`;
     addBtn.addEventListener('click', () => {
         searchOverlay.classList.remove('hidden');
         renderSearchResults(''); // Init with all available values
