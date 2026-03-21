@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Installation Mobile - FOREXcross</title>
+    <title>Installation de l'App - FOREXcross</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -29,7 +29,7 @@
             padding: 40px 20px;
         }
         .container {
-            max-width: 800px;
+            max-width: 850px;
             margin: 0 auto;
             background: var(--card);
             padding: 50px;
@@ -61,7 +61,7 @@
             margin-bottom: 15px;
         }
         h1 {
-            font-size: 32px;
+            font-size: 28px;
             margin: 10px 0;
             color: var(--text);
             font-weight: 800;
@@ -69,7 +69,7 @@
             letter-spacing: -1px;
         }
         h2 {
-            font-size: 22px;
+            font-size: 20px;
             margin-top: 40px;
             color: var(--primary);
             border-bottom: 1px solid var(--border);
@@ -80,32 +80,33 @@
         .step-card {
             background: #fdfdfd;
             border: 1px solid var(--border);
-            padding: 25px;
+            padding: 20px;
             border-radius: 16px;
-            margin-top: 20px;
+            margin-top: 15px;
             display: flex;
-            gap: 20px;
+            gap: 15px;
             align-items: flex-start;
         }
         .step-number {
             background: var(--primary);
             color: white;
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
             flex-shrink: 0;
+            font-size: 14px;
         }
         .step-content {
             flex-grow: 1;
         }
         .step-content strong {
             display: block;
-            font-size: 18px;
-            margin-bottom: 8px;
+            font-size: 17px;
+            margin-bottom: 5px;
             color: var(--text);
         }
         .alert-box {
@@ -114,6 +115,21 @@
             padding: 25px;
             margin: 40px 0;
             border-radius: 0 16px 16px 0;
+        }
+        .device-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .device-tag {
+            background: #f1f5f9;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--secondary);
         }
         footer {
             margin-top: 60px;
@@ -132,84 +148,81 @@
 <body>
     <div class="container">
         <header>
-            <div class="header-badge">Guide d'Installation</div>
-            <div class="app-logo"><i class="fa-solid fa-mobile-screen-button"></i></div>
-            <h1>Ajouter à l'écran d'accueil</h1>
-            <p style="color: var(--secondary); font-weight: 500;">Transformez la Web App en une application native sur votre mobile.</p>
+            <div class="header-badge">Guide Complet</div>
+            <div class="app-logo"><i class="fa-solid fa-laptop-medical"></i></div>
+            <h1>Installation de l'App sur PC, Tablet et Mobile</h1>
+            <p style="color: var(--secondary); font-weight: 500;">Accédez à FOREXcross en un clic depuis n'importe quel appareil.</p>
         </header>
 
-        <section id="android-guide">
-            <h2><i class="fa-brands fa-android"></i> Pour les Appareils Android (Chrome)</h2>
+        <section id="pc-guide">
+            <h2><i class="fa-solid fa-desktop"></i> Installation sur Ordinateur (PC & Mac)</h2>
             <div class="step-card">
                 <div class="step-number">1</div>
                 <div class="step-content">
-                    <strong>Ouvrez le site dans Chrome</strong>
-                    Naviguez vers l'adresse de notre application en utilisant le navigateur Google Chrome sur votre smartphone.
+                    <strong>Utilisez Google Chrome ou Microsoft Edge</strong>
+                    Ouvrez le navigateur sur votre ordinateur et allez sur l'adresse de l'application.
                 </div>
             </div>
             <div class="step-card">
                 <div class="step-number">2</div>
                 <div class="step-content">
-                    <strong>Ouvrez le menu Options</strong>
-                    Appuyez sur l'icône avec les <strong>trois points</strong> (⋮) dans le coin supérieur droit de la barre Chrome.
+                    <strong>Installation Directe</strong>
+                    Dans la barre d'adresse (où se trouve l'URL), cliquez sur l'icône <strong>"Installer l'application"</strong> (un petit écran avec une flèche) située à droite.
                 </div>
             </div>
             <div class="step-card">
                 <div class="step-number">3</div>
                 <div class="step-content">
-                    <strong>Installez l'application</strong>
-                    Sélectionnez <strong>"Installer l'application"</strong> ou <strong>"Ajouter à l'écran d'accueil"</strong>.
+                    <strong>Méthode Alternative</strong>
+                    Cliquez sur les trois points (⋮) en haut à droite > <strong>Enregistrer et partager</strong> > <strong>Installer la page comme application</strong>.
                 </div>
             </div>
             <div class="step-card">
                 <div class="step-number">4</div>
                 <div class="step-content">
-                    <strong>Confirmez</strong>
-                    Appuyez sur "Ajouter" dans la fenêtre qui apparaît. L'icône de l'application apparaîtra instantanément sur votre écran d'accueil avec vos autres applications.
+                    <strong>Icône sur le Bureau</strong>
+                    L'application s'ouvrira dans une fenêtre dédiée et une icône sera créée sur votre bureau pour un accès instantané.
                 </div>
             </div>
         </section>
 
-        <section id="ios-guide">
-            <h2><i class="fa-brands fa-apple"></i> Pour les Appareils iOS / iPhone (Safari)</h2>
+        <section id="mobile-guide">
+            <h2><i class="fa-solid fa-mobile-screen"></i> Installation sur Mobile et Tablette</h2>
+            
+            <div style="margin-top:20px; font-weight: 600; color:var(--secondary); font-size: 14px; padding-left: 5px;">POUR ANDROID (Chrome) :</div>
             <div class="step-card">
                 <div class="step-number">1</div>
                 <div class="step-content">
-                    <strong>Ouvrez le site dans Safari</strong>
-                    Il est essentiel d'utiliser <strong>Safari</strong> sur iPhone pour pouvoir installer l'application correctement.
+                    <strong>Menu Options</strong>
+                    Appuyez sur les trois points (⋮) et sélectionnez <strong>"Installer l'application"</strong> ou <strong>"Ajouter à l'écran d'accueil"</strong>.
+                </div>
+            </div>
+
+            <div style="margin-top:25px; font-weight: 600; color:var(--secondary); font-size: 14px; padding-left: 5px;">POUR iOS / iPHONE / iPAD (Safari) :</div>
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <strong>Bouton Partager</strong>
+                    Appuyez sur l'icône <strong>Partager</strong> (le carré avec une flèche vers le haut) dans la barre du bas.
                 </div>
             </div>
             <div class="step-card">
                 <div class="step-number">2</div>
                 <div class="step-content">
-                    <strong>Appuyez sur l'icône Partager</strong>
-                    Appuyez sur le bouton <strong>Partager</strong> (le carré avec une flèche vers le haut) situé dans la barre inférieure.
-                </div>
-            </div>
-            <div class="step-card">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <strong>Ajouter à l'écran d'accueil</strong>
-                    Faites défiler la liste des options vers le bas et appuyez sur <strong>"Sur l'écran d'accueil"</strong>.
-                </div>
-            </div>
-            <div class="step-card">
-                <div class="step-number">4</div>
-                <div class="step-content">
-                    <strong>Terminez l'opération</strong>
-                    Appuyez sur <strong>"Ajouter"</strong> dans le coin supérieur droit. L'icône FOREXcross apparaîtra sur l'écran d'accueil de votre iPhone.
+                    <strong>Sur l'écran d'accueil</strong>
+                    Faites défiler vers le bas et appuyez sur <strong>"Sur l'écran d'accueil"</strong>, puis confirmez avec "Ajouter".
                 </div>
             </div>
         </section>
 
         <div class="alert-box">
-            <strong><i class="fa-solid fa-circle-info"></i> Pourquoi l'installer ?</strong>
-            Une fois ajoutée à l'écran d'accueil, l'application s'ouvrira sans les barres du navigateur, vous offrant une expérience plein écran plus rapide, plus fluide et plus professionnelle, tout comme une application téléchargée sur les Stores officiels.
+            <strong><i class="fa-solid fa-rocket"></i> Pourquoi l'installer ?</strong>
+            L'application s'ouvre sans les barres du navigateur, offrant une expérience plein écran, plus rapide et professionnelle, avec l'icône FOREXcross toujours à portée de main sur votre bureau ou écran d'accueil.
         </div>
 
         <footer>
-            &copy; 2026 FOREXcross Dashboard - Guide Rapide.
-            <br>Votre finance professionnelle au bout des doigts.
+            &copy; 2026 FOREXcross Dashboard - Guide d'Installation Universel.
+            <br>Votre finance professionnelle partout avec vous.
         </footer>
     </div>
 
