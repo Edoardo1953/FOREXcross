@@ -2182,18 +2182,12 @@ tbody tr:hover {
     width: 55px;
     height: 42px;
     border-radius: 12px;
-    display: none; /* Hidden by default (PC/Tablet) */
+    display: flex; /* Restored for PC consistent with Mobile */
     align-items: center;
     justify-content: center;
     font-size: 22px;
     cursor: pointer;
     transition: all 0.2s ease;
-}
-
-@media (max-width: 768px) {
-    .close-numpad-internal {
-        display: flex !important;
-    }
 }
 
 .numpad-grid .ac-key, .numpad-grid .backspace-key {
@@ -2495,11 +2489,13 @@ tbody tr:hover {
     }
     .numpad-section {
         position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
+        bottom: 95px !important; /* FIXED: Position ABOVE the bottom toolbar so numbers are not cut off */
+        left: 5% !important;
+        width: 90% !important;
         height: auto;
-        padding: 10px;
+        padding: 5px;
+        border-radius: 20px !important;
+        box-shadow: 0 0 30px rgba(0,0,0,0.8) !important;
     }
     .mobile-only {
         display: block !important;
