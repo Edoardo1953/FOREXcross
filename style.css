@@ -59,7 +59,7 @@ body.admin-active .btn-delete-manual.admin-only {
 
 .split-left > * {
     width: 100%;
-    max-width: 650px; /* Keep currency list readable and centered */
+    max-width: 750px; /* Widened as requested */
 }
 
 .split-right {
@@ -1024,9 +1024,10 @@ margin: 0;
     }
 
     .intro-titles.centered {
-        flex: 0; /* Only take needed space on left */
-        align-items: flex-start;
-        text-align: left;
+        flex: 1; 
+        align-items: center !important;
+        text-align: center !important;
+        margin: 0 auto;
     }
 
     .intro-titles.centered h1 {
@@ -2407,15 +2408,15 @@ tbody tr:hover {
         right: 0 !important;
         margin: 0 auto !important;
         width: 100% !important;
-        max-width: 650px !important; /* Perfect match with the currency list width above */
+        max-width: 750px !important; /* Perfect match with the wider 750px zones */
         background: var(--bg-main) !important;
-        border-top: 2px solid var(--border-color); /* Slightly stronger border */
-        padding: 15px 20px calc(env(safe-area-inset-bottom, 5px) + 20px) 20px !important; 
+        border-top: 2px solid var(--border-color);
+        padding: 15px 25px calc(env(safe-area-inset-bottom, 5px) + 20px) 25px !important; 
         z-index: 9999 !important; 
         box-sizing: border-box !important;
         display: flex !important;
         align-items: center !important;
-        gap: 20px !important; /* More breathing room */
+        gap: 25px !important; /* More breathing room */
         box-shadow: 0 -15px 45px rgba(0,0,0,0.6) !important;
     }
 
