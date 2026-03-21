@@ -246,23 +246,23 @@ function renderCurrencyList() {
         currencyListEl.appendChild(li);
     });
     // --- NEW: Stable Add Currency Area Handling (outside the dynamic list) ---
-    const addArea = document.getElementById('homeAddCurrencyArea');
-    if (addArea) {
-        addArea.innerHTML = ''; // Always clear to allow fresh translation
+    const addPlaceholder = document.getElementById('addBtnPlaceholder');
+    if (addPlaceholder) {
+        addPlaceholder.innerHTML = '';
         const addBtn = document.createElement('div');
         addBtn.className = 'add-currency-btn';
-        // Inline style for maximum safety and the dashed border you like!
-        addBtn.style.cssText = "display: flex !important; justify-content: center !important; align-items: center !important; padding: 18px !important; background: rgba(59, 130, 246, 0.05) !important; border: 2px dashed rgba(59, 130, 246, 0.6) !important; border-radius: 16px !important; margin: 20px 0 !important; cursor: pointer !important; color: #3b82f6 !important; font-weight: 700 !important; min-height: 55px !important; width: 100% !important; visibility: visible !important; opacity: 1 !important; box-sizing: border-box !important;";
-        addBtn.innerHTML = `<i class="fa-solid fa-plus-circle" style="margin-right: 10px; font-size: 20px;"></i> ${getTranslation('search_add')}`;
+        addBtn.innerHTML = `<i class="fa-solid fa-plus-circle"></i> ${getTranslation('search_add')}`;
         addBtn.addEventListener('click', () => {
             searchOverlay.classList.remove('hidden');
             renderSearchResults(''); 
             searchResults.scrollTop = 0;
             setTimeout(() => searchInput.focus(), 100);
         });
-        addArea.appendChild(addBtn);
+        addPlaceholder.appendChild(addBtn);
     }
 }
+
+
 
 function removeCurrency(code) {
     const protectedCodes = ['EUR', 'USD'];

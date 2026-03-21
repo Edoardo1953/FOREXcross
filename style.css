@@ -852,10 +852,10 @@ body {
 
 /* === NEW HEADER CUSTOM CROSS BUTTON === */
 .custom-cross-header-pill {
-    margin-top: 15px;
+    margin-top: 20px;
     width: 100%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: flex-start; /* Default PC/Tablet */
 }
 
 .btn-header-custom {
@@ -885,9 +885,13 @@ body {
 }
 
 @media (max-width: 900px) {
+    .header-text-container {
+        align-items: center; /* Center-align the text and button on mobile */
+        text-align: center;
+    }
     .custom-cross-header-pill {
         justify-content: center; /* Center on mobile */
-        margin-top: 10px;
+        margin-top: 15px;
     }
     .btn-header-custom {
         padding: 10px 20px;
@@ -919,27 +923,28 @@ margin: 0;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     color: var(--accent-primary);
-    width: 45px;
-    height: 45px;
-    border-radius: 12px;
+    width: 55px;
+    height: 55px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    font-size: 24px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     box-shadow: var(--shadow-sm);
+    flex-shrink: 0;
 }
 
 .inline-numpad-btn:hover {
-    transform: translateY(-2px) scale(1.05);
-    background: var(--accent-primary);
-    color: white;
-    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+    transform: translateY(-2px) scale(1.03);
+    border-color: var(--accent-primary);
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
 }
 
-.inline-numpad-btn:active {
-    transform: scale(0.95);
+.inline-numpad-btn.btn-active {
+    background: var(--accent-primary);
+    color: white;
 }
 
 .header-actions {
@@ -2243,32 +2248,33 @@ tbody tr:hover {
 }
 
 .add-currency-btn {
-    display: flex;
+    display: flex !important;
     justify-content: center !important;
-    align-items: center;
-    padding: 15px !important;
-    background: rgba(255,255,255,0.05) !important;
-    border: 1px dashed var(--border-color) !important;
-    border-radius: 12px !important;
-    margin-top: 15px !important;
-    margin: 10px 20px;
-    cursor: pointer;
-    color: var(--accent-primary) !important;
-    transition: all 0.2s;
-    font-weight: 600 !important;
-    min-height: 50px !important;
+    align-items: center !important;
+    padding: 18px !important;
+    background: rgba(59, 130, 246, 0.05) !important;
+    border: 2px dashed rgba(59, 130, 246, 0.6) !important;
+    border-radius: 16px !important;
+    margin: 0 !important; /* Managed by the flex parent now */
+    cursor: pointer !important;
+    color: #3b82f6 !important;
+    font-weight: 700 !important;
+    min-height: 55px !important;
     width: 100% !important;
+    transition: all 0.3s ease !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
 }
 
 .add-currency-btn:hover {
-    background: rgba(255, 255, 255, 0.07);
-    color: var(--text-primary);
-    border-color: var(--accent-primary);
+    background: rgba(59, 130, 246, 0.12) !important;
+    border-style: solid !important;
+    transform: translateY(-2px);
 }
 
 .add-currency-btn i {
-    margin-right: 10px;
-    font-size: 1.25em;
+    margin-right: 12px;
+    font-size: 22px;
 }
 
 @keyframes slideInUp {
@@ -2393,22 +2399,28 @@ tbody tr:hover {
         transform: scale(0.92);
     }
 
-    /* Fixed Bottom Search Area - NOW FOR ALL SCREENS */
+    /* Fixed Bottom Home Toolbar (Search + Calculator Toggle) */
     #homeAddCurrencyArea {
         position: fixed !important;
         bottom: 0 !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
         width: 100% !important;
-        max-width: 650px !important; /* Keep it aligned with the list */
-        background: linear-gradient(to top, var(--bg-main) 85%, transparent) !important;
-        padding: 15px 20px 20px 20px !important;
-        z-index: 1500 !important; 
+        max-width: 650px !important;
+        /* Use a solid background with a top shadow instead of gradient, for maximum visibility */
+        background: var(--bg-main) !important;
+        border-top: 1px solid var(--border-color);
+        padding: 10px 15px 15px 15px !important;
+        z-index: 2000 !important; 
         box-sizing: border-box !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        box-shadow: 0 -10px 30px rgba(0,0,0,0.4) !important;
     }
 
-    .spacer-numpad.mobile-only {
-        height: 120px !important; /* Smaller spacer for list bottom */
+    .spacer-numpad {
+        height: 100px !important; 
         display: block !important;
     }
 
