@@ -796,13 +796,13 @@ body {
     margin: 0 auto; /* Double ensure horizontal centering */
 }
 
-.intro-titles.centered {
-    flex: 0; 
-    text-align: left;
+.intro-titles {
+    flex: 1; 
+    text-align: center; /* Centered EVERYTHING */
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    margin-right: auto;
+    align-items: center; /* Centered EVERYTHING */
+    margin: 0 auto;
 }
 
 .title-with-icon-main {
@@ -824,9 +824,9 @@ body {
 .header-text-container {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Aligned to the left for vertical stacking */
+    align-items: center; /* Centered titles */
     justify-content: center;
-    text-align: left; /* Aligns F over D */
+    text-align: center; /* Centered titles */
 }
 
 .intro-titles.centered h1 {
@@ -855,7 +855,7 @@ body {
     margin-top: 20px;
     width: 100%;
     display: flex;
-    justify-content: flex-start; /* Default PC/Tablet */
+    justify-content: center; /* Centered on PC too */
 }
 
 .btn-header-custom {
