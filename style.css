@@ -2410,18 +2410,21 @@ tbody tr:hover {
         max-width: 650px !important;
         background: var(--bg-main) !important;
         border-top: 1px solid var(--border-color);
-        padding: 12px 18px env(safe-area-inset-bottom, 25px) 18px !important; /* Safety padding for modern mobiles */
-        z-index: 2500 !important; 
+        padding: 12px 18px calc(env(safe-area-inset-bottom, 5px) + 20px) 18px !important; 
+        z-index: 9999 !important; /* Highest possible to stay on top of everything! */
         box-sizing: border-box !important;
         display: flex !important;
         align-items: center !important;
         gap: 15px !important;
-        box-shadow: 0 -15px 40px rgba(0,0,0,0.5) !important;
+        box-shadow: 0 -20px 40px rgba(0,0,0,0.6) !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
 
     .spacer-numpad {
-        height: 140px !important; /* Increased spacer to match new footer height */
+        height: 180px !important; /* Ensure content clears the toolbar */
         display: block !important;
+        width: 100%;
     }
 
     .numpad-mobile-active {
@@ -2511,33 +2514,34 @@ tbody tr:hover {
         max-width: 100% !important;
     }
 
-    .split-content {
+    .split-layout {
+        height: calc(100vh - 120px) !important; /* Total viewport minus header approximately */
+        display: flex !important;
         flex-direction: column !important;
-        height: auto !important;
-        overflow: visible !important;
-        display: block !important; /* Use block to allow natural document flow */
+        overflow: hidden !important;
     }
-    
+
     .split-left {
-        flex: none !important;
+        flex: 1 !important;
         width: 100% !important;
         height: auto !important;
-        overflow: visible !important;
-        padding-bottom: 20px !important;
+        overflow-y: auto !important; /* INDEPENDENT SCROLLING for the list! */
+        padding-bottom: 50px !important;
+        -webkit-overflow-scrolling: touch; /* Smooth iOS scroll */
     }
 
     .currency-list {
         height: auto !important;
         overflow: visible !important;
-        padding-bottom: 480px !important; /* Ensure last items scroll ABOVE the fixed search bar area */
+        padding-bottom: 20px !important; 
         margin-bottom: 0 !important;
     }
 
     .base-currency-section {
-        padding: 15px 0 10px;
+        padding: 5px 0 5px;
     }
     .currency-row.base-row {
-        padding: 15px 15px 10px 15px !important; 
+        padding: 10px 15px 5px 15px !important; 
         display: flex;
         justify-content: space-between;
         align-items: center;
