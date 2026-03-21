@@ -1,7 +1,7 @@
 :root {
     /* Color Palette - Premium Blue & Black Theme */
     --accent-primary: #3b82f6;    /* Electric Blue */
-    --accent-secondary: #0ea5e9;  /* v=4.4.2 */
+    --accent-secondary: #0ea5e9;  /* v=4.4.3 */
     --accent-success: #10b981;    /* Emerald */
     --accent-warning: #f59e0b;    /* Amber */
     --accent-danger: #ef4444;     /* Rose */
@@ -2327,12 +2327,44 @@ tbody tr:hover {
         display: none !important;
     }
 
-    /* Intro Page Mobile Specifics */
+    /* Mobile Header - STICKY and Fixed */
     .intro-header {
+        position: sticky !important;
+        top: 0 !important;
+        background: var(--bg-main) !important;
+        z-index: 1200 !important; /* Above scrolling list */
         flex-direction: column !important;
         padding: 15px !important;
         gap: 15px !important;
         text-align: center;
+        border-bottom: 1px solid var(--border-color) !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+    }
+
+    .numpad-mobile-active {
+        display: flex !important;
+        transform: translateY(0) !important;
+        z-index: 3000 !important; /* Above everything - research, header, etc. */
+    }
+
+    .floating-numpad-btn {
+        position: fixed;
+        bottom: 100px; /* Elevated above the search bar */
+        right: 20px;
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        background: #000 !important;
+        color: var(--accent-primary) !important;
+        border: 2px solid var(--accent-primary);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+        z-index: 2500 !important; /* ELEVATED: Now above the search area at 1500 */
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     .intro-header .header-actions {
         order: 2;
