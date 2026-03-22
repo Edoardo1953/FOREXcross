@@ -475,11 +475,16 @@ h1, h2, h3, h4, h5, h6, .logo-area h2, .curr-amount, .num-key {
     font-family: 'Outfit', sans-serif;
 }
 
-body {
+html, body {
     background-color: var(--bg-main);
     color: var(--text-primary);
     min-height: 100vh;
+    width: 100%;
+    max-width: 100%;
     overflow-x: hidden;
+    position: relative;
+    margin: 0;
+    padding: 0;
 }
 
 /* Cleaned up redundant layout blocks */
@@ -724,6 +729,7 @@ body {
     align-items: center; 
     position: relative;
     overflow-y: auto;
+    overflow-x: hidden; /* Prevent sideways movement */
     padding: 0 0 60px;
     width: 100%;
 }
@@ -1103,9 +1109,9 @@ margin: 0;
 
     /* Mobile Navigation Area */
     .mobile-nav-area {
-        margin: 15px -20px 25px; /* Offset parent padding */
+        margin: 15px 0 25px; 
         padding: 5px 15px;
-        width: calc(100% + 40px);
+        width: 100%;
         display: flex;
         justify-content: center;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -1177,8 +1183,8 @@ margin: 0;
 
     /* Mobile Button Styling - Perfectly Centered */
     .mobile-custom-cross-area {
-        margin: 0 0 25px -20px; /* Offset parent padding (20px) to center relative to screen */
-        width: calc(100% + 40px); /* Span full screen width for centering logic */
+        margin: 0 0 25px 0; 
+        width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
