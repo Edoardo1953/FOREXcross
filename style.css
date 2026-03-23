@@ -1186,13 +1186,13 @@ margin: 0;
         background-color: var(--bg-card) !important;
         border: 1px solid var(--border-color) !important;
         border-radius: 28px !important;
-        margin: 0 12px 2px !important; /* Lowered to touch the bottom area */
+        margin: 0 12px 14px !important; /* Raised slightly more to clear bottom edge */
         padding: 10px !important;
         width: calc(100% - 24px) !important;
         height: auto !important;
         box-shadow: 0 10px 40px rgba(0,0,0,0.6) !important;
         position: fixed !important;
-        bottom: 0 !important;
+        bottom: 10px !important; /* Raised from 0 to 10px plus margin */
         left: 0 !important;
         z-index: 1000 !important;
     }
@@ -2175,6 +2175,8 @@ tbody tr:hover {
     margin-bottom: 4px;
     display: none; /* Hidden by default */
     text-transform: uppercase;
+    white-space: nowrap;
+    max-width: fit-content;
 }
 
 .base-row .curr-right {

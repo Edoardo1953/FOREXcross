@@ -397,7 +397,7 @@ function updateDashboardUI() {
 
         const latestDateElement = document.getElementById('latestDate');
         if (latestDateElement) {
-            latestDateElement.innerHTML = `${getTranslation('updated_on')}: ${lastRecord.dateStr}`;
+            latestDateElement.innerHTML = '';
         }
 
         const trendEl = document.getElementById('brlTrend');
