@@ -15,11 +15,11 @@ const translations = {
         title_nav_historical: "Vai ai Cambi Storici",
         
         // Dashboard
-        nav_calculator: "Calcolatore Cambi",
+        nav_calculator: "CALCULATOR",
         nav_database: "Database",
         group_main: "Main Crosses",
         group_custom: "Ricerca Cross",
-        nav_home: "Calcolatore<br>Cross",
+        nav_home: "CALCULATOR",
         label_base: "Divisa Base",
         label_target: "Divisa Target",
         btn_fetch: "Cerca Cross",
@@ -87,7 +87,7 @@ const translations = {
         twelve_data_key_placeholder: "Incolla la tua API Key qui...",
         select_currency_notice: "Seleziona le divise desiderate",
         btn_swap_title: "Inverti Valute",
-        btn_open_numpad: "Apri Tastierino",
+        btn_open_numpad: "CALCULATOR",
         remove_manual: "Rimuovi Manuale",
         
         // Share Access
@@ -147,11 +147,11 @@ const translations = {
         title_nav_historical: "Go to Historical Rates",
         
         // Dashboard
-        nav_calculator: "Cross Calculator",
+        nav_calculator: "CALCULATOR",
         nav_database: "Database",
         group_main: "Main Crosses",
         group_custom: "Custom Cross",
-        nav_home: "Cross<br>Calculator",
+        nav_home: "CALCULATOR",
         label_base: "Base Currency",
         label_target: "Target Currency",
         btn_fetch: "Cross Currencies Search",
@@ -219,7 +219,7 @@ const translations = {
         twelve_data_key_placeholder: "Paste your API Key here...",
         select_currency_notice: "Please select the currency you require",
         btn_swap_title: "Swap Currencies",
-        btn_open_numpad: "Open Numpad",
+        btn_open_numpad: "CALCULATOR",
         remove_manual: "Remove Manual",
 
         // Share Access
@@ -279,11 +279,11 @@ const translations = {
         title_nav_historical: "Aller aux Taux Historiques",
         
         // Dashboard
-        nav_calculator: "Calculatrice de Taux",
+        nav_calculator: "CALCULATOR",
         nav_database: "Database",
         group_main: "Taux Principaux",
         group_custom: "Recherche Cross",
-        nav_home: "Calculatrice<br>Cross",
+        nav_home: "CALCULATOR",
         label_base: "Devise de Base",
         label_target: "Devise Target",
         btn_fetch: "Cross Currencies Search",
@@ -351,7 +351,7 @@ const translations = {
         twelve_data_key_placeholder: "Collez votre API Key ici...",
         select_currency_notice: "Veuillez sélectionner la devise requise",
         btn_swap_title: "Inverser les devises",
-        btn_open_numpad: "Ouvrir le pavé numérique",
+        btn_open_numpad: "CALCULATOR",
         remove_manual: "Supprimer le manuel",
 
         // Share Access

@@ -189,9 +189,7 @@ async function fetchAndRenderRates() {
                         const rtBadge = document.getElementById('realTimeBadge');
                         
                         if (subtitleEl) {
-                            const d = tdData.timestamp ? new Date(tdData.timestamp * 1000) : new Date();
-                            const dStr = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
-                            subtitleEl.innerHTML = `${getTranslation('homepage_subtitle')} - ${getTranslation('updated_on')}: ${dStr}`;
+                            subtitleEl.innerHTML = getTranslation('homepage_subtitle');
                         }
                         
                         if (rtBadge) {
@@ -224,10 +222,9 @@ async function fetchAndRenderRates() {
             const subtitleEl = document.querySelector('.header-subtitle');
             const rtBadge = document.getElementById('realTimeBadge');
 
-            if (subtitleEl && !subtitleEl.innerHTML.includes('Data Valore') && !subtitleEl.innerHTML.includes('Value Date')) {
-                const d = new Date(data.time_last_update_utc);
-                const dStr = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
-                subtitleEl.innerHTML = `${getTranslation('homepage_subtitle')} - ${getTranslation('updated_on')}: ${dStr}`;
+            if (subtitleEl && !subtitleEl.classList.contains('subtitle-fixed')) {
+                subtitleEl.innerHTML = getTranslation('homepage_subtitle');
+                subtitleEl.classList.add('subtitle-fixed');
             }
 
             if (rtBadge && (!ratesCache[baseCurrency] || !ratesCache[baseCurrency][codesToFetch[0]] || !userKey && !isDemoPair)) {
