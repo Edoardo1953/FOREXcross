@@ -100,9 +100,36 @@ body.admin-active .btn-delete-manual.admin-only {
 }
 
 /* enlarge nav pills in dashboard */
+.header-nav-pills {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+}
+
 .header-nav-pills .nav-pill {
-    padding: 12px 24px;
-    font-size: 15px;
+    padding: 10px 18px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.header-nav-pills .nav-pill.active {
+    background: var(--accent-gradient);
+    color: white;
+    border-color: transparent;
 }
 
 /* === CUSTOM CROSS NAV PILL - ENHANCED === */
@@ -2137,6 +2164,23 @@ tbody tr:hover {
     color: var(--accent-primary);
 }
 
+/* Real Time Badge Badge */
+.real-time-badge {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--success);
+    background: rgba(16, 185, 129, 0.1);
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    display: none; /* Hidden by default */
+    text-transform: uppercase;
+}
+
+.base-row .curr-right {
+    position: relative;
+}
+
 /* Numpad Area */
 .numpad-section {
     background-color: var(--bg-sidebar);
@@ -2508,9 +2552,23 @@ tbody tr:hover {
         border-left: 1px solid var(--border-color);
         border-right: 1px solid var(--border-color);
     }
-    .split-content {
-        flex-direction: column;
-        overflow-y: auto;
+    .mobile-nav-area {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 10px 0;
+        background: var(--bg-card);
+        border-bottom: 1px solid var(--border-color);
+    }
+    .mobile-nav-area .header-nav-pills {
+        width: 95%;
+        justify-content: space-between;
+    }
+    .mobile-nav-area .nav-pill {
+        flex: 1;
+        justify-content: center;
+        padding: 10px 5px;
+        font-size: 12px;
     }
     .split-right {
         width: 100%;

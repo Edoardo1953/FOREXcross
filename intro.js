@@ -184,12 +184,21 @@ async function fetchAndRenderRates() {
                         ratesCache[baseCurrency] = ratesCache[baseCurrency] || {};
                         ratesCache[baseCurrency][codesToFetch[0]] = parseFloat(tdData.rate);
                         
+                        // Aggiorna data nel sottotitolo e mostra badge Real-Time
                         const subtitleEl = document.querySelector('.header-subtitle');
+                        const rtBadge = document.getElementById('realTimeBadge');
+                        
                         if (subtitleEl) {
                             const d = tdData.timestamp ? new Date(tdData.timestamp * 1000) : new Date();
-                            const timeStr = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
                             const dStr = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
-                            subtitleEl.innerHTML = `${getTranslation('homepage_subtitle')} - <span style="color:var(--success); font-weight:bold;">REAL-TIME (${timeStr})</span> - ${getTranslation('updated_on')}: ${dStr}`;
+                            subtitleEl.innerHTML = `${getTranslation('homepage_subtitle')} - ${getTranslation('updated_on')}: ${dStr}`;
+                        }
+                        
+                        if (rtBadge) {
+                            const d = tdData.timestamp ? new Date(tdData.timestamp * 1000) : new Date();
+                            const timeStr = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+                            rtBadge.innerHTML = `REAL-TIME (${timeStr})`;
+                            rtBadge.style.display = 'block';
                         }
                     }
                 }
@@ -213,10 +222,16 @@ async function fetchAndRenderRates() {
             
             // Se non abbiamo ancora aggiornato il sottotitolo (perché Twelve Data ha fallito o non era EUR/USD)
             const subtitleEl = document.querySelector('.header-subtitle');
-            if (subtitleEl && !subtitleEl.innerHTML.includes('REAL-TIME')) {
+            const rtBadge = document.getElementById('realTimeBadge');
+
+            if (subtitleEl && !subtitleEl.innerHTML.includes('Data Valore') && !subtitleEl.innerHTML.includes('Value Date')) {
                 const d = new Date(data.time_last_update_utc);
                 const dStr = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
                 subtitleEl.innerHTML = `${getTranslation('homepage_subtitle')} - ${getTranslation('updated_on')}: ${dStr}`;
+            }
+
+            if (rtBadge && (!ratesCache[baseCurrency] || !ratesCache[baseCurrency][codesToFetch[0]] || !userKey && !isDemoPair)) {
+                rtBadge.style.display = 'none';
             }
 
             renderCurrencyList();
