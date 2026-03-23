@@ -1171,6 +1171,7 @@ margin: 0;
     }
 
     .numpad-grid {
+        grid-template-columns: repeat(5, 1fr) !important;
         gap: 6px !important;
     }
 
@@ -2148,7 +2149,7 @@ tbody tr:hover {
 
 .numpad-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     grid-gap: 1px;
     background-color: var(--border-color); /* borders */
 }
@@ -2226,15 +2227,27 @@ tbody tr:hover {
 .numpad-grid .op-key {
     background-color: #f97316;
     color: white;
-    font-size: 28px;
+    font-size: 26px; /* Slightly smaller to fit */
+    font-weight: 700;
 }
 .numpad-grid .op-key:active {
     background-color: #ea580c;
 }
 
+.invisible {
+    visibility: hidden;
+    pointer-events: none;
+}
+
 /* Spans */
+.grid-row-span-2 {
+    grid-row: span 2 !important;
+    height: 100% !important;
+}
+
 .grid-row-span-3 {
-    grid-row: span 3;
+    grid-row: span 3 !important;
+    height: 100% !important;
 }
 
 .calc-icon-key {

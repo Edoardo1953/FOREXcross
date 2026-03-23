@@ -131,10 +131,18 @@ function updateBaseCurrencyDisplay() {
     
     if (baseAmountDisplayEl) {
         let displayStr = baseAmountStr === '' ? '0' : baseAmountStr;
-        // Formatting for the input display remains slightly specific due to the "live" comma handling
-        let parts = displayStr.split(',');
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        baseAmountDisplayEl.textContent = parts.join(',');
+        
+        // Se contiene operatori, non applichiamo la formattazione dei punti per non confondere l'utente
+        const hasOperators = /[+\-\*\/]/.test(displayStr);
+        
+        if (hasOperators) {
+            baseAmountDisplayEl.textContent = displayStr;
+        } else {
+            // Formatting for the input display remains slightly specific due to the "live" comma handling
+            let parts = displayStr.split(',');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            baseAmountDisplayEl.textContent = parts.join(',');
+        }
     }
 }
 
@@ -184,7 +192,7 @@ async function fetchAndRenderRates() {
 
 function renderCurrencyList() {
     const currentRates = ratesCache[baseCurrency] || {};
-    let baseAmountNum = parseFloat(baseAmountStr.replace(',', '.'));
+    let baseAmountNum = evaluateBaseAmount(baseAmountStr);
     if(isNaN(baseAmountNum)) baseAmountNum = 0;
 
     // Se la lista è già popolata e il numero di elementi non è cambiato, aggiorna solo i valori
@@ -381,9 +389,27 @@ function handleNumpadInput(key) {
             isInitialState = true;
         }
     }
+    else if (key === '=') {
+        const result = evaluateBaseAmount(baseAmountStr);
+        baseAmountStr = result.toString().replace('.', ',');
+        isInitialState = false;
+    }
+    else if (['+', '-', '*', '/'].includes(key)) {
+        isInitialState = false;
+        // Evita di aggiungere lo stesso operatore due volte
+        const lastChar = baseAmountStr.slice(-1);
+        if (['+', '-', '*', '/'].includes(lastChar)) {
+            baseAmountStr = baseAmountStr.slice(0, -1) + key;
+        } else {
+            baseAmountStr += key;
+        }
+    }
     else if (key === ',') {
         isInitialState = false;
-        if(!baseAmountStr.includes(',')) baseAmountStr += ',';
+        // Consenti la virgola solo se non c'è già nel pezzo corrente (dopo l'ultimo operatore)
+        const parts = baseAmountStr.split(/[+\-\*\/]/);
+        const lastPart = parts[parts.length - 1];
+        if(!lastPart.includes(',')) baseAmountStr += ',';
     }
     else {
         if(isInitialState) {
@@ -391,9 +417,36 @@ function handleNumpadInput(key) {
             isInitialState = false;
         } else {
             if(baseAmountStr === '0') baseAmountStr = key;
-            else if(baseAmountStr.length < 12) baseAmountStr += key;
+            else if(baseAmountStr.length < 24) baseAmountStr += key; // Aumentato limite per espressioni
         }
     }
     updateBaseCurrencyDisplay();
     renderCurrencyList();
+}
+
+/**
+ * Valuta l'espressione inserita nel baseAmountStr in modo sicuro
+ */
+function evaluateBaseAmount(str) {
+    if (!str) return 0;
+    // Sostituisci virgola con punto per eval
+    let expr = str.replace(/,/g, '.');
+    // Rimuovi caratteri non ammessi (sicurezza)
+    expr = expr.replace(/[^0-9+\-\*\/.]/g, '');
+    
+    // Rimuovi operatore finale se presente (es. "5+" -> "5")
+    if (/[+\-\*\/]$/.test(expr)) {
+        expr = expr.slice(0, -1);
+    }
+
+    if (!expr) return 0;
+    
+    try {
+        // Utilizziamo Function invece di eval per maggiore sicurezza
+        const result = new Function('return ' + expr)();
+        return isFinite(result) ? result : 0;
+    } catch (e) {
+        // Fallback al semplice parseFloat se l'espressione è incompleta o errata
+        return parseFloat(expr) || 0;
+    }
 }
