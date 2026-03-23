@@ -64,19 +64,16 @@ body.admin-active .btn-delete-manual.admin-only {
 }
 
 .split-right {
-    width: 380px;
+    width: 400px;
     border-left: 1px solid var(--border-color);
     background-color: var(--bg-sidebar);
-    display: none; /* Hidden by default on PC now */
+    display: none; /* Hidden by default */
     flex-direction: column;
     justify-content: flex-start;
-    padding-top: 24px;
-    position: fixed;
-    right: 0;
-    top: 0;
-    height: 100vh;
-    z-index: 500;
-    box-shadow: -10px 0 30px rgba(0,0,0,0.3);
+    padding: 24px;
+    height: auto;
+    min-height: calc(100vh - 175px);
+    transition: all 0.3s ease;
 }
 
 .split-right.numpad-mobile-active {
@@ -1186,13 +1183,13 @@ margin: 0;
         background-color: var(--bg-card) !important;
         border: 1px solid var(--border-color) !important;
         border-radius: 28px !important;
-        margin: 0 12px 14px !important; /* Raised slightly more to clear bottom edge */
+        margin: 0 12px 20px !important; 
         padding: 10px !important;
         width: calc(100% - 24px) !important;
         height: auto !important;
         box-shadow: 0 10px 40px rgba(0,0,0,0.6) !important;
         position: fixed !important;
-        bottom: 10px !important; /* Raised from 0 to 10px plus margin */
+        bottom: 85px !important; /* Significantly raised to clear any mobile UI bars */
         left: 0 !important;
         z-index: 1000 !important;
     }
