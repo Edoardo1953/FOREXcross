@@ -143,6 +143,7 @@
                             <div class="card-info">
                                 <h3 id="cardTitle" data-i18n="last_change">Ultimo Cambio</h3>
                                 <h2 id="latestRate">--</h2>
+                                <p id="latestDate" style="font-size: 11px; opacity: 0.7; margin-top: -5px; margin-bottom: 5px; font-weight: 500;">--</p>
                                 <p class="trend positive"><i class="fa-solid fa-arrow-up"></i> <span
                                         id="brlTrend">--%</span> (da ieri)</p>
                             </div>
@@ -292,6 +293,14 @@
                             <button class="bg-switch-btn" data-bg="default" onclick="setBackground('default')" data-i18n="bg_option_default">Predefinito</button>
                             <button class="bg-switch-btn" data-bg="black" onclick="setBackground('black')" data-i18n="bg_option_black">Nero</button>
                         </div>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <label class="settings-group-title" data-i18n="real_time_label">API Quotazioni Real-Time (Twelve Data)</label>
+                    <div class="settings-col">
+                        <input type="text" id="twelveDataApiKey" placeholder="Incolla la tua API Key qui..." data-i18n="twelve_data_key_placeholder" style="width: 100%; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px; font-size: 13px;">
+                        <p style="font-size: 10px; color: var(--text-secondary); margin-top: 6px; opacity: 0.8;">La chiave 'demo' è attiva per EUR/USD. Per altre valute inserisci la tua chiave gratuita.</p>
                     </div>
                 </div>
 

@@ -155,21 +155,70 @@ async function fetchAndRenderRates() {
 
     if (appAbortController) appAbortController.abort();
     appAbortController = new AbortController();
-    const currentController = appAbortController; // Capture local reference
+    const currentController = appAbortController; 
     const signal = currentController.signal;
 
     try {
         const timeoutId = setTimeout(() => currentController.abort(), 8000);
+        
+        // --- PROVA TWELVE DATA (REAL-TIME) ---
+        // Funziona per EUR/USD con chiave 'demo' o per tutto se l'utente ha una sua chiave
+        const userKey = localStorage.getItem('twelvedata_apikey');
+        const apiKey = userKey || 'demo';
+        
+        // Determina se questa coppia è supportata dalla demo o se abbiamo una chiave utente
+        const isDemoPair = (baseCurrency === 'EUR' && codesToFetch.includes('USD')) || (baseCurrency === 'USD' && codesToFetch.includes('EUR'));
+        
+        if (userKey || isDemoPair) {
+            console.log(`Attempting Twelve Data Real-Time Fetch (Pair: ${baseCurrency}/X)...`);
+            // Nota: La versione FREE/DEMO supporta meglio richieste singole per coppia
+            // ma proviamo a recuperare almeno la coppia principale EUR/USD
+            try {
+                const tdSymbol = `${baseCurrency}/${codesToFetch[0]}`; // Usiamo la prima coppia come priorità
+                const tdUrl = `https://api.twelvedata.com/exchange_rate?symbol=${tdSymbol}&apikey=${apiKey}`;
+                const tdResp = await fetch(tdUrl, { signal });
+                if (tdResp.ok) {
+                    const tdData = await tdResp.json();
+                    if (tdData.rate) {
+                        console.log(`Twelve Data Success for ${tdSymbol}: ${tdData.rate}`);
+                        ratesCache[baseCurrency] = ratesCache[baseCurrency] || {};
+                        ratesCache[baseCurrency][codesToFetch[0]] = parseFloat(tdData.rate);
+                        
+                        const subtitleEl = document.querySelector('.header-subtitle');
+                        if (subtitleEl) {
+                            const d = tdData.timestamp ? new Date(tdData.timestamp * 1000) : new Date();
+                            const timeStr = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+                            const dStr = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+                            subtitleEl.innerHTML = `${getTranslation('homepage_subtitle')} - <span style="color:var(--success); font-weight:bold;">REAL-TIME (${timeStr})</span> - ${getTranslation('updated_on')}: ${dStr}`;
+                        }
+                    }
+                }
+            } catch (tdErr) {
+                console.warn("Twelve Data failed, moving to secondary provider", tdErr);
+            }
+        }
 
-        const response = await fetch(`https://api.frankfurter.app/latest?from=${baseCurrency}&to=${targetStr}`, {
-            signal: signal
-        });
+        // --- PROVA SECONDARY PROVIDER (OPEN.ER-API) ---
+        const url = `https://open.er-api.com/v6/latest/${baseCurrency}`;
+        const response = await fetch(url, { signal: signal });
         clearTimeout(timeoutId);
 
         if(response.ok) {
             const data = await response.json();
-            if (signal.aborted) return; // Final safety check
-            ratesCache[baseCurrency] = data.rates;
+            if (signal.aborted) return; 
+            
+            // Uniamo i dati di oggi con quelli real-time (se arrivati)
+            const combinedRates = { ...data.rates, ...(ratesCache[baseCurrency] || {}) };
+            ratesCache[baseCurrency] = combinedRates;
+            
+            // Se non abbiamo ancora aggiornato il sottotitolo (perché Twelve Data ha fallito o non era EUR/USD)
+            const subtitleEl = document.querySelector('.header-subtitle');
+            if (subtitleEl && !subtitleEl.innerHTML.includes('REAL-TIME')) {
+                const d = new Date(data.time_last_update_utc);
+                const dStr = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+                subtitleEl.innerHTML = `${getTranslation('homepage_subtitle')} - ${getTranslation('updated_on')}: ${dStr}`;
+            }
+
             renderCurrencyList();
         } else {
             throw new Error(`API Status ${response.status}`);
@@ -180,7 +229,6 @@ async function fetchAndRenderRates() {
         ratesCache[baseCurrency] = SHARED_FALLBACK_RATES[baseCurrency] || {};
         renderCurrencyList();
         
-        // Only show error if we are not aborted by a subsequent call
         if (!signal.aborted) {
             const errorMsg = document.createElement('li');
             errorMsg.style.cssText = "font-size:10px; color: var(--text-muted); text-align:center; padding: 10px; list-style:none;";

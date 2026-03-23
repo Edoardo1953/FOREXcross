@@ -30,6 +30,7 @@ function initSettings() {
 
     updateManualLinks();
     applyAdminUI(); // Initial Admin UI state
+    initTwelveDataKey(); // Initialize real-time key UI
     
     // Add event listener for clicks outside settings container to close it
     const overlay = document.getElementById('settingsOverlay');
@@ -65,6 +66,18 @@ function initSettings() {
 
     window.addEventListener('languageChanged', () => {
         updateManualLinks();
+    });
+}
+
+function initTwelveDataKey() {
+    const input = document.getElementById('twelveDataApiKey');
+    if (!input) return;
+
+    input.value = localStorage.getItem('twelvedata_apikey') || '';
+    input.addEventListener('input', (e) => {
+        localStorage.setItem('twelvedata_apikey', e.target.value.trim());
+        // Dispatch event so other scripts (like intro.js) can refresh
+        window.dispatchEvent(new CustomEvent('twelveDataKeyChanged'));
     });
 }
 

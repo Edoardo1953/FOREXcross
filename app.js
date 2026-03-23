@@ -395,6 +395,11 @@ function updateDashboardUI() {
 
         latestRateElement.innerHTML = APP_UTILS.formatCurrency(lastRecord.rate, currentTargetCurrency);
 
+        const latestDateElement = document.getElementById('latestDate');
+        if (latestDateElement) {
+            latestDateElement.innerHTML = `${getTranslation('updated_on')}: ${lastRecord.dateStr}`;
+        }
+
         const trendEl = document.getElementById('brlTrend');
         const trendParent = trendEl.parentElement;
 
