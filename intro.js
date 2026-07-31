@@ -322,9 +322,15 @@ function renderCurrencyList() {
         addBtn.innerHTML = `<i class="fa-solid fa-plus-circle"></i> ${getTranslation('search_add')}`;
         addBtn.addEventListener('click', () => {
             searchOverlay.classList.remove('hidden');
-            renderSearchResults(''); 
             searchResults.scrollTop = 0;
             setTimeout(() => searchInput.focus(), 100);
+            // Se le valute non sono ancora caricate, scaricale e poi mostra la lista
+            if (Object.keys(allAvailableCurrencies).length === 0) {
+                renderSearchResults('');
+                fetchAllAvailableCurrencies().then(() => renderSearchResults(searchInput ? searchInput.value.toUpperCase() : ''));
+            } else {
+                renderSearchResults('');
+            }
         });
         addPlaceholder.appendChild(addBtn);
     }
@@ -356,23 +362,31 @@ function setupSearchListeners() {
 
 function renderSearchResults(query = '') {
     searchResults.innerHTML = '';
-    searchResults.scrollTop = 0; // Alway reset scroll to top on new query
-    const filtered = Object.entries(allAvailableCurrencies).filter(([code, name]) => {
-        return code.includes(query) || name.toUpperCase().includes(query);
-    });
+    searchResults.scrollTop = 0;
 
+    // Controlla prima se le valute sono caricate
     if (Object.keys(allAvailableCurrencies).length === 0) {
         searchResults.innerHTML = `<li style="text-align:center; padding: 20px; color: var(--text-secondary); opacity: 0.7; font-size: 13px;">${getTranslation('loading_rates') || 'Caricamento divise...'}</li>`;
         return;
     }
 
-    filtered.forEach(([code, name]) => {
-        // Skip if already in list OR base currency
+    const filtered = Object.entries(allAvailableCurrencies).filter(([code, name]) => {
+        return code.includes(query) || name.toUpperCase().includes(query);
+    });
+
+    // Filtra valute già presenti o valuta base
+    const toShow = filtered.filter(([code]) => {
         const isAlreadyDisplayed = displayedCurrencies.some(c => c?.code?.trim()?.toUpperCase() === code?.trim()?.toUpperCase());
         const isBase = baseCurrency?.trim()?.toUpperCase() === code?.trim()?.toUpperCase();
-        
-        if (isAlreadyDisplayed || isBase) return;
+        return !isAlreadyDisplayed && !isBase;
+    });
 
+    if (toShow.length === 0) {
+        searchResults.innerHTML = `<li style="text-align:center; padding: 20px; color: var(--text-secondary); opacity: 0.7; font-size: 13px;">Nessun risultato${query ? ` per "${query}"` : ''}</li>`;
+        return;
+    }
+
+    toShow.forEach(([code, name]) => {
         const li = document.createElement('li');
         li.className = 'search-result-item';
         li.innerHTML = `
