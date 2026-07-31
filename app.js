@@ -468,19 +468,19 @@ function updateDashboardUI() {
 const SAFE_HISTORY_DATA = {
     'EUR_BRL': [
         { d: "01/01/2016", r: 4.30 }, { d: "01/01/2020", r: 4.60 }, 
-        { d: "01/01/2025", r: 5.85 }
+        { d: "01/01/2025", r: 5.85 }, { d: "01/07/2026", r: 5.84 }
     ],
     'USD_BRL': [
         { d: "01/01/2016", r: 3.90 }, { d: "01/01/2020", r: 4.05 }, 
-        { d: "01/01/2025", r: 5.08 }
+        { d: "01/01/2025", r: 5.08 }, { d: "01/07/2026", r: 5.09 }
     ],
     'EUR_USD': [
         { d: "01/01/2016", r: 1.09 }, { d: "01/01/2020", r: 1.12 }, 
-        { d: "01/01/2025", r: 1.08 }
+        { d: "01/01/2025", r: 1.04 }, { d: "01/07/2026", r: 1.14 }
     ],
     'USD_EUR': [
         { d: "01/01/2016", r: 0.92 }, { d: "01/01/2020", r: 0.89 }, 
-        { d: "01/01/2025", r: 0.92 }
+        { d: "01/01/2025", r: 0.96 }, { d: "01/07/2026", r: 0.88 }
     ]
 };
 
@@ -498,16 +498,31 @@ async function fetchLiveData(signal) {
         const saved = localStorage.getItem(storageKey);
         if (saved) {
             const parsed = JSON.parse(saved);
-            if (Array.isArray(parsed)) {
-                const limit = new Date(); limit.setFullYear(today.getFullYear() - 10);
-                parsed.forEach(item => {
-                    if (!item.dateObj || !item.dateStr || item.rate === undefined) return;
-                    const dObj = new Date(item.dateObj);
-                    if (!isNaN(dObj.getTime()) && dObj >= limit) {
-                        if (!item.isLive) return;
-                        uniqueMap.set(item.dateStr, { ...item, dateObj: dObj });
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                // ── CONTROLLO FRESCHEZZA CACHE ──────────────────────────────
+                // Se l'ultimo dato salvato è più vecchio di 7 giorni, svuota la cache
+                // per forzare un re-download fresco dall'API
+                const sortedByDate = parsed
+                    .filter(item => item.dateObj && item.isLive)
+                    .sort((a, b) => new Date(b.dateObj) - new Date(a.dateObj));
+                if (sortedByDate.length > 0) {
+                    const lastDate = new Date(sortedByDate[0].dateObj);
+                    const daysDiff = (today - lastDate) / (1000 * 60 * 60 * 24);
+                    if (daysDiff > 7) {
+                        console.warn(`Cache per ${storageKey} obsoleta (${daysDiff.toFixed(0)} giorni). Forzo re-download.`);
+                        localStorage.removeItem(storageKey);
+                    } else {
+                        const limit = new Date(); limit.setFullYear(today.getFullYear() - 10);
+                        parsed.forEach(item => {
+                            if (!item.dateObj || !item.dateStr || item.rate === undefined) return;
+                            const dObj = new Date(item.dateObj);
+                            if (!isNaN(dObj.getTime()) && dObj >= limit) {
+                                if (!item.isLive) return;
+                                uniqueMap.set(item.dateStr, { ...item, dateObj: dObj });
+                            }
+                        });
                     }
-                });
+                }
             }
         }
     } catch (e) {
