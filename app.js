@@ -346,10 +346,32 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('themeChanged', () => {
         updateDashboardUI();
     });
+
+    // ── AUTO-REFRESH DATI LIVE ──────────────────────────────────────────
+    // Aggiorna i cambi ogni 30 minuti se la pagina è aperta
+    const REFRESH_INTERVAL_MS = 30 * 60 * 1000; // 30 minuti
+    setInterval(() => {
+        console.log('Auto-refresh: ricarico dati live...');
+        initializeData();
+    }, REFRESH_INTERVAL_MS);
+
+    // Aggiorna anche quando l'utente torna sulla tab dopo essere stato altrove
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            const lastRefresh = parseInt(sessionStorage.getItem('lastRefreshTime') || '0', 10);
+            const now = Date.now();
+            // Ricarica solo se sono passati più di 5 minuti dall'ultimo refresh
+            if (now - lastRefresh > 5 * 60 * 1000) {
+                console.log('Tab tornata visibile: ricarico dati live...');
+                initializeData();
+            }
+        }
+    });
 });
 
 async function initializeData() {
     console.log("Initializing Dashboard Data Integration...");
+    sessionStorage.setItem('lastRefreshTime', Date.now().toString());
     
     // Abort any existing sync process
     if (syncAbortController) {
