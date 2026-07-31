@@ -349,7 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── AUTO-REFRESH DATI LIVE ──────────────────────────────────────────
     // Aggiorna i cambi ogni 30 minuti se la pagina è aperta
-    const REFRESH_INTERVAL_MS = 30 * 60 * 1000; // 30 minuti
+    const REFRESH_INTERVAL_MS = 15 * 60 * 1000; // 15 minuti
     setInterval(() => {
         console.log('Auto-refresh: ricarico dati live...');
         initializeData();
