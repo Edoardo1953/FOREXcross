@@ -112,8 +112,8 @@ const APP_UTILS = {
 
 // Shared Constants
 const SHARED_FALLBACK_RATES = {
-    'EUR': { 'USD': 1.08, 'BRL': 6.12, 'HKD': 8.45, 'GBP': 0.86, 'CAD': 1.48 },
-    'USD': { 'EUR': 0.92, 'BRL': 5.65, 'HKD': 7.82, 'GBP': 0.79, 'CAD': 1.36 },
-    'BRL': { 'EUR': 0.16, 'USD': 0.18, 'HKD': 1.38, 'GBP': 0.14, 'CAD': 0.24 },
-    'GBP': { 'EUR': 1.16, 'USD': 1.25, 'BRL': 7.15, 'HKD': 9.80, 'CAD': 1.71 }
+    'EUR': { 'USD': 1.08, 'BRL': 5.85, 'HKD': 8.45, 'GBP': 0.86, 'CAD': 1.48 },
+    'USD': { 'EUR': 0.92, 'BRL': 5.08, 'HKD': 7.82, 'GBP': 0.79, 'CAD': 1.36 },
+    'BRL': { 'EUR': 0.17, 'USD': 0.20, 'HKD': 1.54, 'GBP': 0.15, 'CAD': 0.28 },
+    'GBP': { 'EUR': 1.16, 'USD': 1.25, 'BRL': 6.83, 'HKD': 9.80, 'CAD': 1.71 }
 };

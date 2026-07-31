@@ -435,19 +435,19 @@ function updateDashboardUI() {
 const SAFE_HISTORY_DATA = {
     'EUR_BRL': [
         { d: "01/01/2016", r: 4.30 }, { d: "01/01/2020", r: 4.60 }, 
-        { d: "01/01/2025", r: 6.18 }
+        { d: "01/01/2025", r: 5.85 }
     ],
     'USD_BRL': [
         { d: "01/01/2016", r: 3.90 }, { d: "01/01/2020", r: 4.05 }, 
-        { d: "01/01/2025", r: 5.85 }
+        { d: "01/01/2025", r: 5.08 }
     ],
     'EUR_USD': [
         { d: "01/01/2016", r: 1.09 }, { d: "01/01/2020", r: 1.12 }, 
-        { d: "01/01/2025", r: 1.05 }
+        { d: "01/01/2025", r: 1.08 }
     ],
     'USD_EUR': [
         { d: "01/01/2016", r: 0.92 }, { d: "01/01/2020", r: 0.89 }, 
-        { d: "01/01/2025", r: 0.95 }
+        { d: "01/01/2025", r: 0.92 }
     ]
 };
 
@@ -460,7 +460,7 @@ async function fetchLiveData(signal) {
     const storageKey = `forex_api_data_${currentBaseCurrency}_${currentTargetCurrency}`;
     const uniqueMap = new Map();
 
-    // 2. RECUPERO CACHE (Istante)
+    // 1. RECUPERO CACHE (Istante)
     try {
         const saved = localStorage.getItem(storageKey);
         if (saved) {
@@ -470,7 +470,7 @@ async function fetchLiveData(signal) {
                 parsed.forEach(item => {
                     if (!item.dateObj || !item.dateStr || item.rate === undefined) return;
                     const dObj = new Date(item.dateObj);
-                    if (dObj >= limit) {
+                    if (!isNaN(dObj.getTime()) && dObj >= limit) {
                         if (!item.isLive) return;
                         uniqueMap.set(item.dateStr, { ...item, dateObj: dObj });
                     }
@@ -481,7 +481,7 @@ async function fetchLiveData(signal) {
         console.warn("Could not load cache for", storageKey, e);
     }
 
-    // 3. RENDER IMMEDIATO
+    // 2. RENDER IMMEDIATO
     if (signal && signal.aborted) return;
     
     // Se la cache è vuota, aggiungiamo un dato statico di emergenza per non mostrare il grafico vuoto mentre carica
@@ -497,34 +497,38 @@ async function fetchLiveData(signal) {
     
     saveAndRenderAll(uniqueMap, storageKey, true); // initial render
 
-    // 4. AVVIO SYNC API IN BACKGROUND (CON DEBOUNCE)
+    // 3. AVVIO SYNC API IN BACKGROUND
     if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-sync fa-spin"></i> ${getTranslation('sync_progress')}`;
     
-    // Timeout per evitare che il sync parta troppo velocemente durante lo switch di valute
     setTimeout(async () => {
         try {
             if (signal && signal.aborted) return;
             const today = new Date();
-            const startDay = new Date(); startDay.setDate(today.getDate() - 90);
+            const startDay = new Date(); startDay.setDate(today.getDate() - 365);
             
-            // Scarica ultimi 3 mesi
+            // Scarica ultimi 12 mesi
             await fetchAndMergeRange(startDay, today, uniqueMap, signal);
             if (signal && signal.aborted) return;
             
-            // Salva ma non renderizzare tutto il Database ancora (pesante)
-            syncGlobalList(uniqueMap);
-            saveToCache(storageKey, historicalRateList);
-            renderChart(); 
-            renderTable();
+            // Se abbiamo ottenuto dati live reali dall'API, rimuoviamo i dati di emergenza non live
+            const hasLiveRecords = Array.from(uniqueMap.values()).some(item => item.isLive);
+            if (hasLiveRecords) {
+                for (const [k, v] of uniqueMap.entries()) {
+                    if (!v.isLive) uniqueMap.delete(k);
+                }
+            }
 
-            // Scarica tutto lo storico mancante
+            // Salva ed esegui un render completo della UI per aggiornare la scheda con il cambio reale
+            saveAndRenderAll(uniqueMap, storageKey, true);
+
+            // Scarica tutto lo storico mancante in background
             await backgroundDeepSync(uniqueMap, storageKey, signal);
         } catch (err) {
             if (err.name === 'AbortError') return;
             console.warn("Background sync error", err);
             if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${getTranslation('offline_mode')}`;
         }
-    }, 500);
+    }, 200);
 
     return true; 
 }
@@ -544,9 +548,9 @@ async function fetchAndMergeRange(start, end, map, signal) {
             if (data && data.rates) {
                 let added = 0;
                 for (const [dStr, rates] of Object.entries(data.rates)) {
-                    if (rates[currentTargetCurrency]) {
+                    if (rates && rates[currentTargetCurrency] !== undefined) {
                         const p = dStr.split('-');
-                        const dObj = new Date(p[0], p[1]-1, p[2]);
+                        const dObj = new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
                         const label = `${String(dObj.getDate()).padStart(2,'0')}/${String(dObj.getMonth()+1).padStart(2,'0')}/${dObj.getFullYear()}`;
                         map.set(label, { dateStr: label, rate: rates[currentTargetCurrency], dateObj: dObj, isLive: true });
                         added++;
@@ -558,7 +562,7 @@ async function fetchAndMergeRange(start, end, map, signal) {
             console.warn(`API responded with status: ${response.status} for ${url}`);
         }
     } catch (err) {
-        if (err.name !== 'AbortError') console.error(`Fetch error for ${currentBaseCurrency}/${currentTargetCurrency}:`, err);
+        if (err && err.name !== 'AbortError') console.error(`Fetch error for ${currentBaseCurrency}/${currentTargetCurrency}:`, err);
     }
 }
 
@@ -576,7 +580,10 @@ async function backgroundDeepSync(map, key, signal) {
     for (let year of years) {
         if (signal && signal.aborted) return;
         
-        const count = Array.from(map.values()).filter(d => d.dateObj.getFullYear() === year).length;
+        const count = Array.from(map.values()).filter(d => {
+            const dObj = d.dateObj instanceof Date ? d.dateObj : new Date(d.dateObj);
+            return !isNaN(dObj.getTime()) && dObj.getFullYear() === year;
+        }).length;
 
         // Se mancano dati per quell'anno, scaricali
         if (count < 100) {
@@ -589,26 +596,21 @@ async function backgroundDeepSync(map, key, signal) {
             await fetchAndMergeRange(startY, fetchEnd, map, signal);
             if (signal && signal.aborted) return;
             
-            // Aggiorniamo la lista globale e la cache
             syncGlobalList(map);
             saveToCache(key, historicalRateList);
             
-            // Ogni 2 anni scaricati, rinfreschiamo la UI per mostrare progresso
             batchCount++;
             if (batchCount % 2 === 0) {
-                // Background sync only refreshes chart and simple table automatically
-                // Full database table is left to the user to avoid freezing
                 renderChart();
                 renderTable();
             }
             
-            await new Promise(r => setTimeout(r, 100)); // Non blocchiamo troppo a lungo
+            await new Promise(r => setTimeout(r, 100));
         }
     }
     
     if (signal && signal.aborted) return;
     
-    // Fine sincronizzazione: rinfreschiamo la UI finale
     syncGlobalList(map);
     saveToCache(key, historicalRateList);
     updateDashboardUI();
@@ -622,6 +624,11 @@ async function backgroundDeepSync(map, key, signal) {
 function syncGlobalList(mapReference) {
     if (!mapReference) return;
     historicalRateList = Array.from(mapReference.values())
+        .filter(d => d && d.rate !== undefined)
+        .map(d => ({
+            ...d,
+            dateObj: (d.dateObj instanceof Date && !isNaN(d.dateObj.getTime())) ? d.dateObj : new Date(d.dateObj)
+        }))
         .filter(d => d.dateObj && !isNaN(d.dateObj.getTime()))
         .sort((a,b) => a.dateObj - b.dateObj);
 }
@@ -634,8 +641,6 @@ function saveAndRenderAll(map, key, fullRender = false) {
         updateDashboardUI();
     }
 }
-
-
 
 function saveToCache(key, list) {
     if (!list || list.length === 0) return;
@@ -652,7 +657,7 @@ function saveToCache(key, list) {
     }
 }
 
-// Tasto Reset Cache - No timeout needed if script is at end of body
+// Tasto Reset Cache
 document.addEventListener('DOMContentLoaded', () => {
     const resetBtn = document.getElementById('resetDataBtn');
     if (resetBtn) {
@@ -666,33 +671,64 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
-
-// formatCurrency and parseDate moved to APP_UTILS
-
-// formatNumberWithSeparators replaced by APP_UTILS.formatNumber
-
 let historicalChartInstance = null;
 let activeChartFrame = '1m'; // Default to 1 Month
 
-// Setup Chart Filter Listeners
-const chartFilterBtns = document.querySelectorAll('.chart-filter-btn');
-if (chartFilterBtns.length > 0 && !chartFilterBtns[0].dataset.listenerAdded) {
-    chartFilterBtns.forEach(btn => {
-        btn.dataset.listenerAdded = 'true';
-        btn.addEventListener('click', (e) => {
-            chartFilterBtns.forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-            activeChartFrame = e.target.getAttribute('data-range');
-            renderChart();
+function setupChartFilterListeners() {
+    const chartFilterBtns = document.querySelectorAll('.chart-filter-btn');
+    if (chartFilterBtns.length > 0) {
+        chartFilterBtns.forEach(btn => {
+            if (!btn.dataset.listenerAdded) {
+                btn.dataset.listenerAdded = 'true';
+                btn.addEventListener('click', async (e) => {
+                    chartFilterBtns.forEach(b => b.classList.remove('active'));
+                    const targetBtn = e.currentTarget || e.target;
+                    targetBtn.classList.add('active');
+                    activeChartFrame = targetBtn.getAttribute('data-range');
+                    
+                    await ensureRangeLoaded(activeChartFrame);
+                    renderChart();
+                });
+            }
         });
-    });
+    }
+}
+
+async function ensureRangeLoaded(range) {
+    if (historicalRateList.length === 0) return;
+    const now = new Date();
+    let targetStartDate = null;
+
+    if (range === '5y') {
+        targetStartDate = new Date(now); targetStartDate.setFullYear(targetStartDate.getFullYear() - 5);
+    } else if (range === '1y') {
+        targetStartDate = new Date(now); targetStartDate.setFullYear(targetStartDate.getFullYear() - 1);
+    } else if (range === '6m') {
+        targetStartDate = new Date(now); targetStartDate.setMonth(targetStartDate.getMonth() - 6);
+    } else if (range === '3m') {
+        targetStartDate = new Date(now); targetStartDate.setMonth(targetStartDate.getMonth() - 3);
+    } else if (range === 'all') {
+        targetStartDate = new Date(now); targetStartDate.setFullYear(targetStartDate.getFullYear() - 10);
+    }
+
+    if (targetStartDate) {
+        const oldestLoaded = historicalRateList[0].dateObj;
+        if (oldestLoaded > targetStartDate) {
+            const storageKey = `forex_api_data_${currentBaseCurrency}_${currentTargetCurrency}`;
+            const mapRef = new Map(historicalRateList.map(item => [item.dateStr, item]));
+            await fetchAndMergeRange(targetStartDate, now, mapRef, syncAbortController ? syncAbortController.signal : null);
+            syncGlobalList(mapRef);
+            saveToCache(storageKey, historicalRateList);
+        }
+    }
 }
 
 function renderChart() {
     const chartCanvas = document.getElementById('historicalChart');
     if (!chartCanvas) return;
     
+    setupChartFilterListeners();
+
     const ctx = chartCanvas.getContext('2d');
 
     if (historicalChartInstance) {
@@ -702,28 +738,27 @@ function renderChart() {
     let chartData = [...historicalRateList];
     if (chartData.length === 0) return;
 
-    // Applica filtro temporale grafico
+    const now = new Date();
+    // Applica filtro temporale grafico usando oggetti Date certi
     if (activeChartFrame === '5y') {
-        const cutoff = new Date(); cutoff.setFullYear(cutoff.getFullYear() - 5);
-        chartData = chartData.filter(d => d.dateObj >= cutoff);
+        const cutoff = new Date(now); cutoff.setFullYear(cutoff.getFullYear() - 5);
+        chartData = chartData.filter(d => (d.dateObj instanceof Date ? d.dateObj : new Date(d.dateObj)) >= cutoff);
     } else if (activeChartFrame === '1y') {
-        const cutoff = new Date(); cutoff.setFullYear(cutoff.getFullYear() - 1);
-        chartData = chartData.filter(d => d.dateObj >= cutoff);
+        const cutoff = new Date(now); cutoff.setFullYear(cutoff.getFullYear() - 1);
+        chartData = chartData.filter(d => (d.dateObj instanceof Date ? d.dateObj : new Date(d.dateObj)) >= cutoff);
     } else if (activeChartFrame === '6m') {
-        const cutoff = new Date(); cutoff.setMonth(cutoff.getMonth() - 6);
-        chartData = chartData.filter(d => d.dateObj >= cutoff);
+        const cutoff = new Date(now); cutoff.setMonth(cutoff.getMonth() - 6);
+        chartData = chartData.filter(d => (d.dateObj instanceof Date ? d.dateObj : new Date(d.dateObj)) >= cutoff);
     } else if (activeChartFrame === '3m') {
-        const cutoff = new Date(); cutoff.setMonth(cutoff.getMonth() - 3);
-        chartData = chartData.filter(d => d.dateObj >= cutoff);
+        const cutoff = new Date(now); cutoff.setMonth(cutoff.getMonth() - 3);
+        chartData = chartData.filter(d => (d.dateObj instanceof Date ? d.dateObj : new Date(d.dateObj)) >= cutoff);
     } else if (activeChartFrame === '1m') {
-        const cutoff = new Date(); cutoff.setMonth(cutoff.getMonth() - 1);
-        chartData = chartData.filter(d => d.dateObj >= cutoff);
+        const cutoff = new Date(now); cutoff.setMonth(cutoff.getMonth() - 1);
+        chartData = chartData.filter(d => (d.dateObj instanceof Date ? d.dateObj : new Date(d.dateObj)) >= cutoff);
     }
     
-    // Fallback: Se il filtro ha svuotato i dati (es. valute con dati vecchi come RUB) 
-    // ma abbiamo dati nello storico, mostriamo gli ultimi 30 record disponibili.
     if (chartData.length === 0 && historicalRateList.length > 0) {
-        chartData = [...historicalRateList].slice(-30);
+        chartData = [...historicalRateList];
     }
 
     const labels = chartData.map(d => d.dateStr); // Use daily date string rather than Month Label
