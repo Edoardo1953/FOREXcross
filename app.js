@@ -154,9 +154,15 @@ function openSearchOverlay(target) {
     currentSearchTarget = target;
     if (searchOverlay) {
         searchOverlay.classList.remove('hidden');
-        renderSearchResults('');
         searchResults.scrollTop = 0;
         setTimeout(() => searchInput.focus(), 100);
+        // If currencies not yet loaded, fetch them now and retry
+        if (Object.keys(allAvailableCurrencies).length === 0) {
+            renderSearchResults('');
+            fetchAllAvailableCurrencies().then(() => renderSearchResults(searchInput ? searchInput.value.toUpperCase() : ''));
+        } else {
+            renderSearchResults('');
+        }
     }
 }
 
@@ -174,13 +180,18 @@ function setupSearchListeners() {
 function renderSearchResults(query = '') {
     if (!searchResults) return;
     searchResults.innerHTML = '';
-    
+
+    if (Object.keys(allAvailableCurrencies).length === 0) {
+        searchResults.innerHTML = `<li style="text-align:center; padding: 20px; color: var(--text-secondary); opacity: 0.7; font-size: 13px;">${getTranslation('loading_rates') || 'Caricamento divise...'}</li>`;
+        return;
+    }
+
     const filtered = Object.entries(allAvailableCurrencies).filter(([code, name]) => {
         return code.includes(query) || name.toUpperCase().includes(query);
     });
 
-    if (Object.keys(allAvailableCurrencies).length === 0) {
-        searchResults.innerHTML = `<li style="text-align:center; padding: 20px; color: var(--text-secondary); opacity: 0.7; font-size: 13px;">${getTranslation('loading_rates') || 'Caricamento divise...'}</li>`;
+    if (filtered.length === 0) {
+        searchResults.innerHTML = `<li style="text-align:center; padding: 20px; color: var(--text-secondary); opacity: 0.7; font-size: 13px;">Nessun risultato per "${query}"</li>`;
         return;
     }
 
