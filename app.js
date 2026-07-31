@@ -393,9 +393,9 @@ async function initializeData() {
         // Hide loader, show dashboard content
         if(globalLoader) globalLoader.classList.add('hidden');
         if(dashboardDataContainer) dashboardDataContainer.classList.remove('hidden');
-        
-        // Final UI updates
-        // REMOVED redundant updateDashboardUI() here as fetchLiveData already handles initial and background renders efficiently
+
+        // Aggiorna il tasso live con open.er-api (stesso provider del Calculator)
+        fetchRealTimeLiveRate(currentSignal);
     } catch (e) {
         if (e.name === 'AbortError') return;
         console.error("Initialization Failed", e);
@@ -410,6 +410,59 @@ async function initializeData() {
                 </div>
             `;
         }
+    }
+}
+
+// ── TASSO LIVE REAL-TIME (open.er-api) ───────────────────────────────────────
+// Recupera il tasso corrente dalla stessa API del Calculator e aggiorna
+// la scheda "Last Rate" nel dashboard, sovrascrivendo il valore BCE di Frankfurter
+async function fetchRealTimeLiveRate(signal) {
+    try {
+        const url = `https://open.er-api.com/v6/latest/${currentBaseCurrency}`;
+        const resp = await fetch(url, signal ? { signal } : {});
+        if (!resp.ok) return;
+        const data = await resp.json();
+        if (!data || !data.rates || !data.rates[currentTargetCurrency]) return;
+
+        const liveRate = data.rates[currentTargetCurrency];
+        const now = new Date();
+        const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+        console.log(`Real-time rate from open.er-api: ${currentBaseCurrency}/${currentTargetCurrency} = ${liveRate}`);
+
+        // Aggiorna la scheda del tasso corrente
+        const latestRateElement = document.getElementById('latestRate');
+        if (latestRateElement) {
+            latestRateElement.innerHTML = APP_UTILS.formatCurrency(liveRate, currentTargetCurrency);
+        }
+
+        // Aggiorna la data con badge Real-Time
+        const latestDateElement = document.getElementById('latestDate');
+        if (latestDateElement) {
+            latestDateElement.innerHTML = `<span style="font-size:10px; background: var(--success, #22c55e); color: white; padding: 2px 8px; border-radius: 20px; font-weight: 700; letter-spacing: 0.5px;">REAL-TIME (${timeStr})</span>`;
+        }
+
+        // Aggiorna anche il record più recente nella lista storica con il valore live
+        if (historicalRateList.length > 0) {
+            const lastRecord = historicalRateList[historicalRateList.length - 1];
+            const prevRate = lastRecord.rate;
+            const trendEl = document.getElementById('brlTrend');
+            const trendParent = trendEl ? trendEl.parentElement : null;
+            if (trendParent && prevRate) {
+                const diff = liveRate - prevRate;
+                const pct = (diff / prevRate) * 100;
+                if (pct >= 0) {
+                    trendParent.className = 'trend positive';
+                    trendParent.innerHTML = `<i class="fa-solid fa-arrow-up"></i> <span id="brlTrend">${Math.abs(pct).toFixed(2)}%</span> ${getTranslation('from_prev')}`;
+                } else {
+                    trendParent.className = 'trend negative';
+                    trendParent.innerHTML = `<i class="fa-solid fa-arrow-down"></i> <span id="brlTrend">${Math.abs(pct).toFixed(2)}%</span> ${getTranslation('from_prev')}`;
+                }
+            }
+        }
+    } catch (e) {
+        if (e && e.name === 'AbortError') return;
+        console.warn('fetchRealTimeLiveRate failed:', e);
     }
 }
 
