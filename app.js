@@ -148,6 +148,43 @@ async function fetchAllAvailableCurrencies() {
     } catch (e) {
         console.warn("Could not fetch full currency list", e);
     }
+
+    // FALLBACK if both local cache and API fetch failed (e.g. CORS / offline / file:// protocol)
+    if (!allAvailableCurrencies || Object.keys(allAvailableCurrencies).length === 0) {
+        allAvailableCurrencies = {
+            "EUR": "Euro",
+            "USD": "United States Dollar",
+            "BRL": "Brazilian Real",
+            "GBP": "British Pound",
+            "CAD": "Canadian Dollar",
+            "HKD": "Hong Kong Dollar",
+            "JPY": "Japanese Yen",
+            "CHF": "Swiss Franc",
+            "AUD": "Australian Dollar",
+            "CNY": "Chinese Renminbi Yuan",
+            "NZD": "New Zealand Dollar",
+            "SGD": "Singapore Dollar",
+            "SEK": "Swedish Krona",
+            "MXN": "Mexican Peso",
+            "INR": "Indian Rupee",
+            "ZAR": "South African Rand",
+            "KRW": "South Korean Won",
+            "TRY": "Turkish Lira",
+            "NOK": "Norwegian Krone",
+            "DKK": "Danish Krone",
+            "PLN": "Polish Złoty",
+            "HUF": "Hungarian Forint",
+            "CZK": "Czech Koruna",
+            "ILS": "Israeli New Shekel",
+            "PHP": "Philippine Peso",
+            "IDR": "Indonesian Rupiah",
+            "MYR": "Malaysian Ringgit",
+            "THB": "Thai Baht",
+            "BGN": "Bulgarian Lev",
+            "RON": "Romanian Leu",
+            "ISK": "Icelandic Króna"
+        };
+    }
 }
 
 function openSearchOverlay(target) {
