@@ -496,3 +496,36 @@ async function checkForUpdates() {
         }
     }
 }
+
+/**
+ * Clear Service Worker cache and local exchange rate data
+ */
+async function clearAppCache() {
+    const confirmMsg = getTranslation('clear_cache_confirm') || "Vuoi cancellare la cache locale e ricaricare l'applicazione?";
+    if (confirm(confirmMsg)) {
+        // Clear all Cache Storage (PWA Assets)
+        if ('caches' in window) {
+            try {
+                const keys = await caches.keys();
+                for (const key of keys) {
+                    await caches.delete(key);
+                }
+                console.log("Service Worker Cache cleared.");
+            } catch (e) {
+                console.error("Failed to clear caches:", e);
+            }
+        }
+
+        // Clear only exchange rates and currencies keys from localStorage
+        for (let i = localStorage.length - 1; i >= 0; i--) {
+            const key = localStorage.key(i);
+            if (key && (key.startsWith('forex_api_data_') || key.startsWith('frankfurter_currencies'))) {
+                localStorage.removeItem(key);
+            }
+        }
+        
+        console.log("Local Storage data cleared.");
+        window.location.reload();
+    }
+}
+

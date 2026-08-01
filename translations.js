@@ -130,7 +130,11 @@ const translations = {
         update_section_title: "Aggiornamenti",
         btn_check_updates: "Controlla Aggiornamenti",
         update_no_new: "L'app è già all'ultima versione.",
-        update_found: "Nuova versione trovata! Ricaricamento..."
+        update_found: "Nuova versione trovata! Ricaricamento...",
+        cache_section_title: "Memoria Cache",
+        cache_section_desc: "Risolvi i problemi di caricamento svuotando la memoria cache temporanea e i dati scaricati.",
+        btn_clear_cache: "Cancella Cache e Dati",
+        clear_cache_confirm: "Vuoi cancellare la cache locale e ricaricare l'applicazione?"
     },
     en: {
         homepage_title: "FOREX<br>Dashboard",
@@ -262,7 +266,11 @@ const translations = {
         update_section_title: "Updates",
         btn_check_updates: "Check for Updates",
         update_no_new: "App is already up to date.",
-        update_found: "New version found! Reloading..."
+        update_found: "New version found! Reloading...",
+        cache_section_title: "App Cache",
+        cache_section_desc: "Solve display or load issues by clearing the temporary cache and downloaded rates data.",
+        btn_clear_cache: "Clear Cache & Data",
+        clear_cache_confirm: "Do you want to clear the local cache and reload the application?"
     },
     fr: {
         homepage_title: "FOREX<br>Dashboard",
@@ -394,7 +402,11 @@ const translations = {
         update_section_title: "Mises à jour",
         btn_check_updates: "Vérifier les mises à jour",
         update_no_new: "L'application est déjà à jour.",
-        update_found: "Nouvelle version trouvée ! Rechargement..."
+        update_found: "Nouvelle version trouvée ! Rechargement...",
+        cache_section_title: "Mémoire Cache",
+        cache_section_desc: "Résolvez les problèmes d'affichage en vidant le cache temporaire et les données téléchargées.",
+        btn_clear_cache: "Effacer le Cache et Données",
+        clear_cache_confirm: "Voulez-vous effacer le cache local et recharger l'application?"
     }
 };
 
