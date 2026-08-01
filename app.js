@@ -140,7 +140,7 @@ async function fetchAllAvailableCurrencies() {
     }
 
     try {
-        const response = await fetch('https://api.frankfurter.app/currencies');
+        const response = await fetch('https://api.frankfurter.dev/v1/currencies');
         if (response.ok) {
             allAvailableCurrencies = await response.json();
             localStorage.setItem('frankfurter_currencies', JSON.stringify(allAvailableCurrencies));
@@ -618,10 +618,11 @@ async function fetchLiveData(signal) {
 
                 // Carica SEMPRE tutti i dati dalla cache (live e non-live = storico anni)
                 parsed.forEach(item => {
-                    if (!item.dateObj || !item.dateStr || item.rate === undefined) return;
-                    const dObj = new Date(item.dateObj);
+                    if (!item.dateStr || item.rate === undefined) return;
+                    // dateObj è ricostruito da dateStr per evitare offset timezone
+                    const dObj = APP_UTILS.parseDate(item.dateStr);
                     if (!isNaN(dObj.getTime()) && dObj >= limit) {
-                        uniqueMap.set(item.dateStr, { ...item, dateObj: dObj });
+                        uniqueMap.set(item.dateStr, { dateStr: item.dateStr, rate: item.rate, dateObj: dObj, isLive: !!item.isLive });
                     }
                 });
 
@@ -653,7 +654,9 @@ async function fetchLiveData(signal) {
             });
         }
     }
-    
+
+    const statusEl2 = document.getElementById('syncStatus');
+    if (statusEl2) statusEl2.innerHTML = `<i class="fa-solid fa-database"></i> Cache: ${uniqueMap.size} record — sincronizzazione...`;
     saveAndRenderAll(uniqueMap, storageKey, true); // initial render
 
     // 3. AVVIO SYNC API IN BACKGROUND
@@ -700,7 +703,7 @@ async function fetchAndMergeRange(start, end, map, signal) {
     const sStr = start.toISOString().split('T')[0];
     const eStr = end.toISOString().split('T')[0];
     try {
-        let url = `https://api.frankfurter.app/${sStr}..${eStr}?to=${currentTargetCurrency}`;
+        let url = `https://api.frankfurter.dev/v1/${sStr}..${eStr}?to=${currentTargetCurrency}`;
         if (currentBaseCurrency !== 'EUR') url += `&from=${currentBaseCurrency}`;
         
         console.log(`Fetching: ${url}`);
@@ -778,7 +781,7 @@ async function backgroundDeepSync(map, key, signal) {
     saveToCache(key, historicalRateList);
     updateDashboardUI();
     
-    if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-check-circle" style="color:var(--success)"></i> ${getTranslation('sync_complete')}`;
+    if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-check-circle" style="color:var(--success)"></i> ${getTranslation('sync_complete')} (${historicalRateList.length} record)`;
 
     // Ri-aggiorna il tasso live dopo il deep sync (backgroundDeepSync può sovrascrivere la UI)
     fetchRealTimeLiveRate();
@@ -790,10 +793,11 @@ async function backgroundDeepSync(map, key, signal) {
 function syncGlobalList(mapReference) {
     if (!mapReference) return;
     historicalRateList = Array.from(mapReference.values())
-        .filter(d => d && d.rate !== undefined)
+        .filter(d => d && d.rate !== undefined && d.dateStr)
         .map(d => ({
             ...d,
-            dateObj: (d.dateObj instanceof Date && !isNaN(d.dateObj.getTime())) ? d.dateObj : new Date(d.dateObj)
+            // Ricostruisce dateObj SEMPRE da dateStr (DD/MM/YYYY) per evitare offset timezone
+            dateObj: APP_UTILS.parseDate(d.dateStr)
         }))
         .filter(d => d.dateObj && !isNaN(d.dateObj.getTime()))
         .sort((a,b) => a.dateObj - b.dateObj);
@@ -811,15 +815,18 @@ function saveAndRenderAll(map, key, fullRender = false) {
 function saveToCache(key, list) {
     if (!list || list.length === 0) return;
     try {
+        // Salva dateObj come YYYY-MM-DD per evitare problemi di fuso orario al ricarico
         const cleanData = list.map(item => ({
             dateStr: item.dateStr,
             rate: item.rate,
-            dateObj: item.dateObj instanceof Date ? item.dateObj.toISOString() : new Date(item.dateObj).toISOString(),
+            dateISO: item.dateObj instanceof Date
+                ? `${item.dateObj.getFullYear()}-${String(item.dateObj.getMonth()+1).padStart(2,'0')}-${String(item.dateObj.getDate()).padStart(2,'0')}`
+                : item.dateStr,
             isLive: item.isLive
         }));
         localStorage.setItem(key, JSON.stringify(cleanData));
-    } catch (err) { 
-        console.warn("Storage error", err);
+    } catch (err) {
+        console.warn('Storage error (localStorage pieno?)', err);
     }
 }
 
