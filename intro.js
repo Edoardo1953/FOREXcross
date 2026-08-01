@@ -183,7 +183,15 @@ async function fetchAndRenderRates() {
                         console.log(`Twelve Data Success for ${tdSymbol}: ${tdData.rate}`);
                         ratesCache[baseCurrency] = ratesCache[baseCurrency] || {};
                         ratesCache[baseCurrency][codesToFetch[0]] = parseFloat(tdData.rate);
-                        
+
+                        // ── Salva in localStorage per condivisione con Historical Rates ──
+                        const cacheKey = `realtime_rate_${baseCurrency}_${codesToFetch[0]}`;
+                        localStorage.setItem(cacheKey, JSON.stringify({
+                            rate: parseFloat(tdData.rate),
+                            ts: Date.now(),
+                            src: 'twelvedata'
+                        }));
+
                         // Aggiorna data nel sottotitolo e mostra badge Real-Time
                         const subtitleEl = document.querySelector('.header-subtitle');
                         const rtBadge = document.getElementById('realTimeBadge');
@@ -217,7 +225,21 @@ async function fetchAndRenderRates() {
             // Uniamo i dati di oggi con quelli real-time (se arrivati)
             const combinedRates = { ...data.rates, ...(ratesCache[baseCurrency] || {}) };
             ratesCache[baseCurrency] = combinedRates;
-            
+
+            // ── Salva ogni tasso in localStorage per condivisione con Historical Rates ──
+            Object.entries(combinedRates).forEach(([targetCode, rate]) => {
+                const cacheKey = `realtime_rate_${baseCurrency}_${targetCode}`;
+                // Salva solo se non c'è già un valore più recente da Twelve Data
+                const existing = JSON.parse(localStorage.getItem(cacheKey) || 'null');
+                if (!existing || existing.src !== 'twelvedata') {
+                    localStorage.setItem(cacheKey, JSON.stringify({
+                        rate: rate,
+                        ts: Date.now(),
+                        src: 'open.er-api'
+                    }));
+                }
+            });
+
             // Se non abbiamo ancora aggiornato il sottotitolo (perché Twelve Data ha fallito o non era EUR/USD)
             const subtitleEl = document.querySelector('.header-subtitle');
             const rtBadge = document.getElementById('realTimeBadge');

@@ -415,86 +415,107 @@ async function initializeData() {
 }
 
 // ── TASSO LIVE REAL-TIME ──────────────────────────────────────────────────────
-// Stessa logica del Calculator: prima Twelve Data, poi open.er-api come fallback
-// Garantisce che entrambe le pagine mostrino lo stesso valore
+// Legge prima dal localStorage condiviso con il Calculator (aggiornato da intro.js).
+// Solo se il valore è vecchio (>5 min) o assente, chiama le API direttamente.
+// Questo garantisce che entrambe le pagine mostrino ESATTAMENTE lo stesso numero.
 async function fetchRealTimeLiveRate() {
-    const rtController = new AbortController();
-    const timeoutId = setTimeout(() => rtController.abort(), 10000);
+    const STALE_MS = 5 * 60 * 1000; // 5 minuti
+    const cacheKey = `realtime_rate_${currentBaseCurrency}_${currentTargetCurrency}`;
     let liveRate = null;
+    let rateSource = '';
 
+    // ── 1. Leggi dal localStorage condiviso con il Calculator ────────────────
     try {
-        // ── 1. Twelve Data (real-time, stessa fonte del Calculator) ──────────
-        const userKey = localStorage.getItem('twelvedata_apikey');
-        const apiKey = userKey || 'demo';
-        const isDemoPair = (currentBaseCurrency === 'EUR' && currentTargetCurrency === 'USD') ||
-                           (currentBaseCurrency === 'USD' && currentTargetCurrency === 'EUR');
+        const cached = JSON.parse(localStorage.getItem(cacheKey) || 'null');
+        if (cached && cached.rate && (Date.now() - cached.ts) < STALE_MS) {
+            liveRate = cached.rate;
+            rateSource = cached.src || 'cache';
+            console.log(`✅ Shared cache (${rateSource}): ${currentBaseCurrency}/${currentTargetCurrency} = ${liveRate}`);
+        }
+    } catch (e) {}
 
-        if (userKey || isDemoPair) {
-            try {
-                const tdSymbol = `${currentBaseCurrency}/${currentTargetCurrency}`;
-                const tdUrl = `https://api.twelvedata.com/exchange_rate?symbol=${tdSymbol}&apikey=${apiKey}`;
-                const tdResp = await fetch(tdUrl, { signal: rtController.signal });
-                if (tdResp.ok) {
-                    const tdData = await tdResp.json();
-                    if (tdData && tdData.rate && !tdData.code) {
-                        liveRate = parseFloat(tdData.rate);
-                        console.log(`✅ Twelve Data: ${tdSymbol} = ${liveRate}`);
+    // ── 2. Se non c'è cache fresca, chiama le API ────────────────────────────
+    if (!liveRate) {
+        const rtController = new AbortController();
+        const timeoutId = setTimeout(() => rtController.abort(), 10000);
+        try {
+            // Prima prova Twelve Data (solo per EUR/USD con demo key)
+            const userKey = localStorage.getItem('twelvedata_apikey');
+            const isDemoPair = (currentBaseCurrency === 'EUR' && currentTargetCurrency === 'USD') ||
+                               (currentBaseCurrency === 'USD' && currentTargetCurrency === 'EUR');
+            if (userKey || isDemoPair) {
+                try {
+                    const apiKey = userKey || 'demo';
+                    const tdUrl = `https://api.twelvedata.com/exchange_rate?symbol=${currentBaseCurrency}/${currentTargetCurrency}&apikey=${apiKey}`;
+                    const tdResp = await fetch(tdUrl, { signal: rtController.signal });
+                    if (tdResp.ok) {
+                        const tdData = await tdResp.json();
+                        if (tdData && tdData.rate && !tdData.code) {
+                            liveRate = parseFloat(tdData.rate);
+                            rateSource = 'twelvedata';
+                            console.log(`✅ Twelve Data: ${currentBaseCurrency}/${currentTargetCurrency} = ${liveRate}`);
+                        }
+                    }
+                } catch (tdErr) {
+                    if (tdErr.name !== 'AbortError') console.warn('Twelve Data fallback');
+                }
+            }
+
+            // Fallback: open.er-api
+            if (!liveRate) {
+                const resp = await fetch(`https://open.er-api.com/v6/latest/${currentBaseCurrency}`, { signal: rtController.signal });
+                if (resp.ok) {
+                    const data = await resp.json();
+                    if (data && data.rates && data.rates[currentTargetCurrency]) {
+                        liveRate = data.rates[currentTargetCurrency];
+                        rateSource = 'open.er-api';
+                        console.log(`✅ open.er-api: ${currentBaseCurrency}/${currentTargetCurrency} = ${liveRate}`);
                     }
                 }
-            } catch (tdErr) {
-                if (tdErr.name !== 'AbortError') console.warn('Twelve Data failed, using open.er-api fallback');
+            }
+            clearTimeout(timeoutId);
+
+            // Salva in localStorage per condivisione futura
+            if (liveRate) {
+                localStorage.setItem(cacheKey, JSON.stringify({ rate: liveRate, ts: Date.now(), src: rateSource }));
+            }
+        } catch (e) {
+            clearTimeout(timeoutId);
+            if (e && e.name !== 'AbortError') console.warn('fetchRealTimeLiveRate API failed:', e);
+        }
+    }
+
+    if (!liveRate) return;
+
+    // ── Aggiorna UI ───────────────────────────────────────────────────────────
+    const now = new Date();
+    const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+    const latestRateElement = document.getElementById('latestRate');
+    if (latestRateElement) {
+        latestRateElement.innerHTML = APP_UTILS.formatCurrency(liveRate, currentTargetCurrency);
+    }
+
+    const latestDateElement = document.getElementById('latestDate');
+    if (latestDateElement) {
+        latestDateElement.innerHTML = `<span style="font-size:10px; background:#22c55e; color:white; padding:2px 8px; border-radius:20px; font-weight:700; letter-spacing:0.5px;">REAL-TIME (${timeStr})</span>`;
+    }
+
+    // Variazione % rispetto all'ultimo dato storico
+    if (historicalRateList.length > 0) {
+        const prevRate = historicalRateList[historicalRateList.length - 1].rate;
+        const trendEl = document.getElementById('brlTrend');
+        const trendParent = trendEl ? trendEl.parentElement : null;
+        if (trendParent && prevRate) {
+            const pct = ((liveRate - prevRate) / prevRate) * 100;
+            if (pct >= 0) {
+                trendParent.className = 'trend positive';
+                trendParent.innerHTML = `<i class="fa-solid fa-arrow-up"></i> <span id="brlTrend">${Math.abs(pct).toFixed(2)}%</span> ${getTranslation('from_prev')}`;
+            } else {
+                trendParent.className = 'trend negative';
+                trendParent.innerHTML = `<i class="fa-solid fa-arrow-down"></i> <span id="brlTrend">${Math.abs(pct).toFixed(2)}%</span> ${getTranslation('from_prev')}`;
             }
         }
-
-        // ── 2. open.er-api (fallback, usato per tutte le altre coppie) ───────
-        if (!liveRate) {
-            const url = `https://open.er-api.com/v6/latest/${currentBaseCurrency}`;
-            const resp = await fetch(url, { signal: rtController.signal });
-            if (resp.ok) {
-                const data = await resp.json();
-                if (data && data.rates && data.rates[currentTargetCurrency]) {
-                    liveRate = data.rates[currentTargetCurrency];
-                    console.log(`✅ open.er-api: ${currentBaseCurrency}/${currentTargetCurrency} = ${liveRate}`);
-                }
-            }
-        }
-
-        clearTimeout(timeoutId);
-        if (!liveRate) return;
-
-        // ── Aggiorna UI ───────────────────────────────────────────────────────
-        const now = new Date();
-        const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-
-        const latestRateElement = document.getElementById('latestRate');
-        if (latestRateElement) {
-            latestRateElement.innerHTML = APP_UTILS.formatCurrency(liveRate, currentTargetCurrency);
-        }
-
-        const latestDateElement = document.getElementById('latestDate');
-        if (latestDateElement) {
-            latestDateElement.innerHTML = `<span style="font-size:10px; background:#22c55e; color:white; padding:2px 8px; border-radius:20px; font-weight:700; letter-spacing:0.5px;">REAL-TIME (${timeStr})</span>`;
-        }
-
-        // Variazione % rispetto all'ultimo dato storico
-        if (historicalRateList.length > 0) {
-            const prevRate = historicalRateList[historicalRateList.length - 1].rate;
-            const trendEl = document.getElementById('brlTrend');
-            const trendParent = trendEl ? trendEl.parentElement : null;
-            if (trendParent && prevRate) {
-                const pct = ((liveRate - prevRate) / prevRate) * 100;
-                if (pct >= 0) {
-                    trendParent.className = 'trend positive';
-                    trendParent.innerHTML = `<i class="fa-solid fa-arrow-up"></i> <span id="brlTrend">${Math.abs(pct).toFixed(2)}%</span> ${getTranslation('from_prev')}`;
-                } else {
-                    trendParent.className = 'trend negative';
-                    trendParent.innerHTML = `<i class="fa-solid fa-arrow-down"></i> <span id="brlTrend">${Math.abs(pct).toFixed(2)}%</span> ${getTranslation('from_prev')}`;
-                }
-            }
-        }
-    } catch (e) {
-        clearTimeout(timeoutId);
-        if (e && e.name !== 'AbortError') console.warn('fetchRealTimeLiveRate failed:', e);
     }
 }
 
