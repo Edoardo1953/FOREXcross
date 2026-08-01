@@ -601,34 +601,36 @@ async function fetchLiveData(signal) {
     const storageKey = `forex_api_data_${currentBaseCurrency}_${currentTargetCurrency}`;
     const uniqueMap = new Map();
 
-    // 1. RECUPERO CACHE (Istante)
+    // 1. RECUPERO CACHE (Istante) — carica TUTTI i dati storici inclusi anni precedenti
     try {
         const saved = localStorage.getItem(storageKey);
         if (saved) {
             const parsed = JSON.parse(saved);
             if (Array.isArray(parsed) && parsed.length > 0) {
                 // ── CONTROLLO FRESCHEZZA CACHE ──────────────────────────────
-                // Se l'ultimo dato salvato è più vecchio di 7 giorni, svuota la cache
-                // per forzare un re-download fresco dall'API
+                // Se l'ultimo dato live è più vecchio di 7 giorni, forza solo
+                // il re-download degli ultimi 365 giorni (non cancellare tutto!)
                 const sortedByDate = parsed
                     .filter(item => item.dateObj && item.isLive)
                     .sort((a, b) => new Date(b.dateObj) - new Date(a.dateObj));
+
+                const limit = new Date(); limit.setFullYear(today.getFullYear() - 10);
+
+                // Carica SEMPRE tutti i dati dalla cache (live e non-live = storico anni)
+                parsed.forEach(item => {
+                    if (!item.dateObj || !item.dateStr || item.rate === undefined) return;
+                    const dObj = new Date(item.dateObj);
+                    if (!isNaN(dObj.getTime()) && dObj >= limit) {
+                        uniqueMap.set(item.dateStr, { ...item, dateObj: dObj });
+                    }
+                });
+
                 if (sortedByDate.length > 0) {
                     const lastDate = new Date(sortedByDate[0].dateObj);
                     const daysDiff = (today - lastDate) / (1000 * 60 * 60 * 24);
                     if (daysDiff > 7) {
-                        console.warn(`Cache per ${storageKey} obsoleta (${daysDiff.toFixed(0)} giorni). Forzo re-download.`);
-                        localStorage.removeItem(storageKey);
-                    } else {
-                        const limit = new Date(); limit.setFullYear(today.getFullYear() - 10);
-                        parsed.forEach(item => {
-                            if (!item.dateObj || !item.dateStr || item.rate === undefined) return;
-                            const dObj = new Date(item.dateObj);
-                            if (!isNaN(dObj.getTime()) && dObj >= limit) {
-                                if (!item.isLive) return;
-                                uniqueMap.set(item.dateStr, { ...item, dateObj: dObj });
-                            }
-                        });
+                        console.warn(`Cache ${storageKey} obsoleta (${daysDiff.toFixed(0)}gg): forzo refresh ultimi 365g.`);
+                        // Non cancelliamo la cache, la aggiorneremo con i nuovi dati
                     }
                 }
             }
@@ -636,6 +638,7 @@ async function fetchLiveData(signal) {
     } catch (e) {
         console.warn("Could not load cache for", storageKey, e);
     }
+
 
     // 2. RENDER IMMEDIATO
     if (signal && signal.aborted) return;
@@ -666,11 +669,14 @@ async function fetchLiveData(signal) {
             await fetchAndMergeRange(startDay, today, uniqueMap, signal);
             if (signal && signal.aborted) return;
             
-            // Se abbiamo ottenuto dati live reali dall'API, rimuoviamo i dati di emergenza non live
+            // Rimuovi solo i dati statici di emergenza (isLive: false) che ricadono
+            // nell'intervallo appena scaricato. NON toccare i dati storici degli anni precedenti.
             const hasLiveRecords = Array.from(uniqueMap.values()).some(item => item.isLive);
             if (hasLiveRecords) {
                 for (const [k, v] of uniqueMap.entries()) {
-                    if (!v.isLive) uniqueMap.delete(k);
+                    if (!v.isLive && v.dateObj >= startDay) {
+                        uniqueMap.delete(k); // cancella solo i placeholder nel range 365gg
+                    }
                 }
             }
 
@@ -685,6 +691,7 @@ async function fetchLiveData(signal) {
             if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${getTranslation('offline_mode')}`;
         }
     }, 200);
+
 
     return true; 
 }
