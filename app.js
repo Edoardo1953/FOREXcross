@@ -395,7 +395,8 @@ async function initializeData() {
         if(dashboardDataContainer) dashboardDataContainer.classList.remove('hidden');
 
         // Aggiorna il tasso live con open.er-api (stesso provider del Calculator)
-        fetchRealTimeLiveRate(currentSignal);
+        // Chiamata senza signal per non essere interrotta dal sync storico
+        fetchRealTimeLiveRate();
     } catch (e) {
         if (e.name === 'AbortError') return;
         console.error("Initialization Failed", e);
@@ -414,12 +415,15 @@ async function initializeData() {
 }
 
 // ── TASSO LIVE REAL-TIME (open.er-api) ───────────────────────────────────────
-// Recupera il tasso corrente dalla stessa API del Calculator e aggiorna
-// la scheda "Last Rate" nel dashboard, sovrascrivendo il valore BCE di Frankfurter
-async function fetchRealTimeLiveRate(signal) {
+// Recupera il tasso corrente dalla stessa API del Calculator (open.er-api)
+// e aggiorna la scheda "Last Rate" nel dashboard con 4 decimali + badge REAL-TIME
+async function fetchRealTimeLiveRate() {
+    const rtController = new AbortController();
+    const timeoutId = setTimeout(() => rtController.abort(), 8000);
     try {
         const url = `https://open.er-api.com/v6/latest/${currentBaseCurrency}`;
-        const resp = await fetch(url, signal ? { signal } : {});
+        const resp = await fetch(url, { signal: rtController.signal });
+        clearTimeout(timeoutId);
         if (!resp.ok) return;
         const data = await resp.json();
         if (!data || !data.rates || !data.rates[currentTargetCurrency]) return;
@@ -428,29 +432,27 @@ async function fetchRealTimeLiveRate(signal) {
         const now = new Date();
         const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
-        console.log(`Real-time rate from open.er-api: ${currentBaseCurrency}/${currentTargetCurrency} = ${liveRate}`);
+        console.log(`✅ Real-time: ${currentBaseCurrency}/${currentTargetCurrency} = ${liveRate} @ ${timeStr}`);
 
-        // Aggiorna la scheda del tasso corrente
+        // Aggiorna la scheda del tasso corrente con 4 decimali
         const latestRateElement = document.getElementById('latestRate');
         if (latestRateElement) {
             latestRateElement.innerHTML = APP_UTILS.formatCurrency(liveRate, currentTargetCurrency);
         }
 
-        // Aggiorna la data con badge Real-Time
+        // Badge REAL-TIME verde con orario
         const latestDateElement = document.getElementById('latestDate');
         if (latestDateElement) {
-            latestDateElement.innerHTML = `<span style="font-size:10px; background: var(--success, #22c55e); color: white; padding: 2px 8px; border-radius: 20px; font-weight: 700; letter-spacing: 0.5px;">REAL-TIME (${timeStr})</span>`;
+            latestDateElement.innerHTML = `<span style="font-size:10px; background:#22c55e; color:white; padding:2px 8px; border-radius:20px; font-weight:700; letter-spacing:0.5px;">REAL-TIME (${timeStr})</span>`;
         }
 
-        // Aggiorna anche il record più recente nella lista storica con il valore live
+        // Aggiorna la variazione % rispetto all'ultimo dato storico BCE
         if (historicalRateList.length > 0) {
-            const lastRecord = historicalRateList[historicalRateList.length - 1];
-            const prevRate = lastRecord.rate;
+            const prevRate = historicalRateList[historicalRateList.length - 1].rate;
             const trendEl = document.getElementById('brlTrend');
             const trendParent = trendEl ? trendEl.parentElement : null;
             if (trendParent && prevRate) {
-                const diff = liveRate - prevRate;
-                const pct = (diff / prevRate) * 100;
+                const pct = ((liveRate - prevRate) / prevRate) * 100;
                 if (pct >= 0) {
                     trendParent.className = 'trend positive';
                     trendParent.innerHTML = `<i class="fa-solid fa-arrow-up"></i> <span id="brlTrend">${Math.abs(pct).toFixed(2)}%</span> ${getTranslation('from_prev')}`;
@@ -461,8 +463,8 @@ async function fetchRealTimeLiveRate(signal) {
             }
         }
     } catch (e) {
-        if (e && e.name === 'AbortError') return;
-        console.warn('fetchRealTimeLiveRate failed:', e);
+        clearTimeout(timeoutId);
+        if (e && e.name !== 'AbortError') console.warn('fetchRealTimeLiveRate failed:', e);
     }
 }
 
@@ -472,18 +474,19 @@ async function fetchRealTimeLiveRate(signal) {
 function updateDashboardUI() {
     console.log(`Updating dashboard with base currency: ${currentBaseCurrency}`);
 
-    // Update the UI texts
+    // Update the UI texts — il tasso live viene gestito da fetchRealTimeLiveRate()
+    // updateDashboardUI aggiorna solo la struttura, non sovrascrive il badge REAL-TIME
     const latestRateElement = document.getElementById('latestRate');
+    const latestDateElement = document.getElementById('latestDate');
     if (latestRateElement && historicalRateList.length > 0) {
-        // Assume last item is the most recent
         const lastRecord = historicalRateList[historicalRateList.length - 1];
         const prevRecord = historicalRateList.length > 1 ? historicalRateList[historicalRateList.length - 2] : null;
 
-        latestRateElement.innerHTML = APP_UTILS.formatCurrency(lastRecord.rate, currentTargetCurrency);
-
-        const latestDateElement = document.getElementById('latestDate');
-        if (latestDateElement) {
-            latestDateElement.innerHTML = '';
+        // Mostra il tasso BCE solo se non c'è già un valore REAL-TIME
+        const hasRealTime = latestDateElement && latestDateElement.innerHTML.includes('REAL-TIME');
+        if (!hasRealTime) {
+            latestRateElement.innerHTML = APP_UTILS.formatCurrency(lastRecord.rate, currentTargetCurrency);
+            if (latestDateElement) latestDateElement.innerHTML = '';
         }
 
         const trendEl = document.getElementById('brlTrend');
@@ -502,6 +505,7 @@ function updateDashboardUI() {
             }
         }
     }
+
 
     updateLabels();
 
@@ -717,6 +721,9 @@ async function backgroundDeepSync(map, key, signal) {
     updateDashboardUI();
     
     if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-check-circle" style="color:var(--success)"></i> ${getTranslation('sync_complete')}`;
+
+    // Ri-aggiorna il tasso live dopo il deep sync (backgroundDeepSync può sovrascrivere la UI)
+    fetchRealTimeLiveRate();
 }
 
 /**
