@@ -414,39 +414,69 @@ async function initializeData() {
     }
 }
 
-// ── TASSO LIVE REAL-TIME (open.er-api) ───────────────────────────────────────
-// Recupera il tasso corrente dalla stessa API del Calculator (open.er-api)
-// e aggiorna la scheda "Last Rate" nel dashboard con 4 decimali + badge REAL-TIME
+// ── TASSO LIVE REAL-TIME ──────────────────────────────────────────────────────
+// Stessa logica del Calculator: prima Twelve Data, poi open.er-api come fallback
+// Garantisce che entrambe le pagine mostrino lo stesso valore
 async function fetchRealTimeLiveRate() {
     const rtController = new AbortController();
-    const timeoutId = setTimeout(() => rtController.abort(), 8000);
-    try {
-        const url = `https://open.er-api.com/v6/latest/${currentBaseCurrency}`;
-        const resp = await fetch(url, { signal: rtController.signal });
-        clearTimeout(timeoutId);
-        if (!resp.ok) return;
-        const data = await resp.json();
-        if (!data || !data.rates || !data.rates[currentTargetCurrency]) return;
+    const timeoutId = setTimeout(() => rtController.abort(), 10000);
+    let liveRate = null;
 
-        const liveRate = data.rates[currentTargetCurrency];
+    try {
+        // ── 1. Twelve Data (real-time, stessa fonte del Calculator) ──────────
+        const userKey = localStorage.getItem('twelvedata_apikey');
+        const apiKey = userKey || 'demo';
+        const isDemoPair = (currentBaseCurrency === 'EUR' && currentTargetCurrency === 'USD') ||
+                           (currentBaseCurrency === 'USD' && currentTargetCurrency === 'EUR');
+
+        if (userKey || isDemoPair) {
+            try {
+                const tdSymbol = `${currentBaseCurrency}/${currentTargetCurrency}`;
+                const tdUrl = `https://api.twelvedata.com/exchange_rate?symbol=${tdSymbol}&apikey=${apiKey}`;
+                const tdResp = await fetch(tdUrl, { signal: rtController.signal });
+                if (tdResp.ok) {
+                    const tdData = await tdResp.json();
+                    if (tdData && tdData.rate && !tdData.code) {
+                        liveRate = parseFloat(tdData.rate);
+                        console.log(`✅ Twelve Data: ${tdSymbol} = ${liveRate}`);
+                    }
+                }
+            } catch (tdErr) {
+                if (tdErr.name !== 'AbortError') console.warn('Twelve Data failed, using open.er-api fallback');
+            }
+        }
+
+        // ── 2. open.er-api (fallback, usato per tutte le altre coppie) ───────
+        if (!liveRate) {
+            const url = `https://open.er-api.com/v6/latest/${currentBaseCurrency}`;
+            const resp = await fetch(url, { signal: rtController.signal });
+            if (resp.ok) {
+                const data = await resp.json();
+                if (data && data.rates && data.rates[currentTargetCurrency]) {
+                    liveRate = data.rates[currentTargetCurrency];
+                    console.log(`✅ open.er-api: ${currentBaseCurrency}/${currentTargetCurrency} = ${liveRate}`);
+                }
+            }
+        }
+
+        clearTimeout(timeoutId);
+        if (!liveRate) return;
+
+        // ── Aggiorna UI ───────────────────────────────────────────────────────
         const now = new Date();
         const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
-        console.log(`✅ Real-time: ${currentBaseCurrency}/${currentTargetCurrency} = ${liveRate} @ ${timeStr}`);
-
-        // Aggiorna la scheda del tasso corrente con 4 decimali
         const latestRateElement = document.getElementById('latestRate');
         if (latestRateElement) {
             latestRateElement.innerHTML = APP_UTILS.formatCurrency(liveRate, currentTargetCurrency);
         }
 
-        // Badge REAL-TIME verde con orario
         const latestDateElement = document.getElementById('latestDate');
         if (latestDateElement) {
             latestDateElement.innerHTML = `<span style="font-size:10px; background:#22c55e; color:white; padding:2px 8px; border-radius:20px; font-weight:700; letter-spacing:0.5px;">REAL-TIME (${timeStr})</span>`;
         }
 
-        // Aggiorna la variazione % rispetto all'ultimo dato storico BCE
+        // Variazione % rispetto all'ultimo dato storico
         if (historicalRateList.length > 0) {
             const prevRate = historicalRateList[historicalRateList.length - 1].rate;
             const trendEl = document.getElementById('brlTrend');
