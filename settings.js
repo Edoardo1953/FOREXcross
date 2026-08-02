@@ -6,11 +6,7 @@
 (function() {
     const savedTheme = localStorage.getItem('app_theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
-    
-    const savedBg = localStorage.getItem('app_bg') || 'default';
-    if (savedBg !== 'default') {
-        document.documentElement.setAttribute('data-bg', savedBg);
-    }
+    localStorage.removeItem('app_bg'); // Clean up old background setting if exists
 })();
 
 // Global Admin State
@@ -24,9 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
 function initSettings() {
     const savedTheme = localStorage.getItem('app_theme') || 'dark';
     setTheme(savedTheme, false); // Initialize without saving again
-    
-    const savedBg = localStorage.getItem('app_bg') || 'default';
-    setBackground(savedBg, false);
 
     updateManualLinks();
     applyAdminUI(); // Initial Admin UI state
@@ -55,9 +48,6 @@ function initSettings() {
     window.addEventListener('storage', (e) => {
         if (e.key === 'app_theme') {
             setTheme(e.newValue, false);
-        }
-        if (e.key === 'app_bg') {
-            setBackground(e.newValue, false);
         }
         if (e.key === 'app_language') {
             updateManualLinks();
@@ -264,17 +254,10 @@ function togglePrivacy(show) {
 }
 
 function setTheme(theme, save = true) {
+    console.log("setTheme called with:", theme, "save:", save);
     document.documentElement.setAttribute('data-theme', theme);
     if (save) {
         localStorage.setItem('app_theme', theme);
-    }
-    
-    // Automatically reset background to default if it was black when switching to light theme
-    if (theme === 'light') {
-        const savedBg = localStorage.getItem('app_bg') || 'default';
-        if (savedBg === 'black') {
-            setBackground('default', save);
-        }
     }
     
     // Update switch buttons UI
@@ -291,27 +274,9 @@ function setTheme(theme, save = true) {
     window.dispatchEvent(new CustomEvent('themeChanged', { detail: theme }));
 }
 
-function setBackground(bg, save = true) {
-    if (bg === 'default') {
-        document.documentElement.removeAttribute('data-bg');
-    } else {
-        document.documentElement.setAttribute('data-bg', bg);
-    }
-    
-    if (save) {
-        localStorage.setItem('app_bg', bg);
-    }
-    
-    // Update switch buttons UI
-    const btns = document.querySelectorAll('.bg-switch-btn');
-    btns.forEach(btn => {
-        if (btn.getAttribute('data-bg') === bg) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
-    });
-}
+// Bind to window to guarantee global access
+window.setTheme = setTheme;
+window.toggleSettings = toggleSettings;
 
 /**
  * ADMIN MODE LOGIC

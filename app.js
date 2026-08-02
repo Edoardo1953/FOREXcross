@@ -85,6 +85,10 @@ function triggerCustomFetch() {
         currentBaseCurrency = base;
         currentTargetCurrency = target;
         
+        // Save selected currencies to sessionStorage
+        sessionStorage.setItem('custom_base_currency', base);
+        sessionStorage.setItem('custom_target_currency', target);
+        
         updateLabels();
 
         const globalLoader = document.getElementById('globalLoader');
@@ -352,9 +356,9 @@ document.getElementById('exportExcelBtn').addEventListener('click', exportDataba
 
 // --- Initialization Logic ---
 document.addEventListener('DOMContentLoaded', () => {
-    // ALWAYS Default to EUR / USD on load as requested
-    currentBaseCurrency = 'EUR';
-    currentTargetCurrency = 'USD';
+    // Load from sessionStorage if present, otherwise default to EUR / USD
+    currentBaseCurrency = sessionStorage.getItem('custom_base_currency') || 'EUR';
+    currentTargetCurrency = sessionStorage.getItem('custom_target_currency') || 'USD';
 
     updateGroupTitles();
 

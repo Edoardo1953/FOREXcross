@@ -251,16 +251,16 @@ body.admin-active .btn-delete-manual.admin-only {
 }
 
 [data-theme='dark'] {
-    --bg-main: #050505;          /* Deep Luxury Black */
-    --bg-sidebar: #0a0a0a;       /* Darker sidebar */
-    --bg-card: #121212;          /* Luxury Card black */
-    --bg-hover: #1e1e1e;         /* Muted hover */
+    --bg-main: #000000;          /* Pure Black Background */
+    --bg-sidebar: #18181b;       /* Dark Grey fields/sidebar */
+    --bg-card: #27272a;          /* Grey Cards/Fields */
+    --bg-hover: #3f3f46;         /* Muted hover */
     --text-primary: #f8fafc;     /* Off-white text */
-    --text-secondary: #94a3b8;   /* Muted slate text */
-    --text-muted: #64748b;       
+    --text-secondary: #cbd5e1;   /* Muted slate text */
+    --text-muted: #94a3b8;       
     --glass-bg: rgba(15, 23, 42, 0.8);
     --glass-border: rgba(255, 255, 255, 0.05);
-    --border-color: rgba(255, 255, 255, 0.1);
+    --border-color: rgba(255, 255, 255, 0.08);
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
@@ -271,16 +271,16 @@ body.admin-active .btn-delete-manual.admin-only {
 }
 
 [data-theme='light'] {
-    --bg-main: #f8fafc;          /* Light Slate background */
-    --bg-sidebar: #ffffff;       /* Pure white sidebar */
-    --bg-card: #ffffff;          /* White cards */
-    --bg-hover: #f1f5f9;         /* Subtle light hover */
-    --text-primary: #000000;     /* Pure Black for better contrast */
+    --bg-main: #e2e8f0;          /* Grey Background */
+    --bg-sidebar: #f1f5f9;       /* Light sidebar */
+    --bg-card: #ffffff;          /* White Cards/Fields */
+    --bg-hover: #cbd5e1;         /* Muted light hover */
+    --text-primary: #000000;     /* Pure Black text */
     --text-secondary: #475569;   /* Darker slate text */
     --text-muted: #64748b;       
     --glass-bg: rgba(255, 255, 255, 0.8);
     --glass-border: rgba(0, 0, 0, 0.05);
-    --border-color: rgba(0, 0, 0, 0.08);
+    --border-color: rgba(0, 0, 0, 0.12);
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.05);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -310,45 +310,7 @@ body.admin-active .btn-delete-manual.admin-only {
     background-color: var(--border-color);
 }
 
-/* === BACKGROUND COLOR VARIATIONS === */
-[data-bg='black'] {
-    --bg-main: #000000;
-    --bg-sidebar: #050505;
-    --bg-card: #0a0a0a;
-    --bg-hover: #151515;
-    --border-color: rgba(255, 255, 255, 0.05);
-    /* Force light text on black background even if theme is light */
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
-    --glass-bg: rgba(15, 23, 42, 0.8);
-    --glass-border: rgba(255, 255, 255, 0.05);
-}
 
-[data-bg='black'] .numpad-section, 
-[data-bg='black'] .intro-header,
-[data-bg='black'] .numpad-grid button:not(.ac-key):not(.backspace-key):not(.op-key) {
-    background-color: var(--bg-sidebar) !important;
-    color: var(--text-primary) !important;
-}
-
-[data-bg='gray'] {
-    --bg-main: #e2e8f0;          /* Light Slate/Gray background */
-    --bg-sidebar: #f1f5f9;       /* Slate 100 sidebar */
-    --bg-card: #ffffff;          /* White cards */
-    --bg-hover: #cbd5e1;         /* Slate 300 hover */
-    --text-primary: #0f172a;     /* Dark slate text */
-    --text-secondary: #475569;   /* Slate 700 secondary text */
-    --text-muted: #64748b;       /* Slate 500 muted text */
-    --border-color: rgba(0, 0, 0, 0.12);
-    --glass-bg: rgba(255, 255, 255, 0.85);
-    --glass-border: rgba(0, 0, 0, 0.08);
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.05);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
-    --shadow-glow: 0 0 15px rgba(59, 130, 246, 0.15);
-}
 
 /* Apply transitions to background colors */
 body, .intro-app-container, .main-content, .intro-header, .numpad-section, .settings-container {
