@@ -855,10 +855,7 @@ html, body {
 .intro-titles.centered h1 {
     font-size: 52px; /* Large premium title */
     font-weight: 900;
-    background: linear-gradient(135deg, #fff, #3b82f6);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--accent-primary);
     letter-spacing: 0px; /* Reset for better vertical stacking */
     line-height: 0.9; /* Keeps words close together for the F-above-D effect */
     margin: 0;
@@ -1860,10 +1857,7 @@ tbody tr:hover {
     font-size: 32px; /* Increased from 20px */
     font-weight: 800;
     letter-spacing: -0.5px;
-    background: var(--accent-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--accent-primary);
 }
 
 .header-controls-container {
