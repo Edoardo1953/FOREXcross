@@ -269,6 +269,14 @@ function setTheme(theme, save = true) {
         localStorage.setItem('app_theme', theme);
     }
     
+    // Automatically reset background to default if it was black when switching to light theme
+    if (theme === 'light') {
+        const savedBg = localStorage.getItem('app_bg') || 'default';
+        if (savedBg === 'black') {
+            setBackground('default', save);
+        }
+    }
+    
     // Update switch buttons UI
     const btns = document.querySelectorAll('.theme-switch-btn');
     btns.forEach(btn => {
