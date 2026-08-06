@@ -53,6 +53,7 @@ async function initApp() {
     setupNumpad();
     setupSearchListeners();
     setupNumpadToggle();
+    setupRefreshButton();
 
     // Listen for language changes to update UI strings
     window.addEventListener('languageChanged', () => {
@@ -588,5 +589,28 @@ function evaluateBaseAmount(str) {
     } catch (e) {
         // Fallback al semplice parseFloat se l'espressione è incompleta o errata
         return parseFloat(expr) || 0;
+    }
+}
+
+function setupRefreshButton() {
+    const refreshBtn = document.getElementById('refreshRatesBtn');
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', async () => {
+            const icon = refreshBtn.querySelector('i');
+            if (icon) icon.classList.add('fa-spin');
+            refreshBtn.disabled = true;
+            try {
+                const codesToFetch = displayedCurrencies.map(c => c.code).filter(c => c !== baseCurrency);
+                codesToFetch.forEach(code => {
+                    localStorage.removeItem(`realtime_rate_${baseCurrency}_${code}`);
+                });
+                await fetchAndRenderRates();
+            } catch (e) {
+                console.error("Refresh failed", e);
+            } finally {
+                if (icon) icon.classList.remove('fa-spin');
+                refreshBtn.disabled = false;
+            }
+        });
     }
 }

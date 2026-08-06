@@ -377,6 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Init search overlay
     fetchAllAvailableCurrencies();
     setupSearchListeners();
+    setupRefreshButton();
 
     // Listen for language changes to update UI components
     window.addEventListener('languageChanged', () => {
@@ -1348,4 +1349,45 @@ function exportDatabaseToExcel() {
     // Salva il file
     const fileName = `FOREX_${currentBaseCurrency}_${currentTargetCurrency}_Historical_Data.xlsx`;
     XLSX.writeFile(wb, fileName);
+}
+
+function setupRefreshButton() {
+    const refreshBtn = document.getElementById('refreshRatesBtn');
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', async () => {
+            const icon = refreshBtn.querySelector('i');
+            if (icon) icon.classList.add('fa-spin');
+            refreshBtn.disabled = true;
+            try {
+                const storageKey = `forex_api_data_${currentBaseCurrency}_${currentTargetCurrency}`;
+                localStorage.removeItem(storageKey);
+                
+                const cacheKey = `realtime_rate_${currentBaseCurrency}_${currentTargetCurrency}`;
+                localStorage.removeItem(cacheKey);
+
+                const globalLoader = document.getElementById('globalLoader');
+                const dashboardDataContainer = document.getElementById('dashboardData');
+                if (globalLoader) {
+                    globalLoader.classList.remove('hidden');
+                    globalLoader.innerHTML = `
+                        <div class="upload-card">
+                            <div class="upload-icon-container" style="animation: pulse 1.5s infinite;">
+                                <i class="fa-solid fa-cloud-arrow-down"></i>
+                            </div>
+                            <h2 data-i18n="loader_sync_title">${getTranslation('loader_sync_title')}</h2>
+                            <p data-i18n="loader_sync_text">${getTranslation('loader_sync_text')}</p>
+                        </div>
+                    `;
+                }
+                if (dashboardDataContainer) dashboardDataContainer.classList.add('hidden');
+
+                await initializeData();
+            } catch (e) {
+                console.error("Refresh failed", e);
+            } finally {
+                if (icon) icon.classList.remove('fa-spin');
+                refreshBtn.disabled = false;
+            }
+        });
+    }
 }

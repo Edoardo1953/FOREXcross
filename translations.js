@@ -135,7 +135,8 @@ const translations = {
         cache_section_title: "Memoria Cache",
         cache_section_desc: "Risolvi i problemi di caricamento svuotando la memoria cache temporanea e i dati scaricati.",
         btn_clear_cache: "Cancella Cache e Dati",
-        clear_cache_confirm: "Vuoi cancellare la cache locale e ricaricare l'applicazione?"
+        clear_cache_confirm: "Vuoi cancellare la cache locale e ricaricare l'applicazione?",
+        btn_refresh: "Aggiorna"
     },
     en: {
         homepage_title: "FOREX<br>Dashboard",
@@ -272,7 +273,8 @@ const translations = {
         cache_section_title: "App Cache",
         cache_section_desc: "Solve display or load issues by clearing the temporary cache and downloaded rates data.",
         btn_clear_cache: "Clear Cache & Data",
-        clear_cache_confirm: "Do you want to clear the local cache and reload the application?"
+        clear_cache_confirm: "Do you want to clear the local cache and reload the application?",
+        btn_refresh: "Refresh"
     },
     fr: {
         homepage_title: "FOREX<br>Dashboard",
@@ -409,7 +411,8 @@ const translations = {
         cache_section_title: "Mémoire Cache",
         cache_section_desc: "Résolvez les problèmes d'affichage en vidant le cache temporaire et les données téléchargées.",
         btn_clear_cache: "Effacer le Cache et Données",
-        clear_cache_confirm: "Voulez-vous effacer le cache local et recharger l'application?"
+        clear_cache_confirm: "Voulez-vous effacer le cache local et recharger l'application?",
+        btn_refresh: "Actualiser"
     }
 };
 
