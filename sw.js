@@ -1,4 +1,4 @@
-const CACHE_NAME = 'forexcross-v4.9.5';
+const CACHE_NAME = 'forexcross-v4.9.6';
 const ASSETS = [
   'index.html',
   'dashboard.html',
