@@ -1961,10 +1961,23 @@ tbody tr:hover {
     display: none; /* Hidden by default, shown in mobile MQ */
 }
 
-.icon-btn:hover {
+@media (hover: hover) {
+    .icon-btn:not(:disabled):hover {
+        background-color: var(--accent-primary);
+        color: white;
+        transform: scale(1.05);
+    }
+}
+
+.icon-btn:not(:disabled):active {
     background-color: var(--accent-primary);
     color: white;
-    transform: scale(1.05);
+    transform: scale(0.95);
+}
+
+.icon-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .nav-btn-text {
