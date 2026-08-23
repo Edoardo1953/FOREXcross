@@ -1391,3 +1391,14 @@ function setupRefreshButton() {
         });
     }
 }
+
+// Auto-switch view based on URL param
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('tab') === 'database' && typeof switchView === 'function') {
+            switchView('database');
+        }
+    }, 100);
+});
+

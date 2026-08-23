@@ -1,5 +1,5 @@
 $port = 8080
-$folder = "C:\Users\Utilisateur\OneDrive\Desktop\Antigravity\FOREXcross_repo"
+$folder = $PSScriptRoot
 $url = "http://localhost:$port/"
 
 # Ensure clean start
