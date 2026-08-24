@@ -2726,7 +2726,7 @@ tbody tr:hover {
         order: 1;
     }
     .intro-header .intro-titles h1 {
-        font-size: 32px !important;
+        font-size: 24px !important;
     }
     .intro-header .intro-titles p {
         font-size: 18px !important;
@@ -3029,7 +3029,7 @@ tbody tr:hover {
     display: none !important;
 }
 .mobile-preview-active .intro-header .intro-titles h1 {
-    font-size: 32px !important;
+    font-size: 24px !important;
 }
 .mobile-preview-active .intro-header .intro-titles p {
     font-size: 18px !important;
