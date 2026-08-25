@@ -44,6 +44,15 @@ function initSettings() {
         });
     }
 
+    const donationOverlay = document.getElementById('donationOverlay');
+    if (donationOverlay) {
+        donationOverlay.addEventListener('click', (e) => {
+            if (e.target === donationOverlay) {
+                toggleDonation(false);
+            }
+        });
+    }
+
     // NEW: Listen for changes from other tabs or local changes
     window.addEventListener('storage', (e) => {
         if (e.key === 'app_theme') {
@@ -253,6 +262,21 @@ function togglePrivacy(show) {
     }
 }
 
+function toggleDonation(show) {
+    const overlay = document.getElementById('donationOverlay');
+    if (!overlay) return;
+    
+    if (show === undefined) {
+        overlay.classList.toggle('hidden');
+    } else {
+        if (show) {
+            overlay.classList.remove('hidden');
+        } else {
+            overlay.classList.add('hidden');
+        }
+    }
+}
+
 function setTheme(theme, save = true) {
     console.log("setTheme called with:", theme, "save:", save);
     document.documentElement.setAttribute('data-theme', theme);
@@ -277,6 +301,7 @@ function setTheme(theme, save = true) {
 // Bind to window to guarantee global access
 window.setTheme = setTheme;
 window.toggleSettings = toggleSettings;
+window.toggleDonation = toggleDonation;
 
 /**
  * ADMIN MODE LOGIC

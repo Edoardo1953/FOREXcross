@@ -72,7 +72,11 @@
                                 <span class="btn-text" data-i18n="settings_title">Strumenti</span>
                             </button>
                         </div>
-                        <div class="refresh-actions" style="margin-top: 4px; display: flex; justify-content: flex-end; width: 100%;">
+                        <div class="refresh-actions" style="margin-top: 4px; display: flex; justify-content: flex-end; gap: 8px; width: 100%;">
+                            <button class="icon-btn donation-btn-pc" onclick="toggleDonation(true)" title="Donazioni" data-i18n-title="btn_donation">
+                                <i class="fa-solid fa-hand-holding-heart"></i>
+                                <span class="btn-text" data-i18n="btn_donation">Donazioni</span>
+                            </button>
                             <button class="icon-btn refresh-btn-pc" id="refreshRatesBtn" title="Aggiorna" data-i18n-title="btn_refresh">
                                 <i class="fa-solid fa-rotate"></i>
                                 <span class="btn-text" data-i18n="btn_refresh">Aggiorna</span>
@@ -252,28 +256,6 @@
                 </div>
 
                 <div class="settings-group" style="padding-top: 15px; border-top: 1px solid var(--border-color);">
-                    <label class="settings-group-title" data-i18n="support_dev_title">100% Gratuita, Sostieni le Organizzazioni Umanitarie</label>
-                    <div style="margin-bottom: 12px; display: inline-flex; align-items: center; background: var(--bg-card); color: var(--accent-primary); font-size: 10px; font-weight: bold; padding: 4px 8px; border-radius: 12px; border: 1px solid var(--border-color);">
-                        <i class="fa-solid fa-ban" style="color: #ef4444; margin-right: 6px;"></i> <span data-i18n="sec2_no_ads">SENZA ALCUNA PUBBLICITÀ COMMERCIALE</span>
-                    </div>
-                    <p class="settings-group-desc" style="font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;" data-i18n="support_dev_desc">
-                        L'app è completamente gratuita. Se la trovi utile, un contributo destinato a organizzazioni umanitarie è molto gradito!
-                    </p>
-                    
-                    <div style="background: var(--bg-card); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
-                        <div style="overflow: hidden;">
-                            <span style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; display: block; margin-bottom: 2px;" data-i18n="sec2_iban_label">IBAN per Donazione</span>
-                            <span style="font-size: 12px; font-weight: bold; color: var(--text-primary); display: block; font-family: monospace;">LU43 1111 7809 1464 0000</span>
-                            <span style="font-size: 10px; color: var(--text-secondary); display: block; margin-top: 4px;">Beneficiary: <strong style="color: var(--text-primary);">NEW LIFE S.À R.L.</strong></span>
-                            <span style="font-size: 10px; color: var(--text-secondary); display: block;">BIC: <strong style="color: var(--text-primary);">CCPLLULL</strong></span>
-                        </div>
-                        <button onclick="navigator.clipboard.writeText('LU431111780914640000')" style="background: var(--accent-primary); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer;" title="Copia IBAN">
-                            <i class="fa-regular fa-copy"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="settings-group" style="padding-top: 15px; border-top: 1px solid var(--border-color);">
                     <label class="settings-group-title" data-i18n="update_section_title">Aggiornamenti</label>
                     <p class="settings-group-desc" style="font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">Verifica se sono disponibili nuove versioni dell'app. (Versione v4.9.7)</p>
                     <button id="btnCheckUpdates" class="action-btn-full" onclick="checkForUpdates()" style="width: 100%; background: var(--bg-card); color: var(--accent-primary); border: 2px solid var(--accent-primary); padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px;">
@@ -390,6 +372,39 @@
             </header>
             <div class="manual-body">
                 <iframe id="manualIframe" src=""></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Donation Overlay -->
+    <div id="donationOverlay" class="settings-overlay hidden">
+        <div class="settings-container" style="max-width: 400px; margin: 40px auto;">
+            <div class="settings-header">
+                <h2 data-i18n="btn_donation">Donazioni</h2>
+                <button class="close-settings" onclick="toggleDonation(false)"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="settings-body" style="padding-bottom: 20px;">
+                <div class="settings-group">
+                    <label class="settings-group-title" data-i18n="support_dev_title">100% Gratuita, Sostieni le Organizzazioni Umanitarie</label>
+                    <div style="margin-bottom: 12px; display: inline-flex; align-items: center; background: var(--bg-card); color: var(--accent-primary); font-size: 10px; font-weight: bold; padding: 4px 8px; border-radius: 12px; border: 1px solid var(--border-color);">
+                        <i class="fa-solid fa-ban" style="color: #ef4444; margin-right: 6px;"></i> <span data-i18n="sec2_no_ads">SENZA ALCUNA PUBBLICITÀ COMMERCIALE</span>
+                    </div>
+                    <p class="settings-group-desc" style="font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;" data-i18n="support_dev_desc">
+                        L'app è completamente gratuita. Se la trovi utile, un contributo destinato a organizzazioni umanitarie è molto gradito!
+                    </p>
+                    
+                    <div style="background: var(--bg-card); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+                        <div style="overflow: hidden;">
+                            <span style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; display: block; margin-bottom: 2px;" data-i18n="sec2_iban_label">IBAN per Donazione</span>
+                            <span style="font-size: 12px; font-weight: bold; color: var(--text-primary); display: block; font-family: monospace;">LU43 1111 7809 1464 0000</span>
+                            <span style="font-size: 10px; color: var(--text-secondary); display: block; margin-top: 4px;">Beneficiary: <strong style="color: var(--text-primary);">NEW LIFE S.À R.L.</strong></span>
+                            <span style="font-size: 10px; color: var(--text-secondary); display: block;">BIC: <strong style="color: var(--text-primary);">CCPLLULL</strong></span>
+                        </div>
+                        <button onclick="navigator.clipboard.writeText('LU431111780914640000')" style="background: var(--accent-primary); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer;" title="Copia IBAN">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

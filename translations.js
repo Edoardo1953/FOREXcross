@@ -140,7 +140,8 @@ const translations = {
         support_dev_title: "100% Gratuita, Sostieni le Organizzazioni Umanitarie",
         support_dev_desc: "L'app è completamente gratuita. Se la trovi utile, un contributo destinato a organizzazioni umanitarie è molto gradito!",
         sec2_no_ads: "SENZA ALCUNA PUBBLICITÀ COMMERCIALE",
-        sec2_iban_label: "IBAN per Donazione"
+        sec2_iban_label: "IBAN per Donazione",
+        btn_donation: "Donazioni"
     },
     en: {
         homepage_title: "FOREX<br>Dashboard",
@@ -282,7 +283,8 @@ const translations = {
         support_dev_title: "100% Free, Support Humanitarian Organizations",
         support_dev_desc: "The app is completely free. If you find it useful, a contribution directed to humanitarian organizations is greatly appreciated!",
         sec2_no_ads: "STRICTLY NO COMMERCIAL ADS",
-        sec2_iban_label: "IBAN for Donation"
+        sec2_iban_label: "IBAN for Donation",
+        btn_donation: "Donations"
     },
     fr: {
         homepage_title: "FOREX<br>Dashboard",
@@ -424,7 +426,8 @@ const translations = {
         support_dev_title: "100% Gratuite, Soutenez des Organisations Humanitaires",
         support_dev_desc: "L'application est entièrement gratuite. Si vous la trouvez utile, une contribution destinée à des organisations humanitaires est très appréciée !",
         sec2_no_ads: "SANS AUCUNE PUBLICITÉ COMMERCIALE",
-        sec2_iban_label: "IBAN pour le Don"
+        sec2_iban_label: "IBAN pour le Don",
+        btn_donation: "Dons"
     }
 };
 
