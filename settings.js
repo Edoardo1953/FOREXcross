@@ -87,7 +87,7 @@ function updateManualLinks() {
     if (privacyLink) {
         privacyLink.onclick = (e) => {
             e.preventDefault();
-            const url = `docs/manuals/Privacy_${langNow}.html`;
+            const url = `docs/manuals/Login_${langNow}.html`;
             toggleManual(true, url, 'manual_privacy_title');
         };
     }
