@@ -136,7 +136,11 @@ const translations = {
         cache_section_desc: "Risolvi i problemi di caricamento svuotando la memoria cache temporanea e i dati scaricati.",
         btn_clear_cache: "Cancella Cache e Dati",
         clear_cache_confirm: "Vuoi cancellare la cache locale e ricaricare l'applicazione?",
-        btn_refresh: "Aggiorna"
+        btn_refresh: "Aggiorna",
+        support_dev_title: "100% Gratuita, Sostieni le Organizzazioni Umanitarie",
+        support_dev_desc: "L'app è completamente gratuita. Se la trovi utile, un contributo destinato a organizzazioni umanitarie è molto gradito!",
+        sec2_no_ads: "SENZA ALCUNA PUBBLICITÀ COMMERCIALE",
+        sec2_iban_label: "IBAN per Donazione"
     },
     en: {
         homepage_title: "FOREX<br>Dashboard",
@@ -274,7 +278,11 @@ const translations = {
         cache_section_desc: "Solve display or load issues by clearing the temporary cache and downloaded rates data.",
         btn_clear_cache: "Clear Cache & Data",
         clear_cache_confirm: "Do you want to clear the local cache and reload the application?",
-        btn_refresh: "Refresh"
+        btn_refresh: "Refresh",
+        support_dev_title: "100% Free, Support Humanitarian Organizations",
+        support_dev_desc: "The app is completely free. If you find it useful, a contribution directed to humanitarian organizations is greatly appreciated!",
+        sec2_no_ads: "STRICTLY NO COMMERCIAL ADS",
+        sec2_iban_label: "IBAN for Donation"
     },
     fr: {
         homepage_title: "FOREX<br>Dashboard",
@@ -412,7 +420,11 @@ const translations = {
         cache_section_desc: "Résolvez les problèmes d'affichage en vidant le cache temporaire et les données téléchargées.",
         btn_clear_cache: "Effacer le Cache et Données",
         clear_cache_confirm: "Voulez-vous effacer le cache local et recharger l'application?",
-        btn_refresh: "Actualiser"
+        btn_refresh: "Actualiser",
+        support_dev_title: "100% Gratuite, Soutenez des Organisations Humanitaires",
+        support_dev_desc: "L'application est entièrement gratuite. Si vous la trouvez utile, une contribution destinée à des organisations humanitaires est très appréciée !",
+        sec2_no_ads: "SANS AUCUNE PUBLICITÉ COMMERCIALE",
+        sec2_iban_label: "IBAN pour le Don"
     }
 };
 
