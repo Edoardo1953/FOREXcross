@@ -3599,3 +3599,423 @@ tbody tr:hover {
 #resetDataBtn {
     margin-left: auto !important;
 }
+
+/* ==========================================================================
+   ENHANCED RESPONSIVE SYSTEM: SMALL & COMPACT MOBILE SCREENS (<= 480px & <= 380px)
+   Prevents overlapping, optimizes touch targets and guarantees smooth readability
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    /* Viewport & Containers */
+    html, body {
+        overflow-x: hidden;
+        width: 100%;
+        min-height: 100dvh;
+    }
+
+    .intro-page, .app-container {
+        min-height: 100dvh;
+        height: auto !important;
+        overflow-x: hidden;
+    }
+
+    /* Split Content */
+    .split-content {
+        flex-direction: column !important;
+        height: auto !important;
+        min-height: calc(100dvh - 120px) !important;
+        overflow: visible !important;
+    }
+
+    .split-left {
+        flex: 1 !important;
+        width: 100% !important;
+        padding: 10px 12px calc(110px + env(safe-area-inset-bottom, 20px)) 12px !important;
+        overflow-y: visible !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Fixed Bottom Home Toolbar */
+    #homeAddCurrencyArea {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 8px 12px calc(env(safe-area-inset-bottom, 8px) + 8px) 12px !important;
+        z-index: 9999 !important;
+        background: var(--bg-main) !important;
+        border-top: 1px solid var(--border-color) !important;
+        box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.45) !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    .add-currency-btn {
+        min-height: 48px !important;
+        padding: 8px 14px !important;
+        font-size: 13px !important;
+        border-radius: 14px !important;
+    }
+
+    .inline-numpad-btn {
+        width: 48px !important;
+        height: 48px !important;
+        min-width: 48px !important;
+        border-radius: 14px !important;
+        font-size: 18px !important;
+    }
+
+    .spacer-numpad {
+        height: calc(110px + env(safe-area-inset-bottom, 20px)) !important;
+        display: block !important;
+        width: 100%;
+    }
+
+    /* Floating Numpad Button */
+    .floating-numpad-btn {
+        bottom: calc(75px + env(safe-area-inset-bottom, 10px)) !important;
+        right: 14px !important;
+        width: 52px !important;
+        height: 52px !important;
+        font-size: 22px !important;
+        z-index: 9998 !important;
+    }
+
+    /* Currency List & Rows */
+    .currency-list {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+    }
+
+    .currency-row {
+        position: relative !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 0 8px 0 !important;
+        border-radius: var(--border-radius-md) !important;
+        box-sizing: border-box !important;
+    }
+
+    .curr-main-link {
+        padding: 12px 42px 12px 12px !important; /* Reserve right area for delete button */
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .curr-left {
+        width: 36px !important;
+        flex-shrink: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .flag-container {
+        width: 36px !important;
+        height: 24px !important;
+        border-radius: 4px !important;
+    }
+
+    .flag-container span {
+        font-size: 24px !important;
+    }
+
+    .curr-middle {
+        flex: 1 !important;
+        min-width: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        overflow: hidden !important;
+    }
+
+    .curr-code {
+        font-size: clamp(14px, 3.8vw, 16px) !important;
+        font-weight: 700 !important;
+        line-height: 1.2 !important;
+    }
+
+    .curr-name {
+        font-size: 11px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 120px !important;
+        line-height: 1.2 !important;
+    }
+
+    .curr-right {
+        flex-shrink: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-end !important;
+        text-align: right !important;
+        max-width: 48% !important;
+    }
+
+    .curr-amount {
+        font-size: clamp(16px, 4.2vw, 22px) !important;
+        font-weight: 700 !important;
+        line-height: 1.2 !important;
+        word-break: break-all !important;
+    }
+
+    .curr-symbol, .curr-name-small {
+        font-size: 10px !important;
+        line-height: 1.2 !important;
+    }
+
+    .currency-row.base-row {
+        padding: 0 !important;
+    }
+
+    .currency-row.base-row .curr-main-link {
+        padding: 12px 14px !important;
+    }
+
+    .base-row .curr-amount {
+        font-size: clamp(22px, 6vw, 30px) !important;
+        padding-right: 0 !important;
+    }
+
+    .remove-curr-btn {
+        position: absolute !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        right: 8px !important;
+        width: 30px !important;
+        height: 30px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 5 !important;
+    }
+
+    /* Numpad Mobile Drawer */
+    .split-right.numpad-mobile-active {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        max-height: 85dvh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        z-index: 10001 !important;
+        border-radius: 20px 20px 0 0 !important;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7) !important;
+        background: var(--bg-sidebar) !important;
+        padding: 0 0 calc(env(safe-area-inset-bottom, 10px) + 10px) 0 !important;
+    }
+
+    .numpad-section {
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 10px 12px !important;
+        box-sizing: border-box !important;
+        border-radius: 20px 20px 0 0 !important;
+    }
+
+    .numpad-mobile-header {
+        padding: 10px 15px !important;
+        margin-bottom: 8px !important;
+        border-radius: 16px 16px 0 0 !important;
+    }
+
+    .numpad-grid {
+        grid-gap: 3px !important;
+    }
+
+    .numpad-grid button {
+        height: clamp(38px, 5.2vh, 48px) !important;
+        padding: 0 !important;
+        font-size: clamp(16px, 4.5vw, 20px) !important;
+        border-radius: 8px !important;
+    }
+}
+
+/* ==========================================================================
+   EXTRA COMPACT SCREENS (<= 480px - iPhone Standard / Android)
+   ========================================================================== */
+@media (max-width: 480px) {
+    /* Header layout */
+    .intro-header {
+        padding: 8px 10px !important;
+    }
+
+    .header-inner {
+        gap: 6px !important;
+    }
+
+    .forex-logo-icon-img {
+        width: 48px !important;
+        height: 48px !important;
+        border-radius: 12px !important;
+    }
+
+    .title-with-icon-main {
+        gap: 8px !important;
+    }
+
+    .intro-titles.centered h1 {
+        font-size: clamp(17px, 5vw, 22px) !important;
+        letter-spacing: -0.2px !important;
+    }
+
+    .header-subtitle {
+        font-size: 8px !important;
+        letter-spacing: 1px !important;
+    }
+
+    /* Compact Header Actions */
+    .header-actions {
+        gap: 4px !important;
+    }
+
+    .lang-selector {
+        gap: 4px !important;
+    }
+
+    .lang-btn {
+        width: 26px !important;
+        height: 26px !important;
+    }
+
+    .lang-btn .fi {
+        font-size: 16px !important;
+    }
+
+    .secondary-actions, .refresh-actions {
+        gap: 4px !important;
+    }
+
+    .icon-btn {
+        padding: 4px 6px !important;
+        font-size: 11px !important;
+        height: 28px !important;
+    }
+
+    .icon-btn .btn-text {
+        display: none !important; /* Hide button text on small mobile so icons stay compact */
+    }
+
+    .icon-btn i {
+        font-size: 13px !important;
+    }
+
+    /* Custom Cross Header Pill */
+    .custom-cross-header-pill {
+        margin-top: 4px !important;
+    }
+
+    .btn-header-custom {
+        width: 100% !important;
+        min-width: 0 !important;
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+        gap: 8px !important;
+    }
+
+    .btn-header-custom i {
+        font-size: 14px !important;
+    }
+
+    /* Dashboard Custom Cross Search Row */
+    .custom-cross-main-row {
+        gap: 4px !important;
+    }
+
+    .custom-cross-main-row .input-with-flag {
+        padding: 6px 6px !important;
+        font-size: 13px !important;
+    }
+
+    .custom-cross-main-row .input-with-flag input {
+        font-size: 13px !important;
+        width: 42px !important;
+    }
+
+    .custom-cross-main-row .swap-btn,
+    .custom-cross-main-row #resetDataBtn {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        font-size: 12px !important;
+        padding: 0 !important;
+    }
+
+    .clear-cache-label {
+        display: none !important;
+    }
+
+    /* Settings and Modals */
+    .settings-container, .search-container {
+        width: 95vw !important;
+        max-width: 95vw !important;
+        border-radius: 16px !important;
+    }
+
+    .settings-header {
+        padding: 14px 16px !important;
+    }
+
+    .settings-body {
+        padding: 14px 16px !important;
+    }
+}
+
+/* ==========================================================================
+   ULTRA-COMPACT SCREENS (<= 380px - iPhone SE, Mini, Older Devices)
+   ========================================================================== */
+@media (max-width: 380px) {
+    .forex-logo-icon-img {
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 10px !important;
+    }
+
+    .intro-titles.centered h1 {
+        font-size: 16px !important;
+    }
+
+    .header-subtitle {
+        font-size: 7px !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    .curr-code {
+        font-size: 13px !important;
+    }
+
+    .curr-name {
+        max-width: 75px !important;
+        font-size: 10px !important;
+    }
+
+    .curr-amount {
+        font-size: 15px !important;
+    }
+
+    .base-row .curr-amount {
+        font-size: 20px !important;
+    }
+
+    .numpad-grid button {
+        height: 36px !important;
+        font-size: 15px !important;
+    }
+
+    .mobile-nav-area .nav-pill {
+        padding: 6px 4px !important;
+        font-size: 10px !important;
+        gap: 3px !important;
+    }
+}
