@@ -183,6 +183,8 @@ body.admin-active .btn-delete-manual.admin-only {
         position: fixed;
         bottom: 0;
         left: 0;
+        min-height: unset;
+        height: auto;
         z-index: 100;
     }
     .split-left {
@@ -3777,6 +3779,7 @@ tbody tr:hover {
         padding: 12px 16px 12px 14px !important;
         gap: 10px !important;
         box-sizing: border-box !important;
+        cursor: pointer !important;
     }
 
     .base-row .curr-amount {
@@ -3804,7 +3807,9 @@ tbody tr:hover {
         left: 0 !important;
         right: 0 !important;
         width: 100% !important;
-        max-height: 85dvh !important;
+        height: auto !important;
+        min-height: unset !important;
+        max-height: 50dvh !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
         z-index: 10001 !important;
@@ -3818,9 +3823,15 @@ tbody tr:hover {
         position: static !important;
         width: 100% !important;
         max-width: 100% !important;
+        height: auto !important;
+        min-height: unset !important;
         padding: 10px 12px !important;
         box-sizing: border-box !important;
         border-radius: 20px 20px 0 0 !important;
+    }
+
+    body.numpad-open .spacer-numpad {
+        height: calc(300px + env(safe-area-inset-bottom, 20px)) !important;
     }
 
     .numpad-mobile-header {

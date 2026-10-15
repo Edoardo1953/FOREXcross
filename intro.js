@@ -66,18 +66,44 @@ function setupNumpadToggle() {
     const toggleBtn = document.getElementById('toggleNumpadBtn');
     const container = document.getElementById('mobileNumpadContainer');
     
+    const openNumpad = () => {
+        if (!container) return;
+        container.classList.add('numpad-mobile-active');
+        if (toggleBtn) toggleBtn.classList.add('btn-active');
+        document.body.classList.add('numpad-open');
+    };
+
+    const closeNumpad = () => {
+        if (!container) return;
+        container.classList.remove('numpad-mobile-active');
+        if (toggleBtn) toggleBtn.classList.remove('btn-active');
+        document.body.classList.remove('numpad-open');
+    };
+
     if (toggleBtn && container) {
-        toggleBtn.addEventListener('click', () => {
-            container.classList.add('numpad-mobile-active');
-            toggleBtn.classList.add('btn-active');
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (container.classList.contains('numpad-mobile-active')) {
+                closeNumpad();
+            } else {
+                openNumpad();
+            }
         });
     }
     
     const closeBtn = document.getElementById('closeNumpadBtn');
-    if (closeBtn && container && toggleBtn) {
-        closeBtn.addEventListener('click', () => {
-            container.classList.remove('numpad-mobile-active');
-            toggleBtn.classList.remove('btn-active');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeNumpad();
+        });
+    }
+
+    // Permette di aprire il tastierino anche cliccando direttamente sulla valuta base
+    const baseRowEl = document.getElementById('baseRow');
+    if (baseRowEl) {
+        baseRowEl.addEventListener('click', () => {
+            openNumpad();
         });
     }
 }
